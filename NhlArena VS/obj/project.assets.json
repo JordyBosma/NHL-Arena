@@ -11506,11 +11506,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\School Assignments\\Jaar 2\\NHL-Arena\\NhlArena VS\\NhlArena VS\\NhlArena VS.csproj",
+      "projectUniqueName": "D:\\School Assignments\\Jaar 2\\NHL-Arena Repo\\NhlArena VS\\NhlArena VS.csproj",
       "projectName": "NhlArena VS",
-      "projectPath": "D:\\School Assignments\\Jaar 2\\NHL-Arena\\NhlArena VS\\NhlArena VS\\NhlArena VS.csproj",
+      "projectPath": "D:\\School Assignments\\Jaar 2\\NHL-Arena Repo\\NhlArena VS\\NhlArena VS.csproj",
       "packagesPath": "C:\\Users\\Gebruiker\\.nuget\\packages\\",
-      "outputPath": "D:\\School Assignments\\Jaar 2\\NHL-Arena\\NhlArena VS\\NhlArena VS\\obj\\",
+      "outputPath": "D:\\School Assignments\\Jaar 2\\NHL-Arena Repo\\NhlArena VS\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
