@@ -1,3 +1,10 @@
 ﻿@{
-    Layout = "_Layout";
+    switch (ViewData["Layout"]) {
+        case "Home":
+            Layout = "_Layout";
+            break;
+        default:
+            Layout = null;
+            break;
+    }
 }
