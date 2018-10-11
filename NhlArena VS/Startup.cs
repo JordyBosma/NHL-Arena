@@ -50,7 +50,6 @@ namespace NhlArena_VS
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
 
             app.UseMvc(routes =>
             {
