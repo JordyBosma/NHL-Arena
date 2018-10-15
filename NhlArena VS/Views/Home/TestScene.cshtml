@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TestScene</title>
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            background: black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id='myCanvas'></canvas>
+
+    @*<script src="~/lib/threejs/MTLLoader.js"></script>
+    <script src="~/lib/threejs/OBJLoader.js"></script>
+    <script src="~/lib/threejs/OrbitControls.js"></script>*@
+    <script src="~/lib/threejs/three.min.js"></script>
+    <script src="~/js/BasicPlane.js"></script>
+    <script>
+        var cameraControls;
+        var renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('myCanvas'), antialias: true })
+        renderer.setClearColor(0x000000);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight + 5);
+
+        var camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 2000);
+
+        var scene = new THREE.Scene();
+
+        var basicPlane = new BasicPlane();
+        scene.add(basicPlane);
+
+        var light = new THREE.AmbientLight(0x404040);
+        light.intensity = 2;
+        scene.add(light);
+
+        renderer.render(scene, camera);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                            //function parseCommand(input = "") {
+                                            //    return JSON.parse(input);
+                                            //}
+                                            //window.onload = function () {
+                                            //    var camera, scene, renderer;
+                                            //    var cameraControls;
+
+                                            //    function init() {
+                                            //        camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 2000);
+                                            //        cameraControls = new THREE.OrbitControls(camera);
+                                            //        cameraControls.minDistance = 5;
+                                            //        cameraControls.maxDistance = 60;
+                                            //        camera.position.z = 40;
+                                            //        camera.position.y = 15;
+                                            //        camera.position.x = 40;
+                                            //        cameraControls.target.set(25, 5, 25);
+                                            //        cameraControls.update();
+                                            //        scene = new THREE.Scene();
+
+                                            //        renderer = new THREE.WebGLRenderer({ antialias: true });
+                                            //        renderer.setPixelRatio(window.devicePixelRatio);
+                                            //        renderer.setSize(window.innerWidth, window.innerHeight + 5);
+                                            //        document.body.appendChild(renderer.domElement);
+
+                                            //        window.addEventListener('resize', onWindowResize, false);
+                                            //        var light = new THREE.AmbientLight(0x404040);
+                                            //        light.intensity = 1.5;
+                                            //        scene.add(light);
+                                            //    }
+
+    </script>
+
+
+</body>
+</html>
