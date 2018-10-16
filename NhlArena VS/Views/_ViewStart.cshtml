@@ -1,7 +1,8 @@
 ﻿@{
+    //ik denk dat dit weg kan zet denk ik liever de layout in de view zelf, anders moet het in de controller en dit heeft meet met de view te maken.
     switch (ViewData["Layout"]) {
         case "Home":
-            Layout = "_Layout";
+            Layout = "_DefaultLayout";
             break;
         default:
             Layout = null;

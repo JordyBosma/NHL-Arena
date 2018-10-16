@@ -54,8 +54,12 @@ namespace NhlArena_VS
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    "Default",                                              // Route name
+                    "{controller}/{action}/{id}",                           // URL with parameters
+                    new { controller = "Home", action = "Index", id = "" }  // Parameter defaults
+                    /*name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}"*/
+                );
             });
         }
     }
