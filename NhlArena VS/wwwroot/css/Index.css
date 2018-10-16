@@ -1,0 +1,28 @@
+﻿.index__container {
+    margin-bottom: 0;
+    height: 100%;
+}
+.collum__image{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.image__container {
+    display: flex;
+    flex: 1 0 auto;
+}
+.Index__NHLArenaLogo {
+    width: auto;
+    height: 92%;
+    margin: auto;
+    flex: 0 1 auto;
+}
+.index__homeinfo{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.index__fillspace {
+    display: flex;
+    flex: 1 0 auto;
+}
