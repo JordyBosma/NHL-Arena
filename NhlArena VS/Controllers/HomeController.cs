@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NhlArena_VS.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace NhlArena_VS.Controllers
 {
@@ -25,21 +26,22 @@ namespace NhlArena_VS.Controllers
             return View();
         }
 
+        [HttpGet]
         public IActionResult Login()
         {
+            return View();
+        }
 
+        [HttpPost]
+        public IActionResult Login(LoginPostData data)
+        {
+            Console.Write(data);
             return View();
         }
 
         public IActionResult SignUp()
         {
             return View();
-        }
-
-        public IActionResult Logout()
-        {
-
-            return RedirectToAction("Home", "Index");
         }
         
         public IActionResult TestScene()
