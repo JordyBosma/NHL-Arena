@@ -4,4 +4,12 @@
 <div id="IndexPageInfoHere">
     <p>hoi</p>
 </div>
+<script>
+    var Socket = new WebSocket("ws://" + window.location.hostname + ":" + window.location.port + "/connect_client");
+    Socket.onopen = function () {
+        console.log("yeet");
+        Socket.send("Hello World");
+
+    };
+</script>
 
