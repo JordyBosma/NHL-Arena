@@ -25,6 +25,23 @@ namespace NhlArena_VS.Controllers
             return View();
         }
 
+        public IActionResult Login()
+        {
+
+            return View();
+        }
+
+        public IActionResult SignUp()
+        {
+            return View();
+        }
+
+        public IActionResult Logout()
+        {
+
+            return RedirectToAction("Home", "Index");
+        }
+        
         public IActionResult TestScene()
         {
             return View();
