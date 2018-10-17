@@ -12,18 +12,36 @@ namespace NhlArena_VS.Controllers
     {
         public IActionResult Index()
         {
-            ViewData["Layout"] = "Home";
             return View();
         }
 
         public IActionResult About()
         {
-            ViewData["Layout"] = "Home";
-
             ViewData["Message"] = "Your application description page.";
             return View();
         }
+        public IActionResult Credits()
+        {
+            return View();
+        }
 
+        public IActionResult Login()
+        {
+
+            return View();
+        }
+
+        public IActionResult SignUp()
+        {
+            return View();
+        }
+
+        public IActionResult Logout()
+        {
+
+            return RedirectToAction("Home", "Index");
+        }
+        
         public IActionResult TestScene()
         {
             return View();
