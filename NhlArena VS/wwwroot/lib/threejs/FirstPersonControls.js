@@ -154,4 +154,5 @@ THREE.FirstPersonControls = function (camera) {
         element.requestPointerLock();
     });
 
+    
 };

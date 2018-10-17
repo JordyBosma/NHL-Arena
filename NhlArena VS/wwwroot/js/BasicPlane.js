@@ -6,7 +6,7 @@
     init() {
         var selfRef = this;
         var geometry = new THREE.BoxGeometry(200, 2, 200);
-        var material = new THREE.MeshBasicMaterial({ color: 0xffffff});
+        var material = new THREE.MeshBasicMaterial({ color: 0x111555});
 
         var box = new THREE.Mesh(geometry, material);
         box.position.x = -10;
