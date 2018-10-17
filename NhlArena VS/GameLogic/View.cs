@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
 
-namespace Views
+namespace GameLogic
 {
     abstract public class View
     {

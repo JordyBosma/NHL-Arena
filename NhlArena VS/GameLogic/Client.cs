@@ -6,7 +6,7 @@ using System.Net.WebSockets;
 using System.Threading.Tasks;
 using System.Text;
 
-namespace Views {
+namespace GameLogic {
     public class Client : View
     {
         public Guid gameId { get; }
