@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
-using Views;
 
-namespace NhlArena_VS.GameLogic
+namespace GameLogic
 {
     public class Game
     {
@@ -22,15 +21,16 @@ namespace NhlArena_VS.GameLogic
             gameThread.Start();
         }
 
-        public void AddPlayer(Client newPlayer)
+        public bool AddPlayer(Client newPlayer)
         {
-            if(players.Count() != 6)
+            if(players.Count() < 7)
             {
                 players.Add(newPlayer);
+                return true;
             }
             else
             {
-                //playermax reached
+                return false;
             }
         }
 

@@ -9,13 +9,16 @@ using System.Text;
 namespace Views {
     public class Client : View
     {
-        public int gameId { get; }
+        public Guid gameId { get; }
 
-        public Client(WebSocket socket, int gameId) : base(socket)
+        public Client(WebSocket socket, Guid gameId) : base(socket)
         {
             this.gameId = gameId;
         }
 
+        public Client(WebSocket socket) : base(socket)
+        {
+        }
         public override async Task StartReceiving() {
             var buffer = new byte[1024 * 4];
 
@@ -24,8 +27,8 @@ namespace Views {
             WebSocketReceiveResult result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
             while (!result.CloseStatus.HasValue)
             {
-                string yeetmessage = Encoding.UTF8.GetString(buffer);
-                System.Diagnostics.Debug.WriteLine("Received the following information from client: " + yeetmessage );
+                //string yeetmessage = Encoding.UTF8.GetString(buffer);
+                //System.Diagnostics.Debug.WriteLine("Received the following information from client: " + yeetmessage );
 
                 result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
             }

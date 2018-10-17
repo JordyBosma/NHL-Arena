@@ -31,10 +31,11 @@ namespace Views
             throw new NotImplementedException();
         }
 
-        public virtual void OnError(Exception error)
+        public virtual void OnError()
         {
-            throw new NotImplementedException();
+            socket.Abort();
         }
+
         public virtual void OnNext()
         {
             //SendCommand(value);

@@ -13,8 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NhlArena_VS.GameLogic;
-using Views;
+using GameLogic;
 
 namespace NhlArena_VS
 {
@@ -63,12 +62,36 @@ namespace NhlArena_VS
                 {
                     if (context.WebSockets.IsWebSocketRequest)
                     {
-                        int gameId = Convert.ToInt32( context.Request.Path.ToString().Split('/')[2]);
-                        WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
+                        string[] pathContents = context.Request.Path.ToString().Split('/');
                         
-                        Client cs = new Client(webSocket, gameId);
-                        GameManager.ManageClient(cs);
-                        await cs.StartReceiving();
+                        //checks if path contains more than just connect_client, and if there is a session with an logged in user.
+                        if (pathContents[2] != null && !string.IsNullOrEmpty(context.Session.GetString("id")) && !string.IsNullOrEmpty(context.Session.GetString("username")))
+                        {
+                            if (pathContents[2] == "newGame")
+                            {
+                                WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
+
+                                Client cs = new Client(webSocket);
+                                GameManager.ManageClient(cs);
+                                await cs.StartReceiving();
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    Guid gameId = new Guid(pathContents[2]);
+                                    WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
+
+                                    Client cs = new Client(webSocket, gameId);
+                                    GameManager.ManageClient(cs);
+                                    await cs.StartReceiving();
+                                }
+                                catch (Exception e)
+                                {
+                                    System.Diagnostics.Debug.WriteLine(e);
+                                }
+                            }
+                        }
                     }
                     else
                     {
@@ -79,7 +102,6 @@ namespace NhlArena_VS
                 {
                     await next();
                 }
-
             });
 
             if (env.IsDevelopment())
