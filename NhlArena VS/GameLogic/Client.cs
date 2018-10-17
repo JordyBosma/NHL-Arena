@@ -6,7 +6,7 @@ using System.Net.WebSockets;
 using System.Threading.Tasks;
 using System.Text;
 
-namespace Views {
+namespace GameLogic {
     public class Client : View
     {
         public Guid gameId { get; }
@@ -19,6 +19,7 @@ namespace Views {
         public Client(WebSocket socket) : base(socket)
         {
         }
+
         public override async Task StartReceiving() {
             var buffer = new byte[1024 * 4];
 
@@ -31,6 +32,8 @@ namespace Views {
                 //System.Diagnostics.Debug.WriteLine("Received the following information from client: " + yeetmessage );
 
                 result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+
+
             }
 
             Console.WriteLine("ClientView has disconnected");
