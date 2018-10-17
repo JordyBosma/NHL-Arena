@@ -22,96 +22,98 @@
 
         window.onload = function () {
             var camera, scene, renderer;
-            var objects = new THREE.Group();
-            var character;
+            var controls;
+
+            var prevTime = performance.now();
+            var velocity = new THREE.Vector3();
 
             function init() {
+
                 renderer = new THREE.WebGLRenderer({ antialias: true });
                 renderer.setPixelRatio(window.devicePixelRatio);
                 renderer.setSize(window.innerWidth, window.innerHeight + 5);
 
                 document.body.appendChild(renderer.domElement);
 
+                //create new camera with controls
                 camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 2000);
-
+                
+                camera.position.z = 0;
+                camera.position.y = 0;
+                camera.position.x = 0;
                 // Create scene
-                scene = new Physijs.Scene({ reportsize: 2, fixedTimeStep: 1 / 60 });
+                scene = new THREE.Scene();
 
-                //objects.add(controls.getObject());
+                // Create First Person Controls
+                controls = new THREE.FirstPersonControls(camera);
+                scene.add(controls.getObject());
 
-                character = new Character(camera);
-                objects.add(character);
+                window.addEventListener('resize', onWindowResize, false);
 
-                //objects.add(box);
+                var geometry = new THREE.BoxGeometry(3, 3, 3);
+                var material = new THREE.MeshBasicMaterial({ color: 0x000000 });
+                var box = new THREE.Mesh(geometry, material);
+
+                scene.add(box);
 
                 var basicPlane = new BasicPlane();
-                objects.add(basicPlane);
+                scene.add(basicPlane);
 
                 var light = new THREE.AmbientLight(0x404040);
                 light.intensity = 2;
-                objects.add(light);
+                scene.add(light);
 
-                window.addEventListener('resize', onWindowResize, false);
-                scene.setGravity();
-                scene.add(objects);
+
             }
 
-            //function playerControls() {
+            function playerControls() {
 
-            //    // Check of de browser pointerlock ondersteund
-            //    if (controls.controlsEnabled) {
+                // Check of de browser pointerlock 
+                if (controls.controlsEnabled) {
 
-            //        // Save the current time
-            //        var time = performance.now();
-            //        // Create a delta value based on current time
-            //        var delta = (time - prevTime) / 1000;
+                    // Save the current time
+                    var time = performance.now();
+                    // Create a delta value based on current time
+                    var delta = (time - prevTime) / 1000;
 
-            //        // Set the velocity.x and velocity.z using the calculated time delta
-            //        velocity.x -= velocity.x * 10.0 * delta;
-            //        velocity.z -= velocity.z * 10.0 * delta;
+                    // Set the velocity.x and velocity.z using the calculated time delta
+                    velocity.x -= velocity.x * 10.0 * delta;
+                    velocity.z -= velocity.z * 10.0 * delta;
 
-            //        // As velocity.y is our "gravity," calculate delta
-            //        velocity.y -= 9.8 * 20.0 * delta; // 100.0 = mass
+                    // As velocity.y is our "gravity," calculate delta
+                    velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
 
-            //        if (controls.moveForward) {
-            //            velocity.z -= 400.0 * delta;
-            //        }
+                    if (controls.moveForward) {
+                        velocity.z -= 400.0 * delta;
+                    }
 
-            //        if (controls.moveBackward) {
-            //            velocity.z += 400.0 * delta;
-            //        }
+                    if (controls.moveBackward) {
+                        velocity.z += 400.0 * delta;
+                    }
 
-            //        if (controls.moveLeft) {
-            //            velocity.x -= 400.0 * delta;
-            //        }
+                    if (controls.moveLeft) {
+                        velocity.x -= 400.0 * delta;
+                    }
 
-            //        if (controls.moveRight) {
-            //            velocity.x += 400.0 * delta;
-            //        }
+                    if (controls.moveRight) {
+                        velocity.x += 400.0 * delta;
+                    }
 
-            //        if (controls.jump) {
-            //            if (velocity.y > 200) {
-            //                velocity.y = 0;
-            //            }
-            //            velocity.y += 50.0;
-            //            controls.jump = false;
-            //        }
+                    // Update the position using the changed delta
+                    controls.getObject().translateX(velocity.x * delta);
+                    controls.getObject().translateY(velocity.y * delta);
+                    controls.getObject().translateZ(velocity.z * delta);
 
-            //        // Update the position using the changed delta
-            //        controls.getObject().translateX(velocity.x * delta);
-            //        controls.getObject().translateY(velocity.y * delta);
-            //        controls.getObject().translateZ(velocity.z * delta);
+                    // Prevent the camera/player from falling out of the 'world'
+                    if (controls.getObject().position.y < 10) {
+                        velocity.y = 0;
+                        controls.getObject().position.y = 10;
+                    }
 
-            //        // Prevent the camera/player from falling out of the 'world'
-            //        if (controls.getObject().position.y < 3) {
-            //            velocity.y = 0;
-            //            controls.getObject().position.y = 3;
-            //        }
-
-            //        // Save the time for future delta calculations
-            //        prevTime = time;
-            //    }
-            //}
+                    // Save the time for future delta calculations
+                    prevTime = time;
+                }
+            }
 
             function onWindowResize() {
                 camera.aspect = window.innerWidth / window.innerHeight;
@@ -121,8 +123,9 @@
 
             function animate() {
                 requestAnimationFrame(animate);
-                character.updatePlayerMovement();
-                scene.simulate();
+
+                playerControls();
+
                 renderer.render(scene, camera);
             }
             init();
@@ -132,12 +135,11 @@
     </script>
     <script src="~/lib/threejs/three.min.js"></script>
     <script src="~/lib/threejs/OrbitControls.js"></script>
-    <script src="~/lib/physijs/physi.js"></script>
-    <script src="~/lib/physijs/physijs_worker.js"></script>
     <script src="~/lib/threejs/FirstPersonControls.js"></script>
     <script src="~/lib/threejs/MTLLoader.js"></script>
     <script src="~/lib/threejs/OBJLoader.js"></script>
     <script src="~/js/BasicPlane.js"></script>
-    <script src="~/js/Character.js"></script>
+
+
 </body>
 </html>
