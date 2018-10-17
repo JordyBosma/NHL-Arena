@@ -36,8 +36,18 @@ namespace NhlArena_VS
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddDistributedMemoryCache();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddSession(options =>
+            {
+                // Set a short timeout for easy testing.
+                options.IdleTimeout = TimeSpan.FromSeconds(360);
+                options.Cookie.HttpOnly = true;
+            });
+
+            //services.AddMvc(options => options.MaxModelValidationErrors = 50);
+
+            services.AddMvc(options => options.MaxModelValidationErrors = 50).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -113,7 +123,12 @@ namespace NhlArena_VS
                 //app.UseHsts();
             }
 
+
             //app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
+            app.UseSession();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

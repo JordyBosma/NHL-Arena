@@ -1,4 +1,51 @@
-﻿@{
-
+﻿@model NhlArena_VS.Models.SignUpPostData
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "_DefaultLayout";
 }
-<p>he</p>
+<div class="container row">
+    <div class="col m6 offset-m6">
+        <form method="post">
+            <div class="col s10 offset-s1 card">
+                <div class="card-content">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input asp-for="username" data-length="16" class="validate">
+                            <label asp-for="username"></label>
+                        </div>
+                    </div>
+
+                    <!--<div class="row">
+                        <div class="input-field col s12">
+                            <input asp-for="email" class="validate" data-length="30">
+                            <label asp-for="email"></label>
+                        </div>
+                    </div>
+                    -->
+
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input asp-for="password" type="password" class="validate">
+                            <label asp-for="password"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input asp-for="password2" type="password" class="validate">
+                            <label asp-for="password2"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-action center-align">
+
+                    <button class="btn waves-effect waves-light" type="submit">
+                        Submit
+                        <i class="material-icons right">send</i>
+                    </button>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

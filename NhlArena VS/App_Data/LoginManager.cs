@@ -8,7 +8,7 @@ using objects;
 
 namespace App_Data
 {
-    public class Login_Manager
+    public class LoginManager
     {
         /// <summary>
         /// Gets a person from the database with the supplied crediantials
@@ -16,16 +16,14 @@ namespace App_Data
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public static Person Log_in(string username, string password)
+        public static Person Login(string username, string password)
         {
-            string sql = "SELECT * " +
-                "FROM Login " +
-                "WHERE username = @username AND password = @password";
+            string sql = "SELECT * FROM Users WHERE username = @username AND password = @password";
 
             List<string> resultslist = new List<string>();
 
             SQLiteConnection database;
-            database = new SQLiteConnection("Data Source=Database.db;Version=3;");
+            database = new SQLiteConnection("Data Source=App_Data\\Database.db;Version=3;");
             database.Open();
 
 
