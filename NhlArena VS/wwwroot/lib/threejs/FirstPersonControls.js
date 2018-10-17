@@ -8,7 +8,6 @@
  */
 
 THREE.FirstPersonControls = function (camera) {
-
     var scope = this;
 
     camera.rotation.set(0, 0, 0);
@@ -31,21 +30,19 @@ THREE.FirstPersonControls = function (camera) {
         pitchObject.rotation.x -= movementY * 0.002;
 
         pitchObject.rotation.x = Math.max(- PI_2, Math.min(PI_2, pitchObject.rotation.x));
-
     };
 
     this.enabled = false;
 
     this.getObject = function () {
-
         return yawObject;
-
     };
 
     this.moveForward = false;
     this.moveBackward = false;
     this.moveLeft = false;
     this.moveRight = false;
+    this.jump = false;
 
     var onKeyDown = function (event) {
         switch (event.keyCode) {
@@ -65,8 +62,19 @@ THREE.FirstPersonControls = function (camera) {
             case 68: // d
                 scope.moveRight = true;
                 break;
+            case 32: // spacebar
+                scope.jump = true;
+                break;
         }
     };
+
+    //var onKeyPress = function (event) {
+    //    switch (event.keyCode) {
+    //        case 32: // spacebar
+    //            scope.jump = true;
+    //            break;
+    //    }
+    //}
 
     var onKeyUp = function (event) {
         switch (event.keyCode) {
@@ -86,11 +94,15 @@ THREE.FirstPersonControls = function (camera) {
             case 68: // d
                 scope.moveRight = false;
                 break;
+            case 32:
+                scope.jump = false;
+                break;
         }
     };
 
     document.addEventListener('keydown', onKeyDown, false);
     document.addEventListener('keyup', onKeyUp, false);
+    //document.addEventListener('keyup', onKeyPress, false);
 
     var havePointerLock = 'pointerLockElement' in document ||
         'mozPointerLockElement' in document ||
