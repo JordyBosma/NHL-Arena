@@ -26,7 +26,6 @@ namespace App_Data
             database = new SQLiteConnection("Data Source=App_Data\\Database.db;Version=3;");
             database.Open();
 
-
             SQLiteCommand command = new SQLiteCommand(sql, database);
             command.Parameters.Add(new SQLiteParameter("@username", username));
             command.Parameters.Add(new SQLiteParameter("@password", password));
