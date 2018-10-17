@@ -11,7 +11,7 @@ namespace App_Data
     public class Login_Manager
     {
         /// <summary>
-        /// checked de crediantials file op de username en password. geeft bij succes de permissions door aan de permissionsmanager
+        /// Gets a person from the database with the supplied crediantials
         /// </summary>
         /// <param name="username"></param>
         /// <param name="password"></param>
