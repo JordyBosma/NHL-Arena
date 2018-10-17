@@ -11,7 +11,6 @@
 *.user
 *.userosscache
 *.sln.docstates
-*.assets.json
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -172,6 +171,8 @@ PublishScripts/
 # NuGet v3's project.json files produces more ignoreable files
 *.nuget.props
 *.nuget.targets
+
+**/obj/project.assets.json
 
 # Microsoft Azure Build Output
 csx/
