@@ -37,7 +37,7 @@
 
                 //create new camera with controls
                 camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 2000);
-                
+
                 camera.position.z = 0;
                 camera.position.y = 0;
                 camera.position.x = 0;
@@ -62,13 +62,11 @@
                 var light = new THREE.AmbientLight(0x404040);
                 light.intensity = 2;
                 scene.add(light);
-
-
             }
 
             function playerControls() {
 
-                // Check of de browser pointerlock 
+                // Check of de browser pointerlock
                 if (controls.controlsEnabled) {
 
                     // Save the current time
@@ -81,7 +79,7 @@
                     velocity.z -= velocity.z * 10.0 * delta;
 
                     // As velocity.y is our "gravity," calculate delta
-                    velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
+                    velocity.y -= 9.8 * 20.0 * delta; // 100.0 = mass
 
                     if (controls.moveForward) {
                         velocity.z -= 400.0 * delta;
@@ -99,15 +97,23 @@
                         velocity.x += 400.0 * delta;
                     }
 
+                    if (controls.jump) {
+                        if (velocity.y > 200) {
+                            velocity.y = 0;
+                        }
+                        velocity.y += 50.0;
+                        controls.jump = false;
+                    }
+
                     // Update the position using the changed delta
                     controls.getObject().translateX(velocity.x * delta);
                     controls.getObject().translateY(velocity.y * delta);
                     controls.getObject().translateZ(velocity.z * delta);
 
                     // Prevent the camera/player from falling out of the 'world'
-                    if (controls.getObject().position.y < 10) {
+                    if (controls.getObject().position.y < 3) {
                         velocity.y = 0;
-                        controls.getObject().position.y = 10;
+                        controls.getObject().position.y = 3;
                     }
 
                     // Save the time for future delta calculations

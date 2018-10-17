@@ -23,7 +23,6 @@ THREE.FirstPersonControls = function (camera) {
     var PI_2 = Math.PI / 2;
 
     var onMouseMove = function (event) {
-
         var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
         var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
 
@@ -31,21 +30,19 @@ THREE.FirstPersonControls = function (camera) {
         pitchObject.rotation.x -= movementY * 0.002;
 
         pitchObject.rotation.x = Math.max(- PI_2, Math.min(PI_2, pitchObject.rotation.x));
-
     };
 
     this.enabled = false;
 
     this.getObject = function () {
-
         return yawObject;
-
     };
 
     this.moveForward = false;
     this.moveBackward = false;
     this.moveLeft = false;
     this.moveRight = false;
+    this.jump = false;
 
     var onKeyDown = function (event) {
         switch (event.keyCode) {
@@ -64,6 +61,9 @@ THREE.FirstPersonControls = function (camera) {
             case 39: // right
             case 68: // d
                 scope.moveRight = true;
+                break;
+            case 32: // spacebar
+                scope.jump = true;
                 break;
         }
     };
@@ -85,6 +85,9 @@ THREE.FirstPersonControls = function (camera) {
             case 39: // right
             case 68: // d
                 scope.moveRight = false;
+                break;
+            case 32: // spacebar
+                scope.jump = false;
                 break;
         }
     };
