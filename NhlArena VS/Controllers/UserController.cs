@@ -11,14 +11,15 @@ namespace NhlArena_VS.Controllers
     {
         public bool checkLogedin()
         {
-            return HttpContext.Session.GetComplexData<string>("user") != null;
+            return HttpContext.Session.GetComplexData<string>("id") != null;
         }
 
         public IActionResult Logout()
         {
             if (checkLogedin())
             {
-                HttpContext.Session.Remove("user");
+                HttpContext.Session.Remove("id");
+                HttpContext.Session.Remove("username");
             }
             return RedirectToAction("Index", "Home");
         }

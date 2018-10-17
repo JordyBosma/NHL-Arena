@@ -35,12 +35,26 @@ namespace NhlArena_VS.Controllers
         [HttpPost]
         public IActionResult Login(LoginPostData data)
         {
-            Console.Write(data);
+            if (ModelState.IsValid)
+            {
+
+            }
             return View();
         }
 
+        [HttpGet]
         public IActionResult SignUp()
         {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult SignUp(SignUpPostData data)
+        {
+            if (ModelState.IsValid)
+            {
+                
+            }
             return View();
         }
         

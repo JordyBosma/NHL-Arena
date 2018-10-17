@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NhlArena_VS.Models
 {
-    public class LoginPostData
+    public class LoginPostData : ValidationAttribute
     {
 
         [Display(Name = "Username")]
