@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using Clients;
+using WorldObjects;
 
 namespace GameLogic
 {
@@ -11,24 +12,24 @@ namespace GameLogic
     {
         private bool isActive = false;
         public Guid gameId { get; }
-        private List<Client> players = new List<Client>();
+        private List<Player> players = new List<Player>();
         public string gameName { get; }
 
-        public Game(Client initailPlayer)
+        public Game(Client initailClient)
         {
             gameId = new Guid();
-            players.Add(initailPlayer);
-            gameName = initailPlayer.username + "'s Game";
+            players.Add(new Player(initailClient));
+            gameName = initailClient.username + "'s Game";
             
             Thread gameThread = new Thread(Logic);
             gameThread.Start();
         }
 
-        public bool AddPlayer(Client newPlayer)
+        public bool AddPlayer(Client newClient)
         {
             if(players.Count() < 7)
             {
-                players.Add(newPlayer);
+                players.Add(new Player(newClient));
                 return true;
             }
             else

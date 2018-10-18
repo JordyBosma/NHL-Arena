@@ -74,13 +74,14 @@ namespace NhlArena_VS
                     if (context.WebSockets.IsWebSocketRequest)
                     {
                         string[] pathContents = context.Request.Path.ToString().Split('/');
-                        
+
                         //checks if path contains more than just connect_client, and if there is a session with an logged in user.
                         if (pathContents[2] != null && !string.IsNullOrEmpty(context.Session.GetString("id")) && !string.IsNullOrEmpty(context.Session.GetString("username")))
                         {
                             if (pathContents[2] == "newGame")
                             {
                                 WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
+                                string username = context.Session.GetString("username");
 
                                 Client cs = new Client(webSocket, username);
                                 GameManager.ManageClient(cs);
@@ -90,10 +91,11 @@ namespace NhlArena_VS
                             {
                                 try
                                 {
-                                    Guid gameId = new Guid(pathContents[2]);
                                     WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-
-                                    Client cs = new Client(webSocket, gameId);
+                                    string username = context.Session.GetString("username");
+                                    Guid gameId = new Guid(pathContents[2]);
+                                    
+                                    Client cs = new Client(webSocket, username, gameId);
                                     GameManager.ManageClient(cs);
                                     await cs.StartReceiving();
                                 }

@@ -22,8 +22,9 @@ namespace Clients
             sendManager = new ClientSendManager();
         }
 
-        public Client(WebSocket socket) : base(socket)
+        public Client(WebSocket socket, string username) : base(socket)
         {
+            this.username = username;
         }
 
         public override async Task StartReceiving() {
