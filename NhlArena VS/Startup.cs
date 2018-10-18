@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using GameLogic;
+using Clients;
 
 namespace NhlArena_VS
 {
@@ -81,7 +82,7 @@ namespace NhlArena_VS
                             {
                                 WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
 
-                                Client cs = new Client(webSocket);
+                                Client cs = new Client(webSocket, username);
                                 GameManager.ManageClient(cs);
                                 await cs.StartReceiving();
                             }

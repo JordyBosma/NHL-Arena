@@ -5,15 +5,21 @@ using System.Threading;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
 using System.Text;
+using Commands;
 
-namespace GameLogic {
+namespace Clients
+{
     public class Client : View
     {
         public Guid gameId { get; }
+        public string username { get; }
+        public ClientSendManager sendManager { get; }
 
-        public Client(WebSocket socket, Guid gameId) : base(socket)
+        public Client(WebSocket socket, string username, Guid gameId) : base(socket)
         {
             this.gameId = gameId;
+            this.username = username;
+            sendManager = new ClientSendManager();
         }
 
         public Client(WebSocket socket) : base(socket)
@@ -32,6 +38,8 @@ namespace GameLogic {
                 //System.Diagnostics.Debug.WriteLine("Received the following information from client: " + yeetmessage );
 
                 result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+
+
             }
 
             Console.WriteLine("ClientView has disconnected");
@@ -39,8 +47,9 @@ namespace GameLogic {
             await socket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
         }
 
-        public override async void SendMessage(string message)
+        public override async void SendCommands()
         {
+            string message = sendManager.GetCommandsForSending();
             byte[] buffer = Encoding.UTF8.GetBytes(message);
             try
             {
@@ -49,6 +58,7 @@ namespace GameLogic {
             catch (Exception e)
             {
                 Console.WriteLine("Error while sending information to client, probably a Socket disconnect");
+                Console.WriteLine(e);
             }
         }
     }

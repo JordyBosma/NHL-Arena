@@ -31,7 +31,7 @@ namespace Commands
     /// </summary>
     public class DeathCommand : Command
     {
-        public DeathCommand(): base("DeathCommand")
+        public DeathCommand() : base("DeathCommand")
         {
 
         }
@@ -90,7 +90,7 @@ namespace Commands
 
         }
     }
-    
+
     public class UpdateObjectCommand : ObjectCommand
     {
         public UpdateObjectCommand(string model) : base("UpdateObjectCommand", model)
