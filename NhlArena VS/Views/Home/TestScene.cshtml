@@ -47,8 +47,11 @@
 
                 window.addEventListener('resize', onWindowResize, false);
 
-                var basicPlane = new BasicPlane();
-                scene.add(basicPlane);
+                //var basicPlane = new BasicPlane();
+                //scene.add(basicPlane);
+
+                var NHLMap = new NHLArenaMap();
+                scene.add(NHLMap);
 
                 var light = new THREE.AmbientLight(0x404040);
                 light.intensity = 2;
@@ -99,7 +102,7 @@
                         velocity.y += 50.0;
                         controls.jump = false;
                     }
-                    
+
                     // Update the position using the changed delta
                     controls.getObject().translateX(velocity.x * delta);
                     controls.getObject().translateY(velocity.y * delta);
@@ -146,6 +149,7 @@
     <script src="~/lib/threejs/MTLLoader.js"></script>
     <script src="~/lib/threejs/OBJLoader.js"></script>
     <script src="~/js/BasicPlane.js"></script>
+    <script src="~/js/ModelLoader.js"></script>
 
 
 </body>
