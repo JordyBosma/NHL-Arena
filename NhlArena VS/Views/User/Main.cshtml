@@ -5,28 +5,35 @@
 }
 <div class="container row">
     <div class="col s10 offset-s1">
-        @{
-            List<Game> games = GameManager.GetGames();
-            if (games.Count() == 0)
-            {
-                <div class="card-panel red darken-4">
-                    <p>curently no games ongoing, start a new game<p><a href="/User/Game/">New game</a>
-                </div>
-            }
-            else
-            {
-                <table class="card-panel red darken-4" style="margin: 10px; padding: 0 10px 0 10px; display: block;">
-                    <thead>
-                        <tr class="orange-text text-accent-3">
-                            <th class="" style="width: 4%"></th>
-                            <th class="" style="width: auto">Started by:</th>
-                            <th class="" style="width: 15%">Players:</th>
-                            <th class="" style="width: 10%"></th>
-                        </tr>
-                    </thead>
+        <table class="card-panel red darken-4" style="margin: 10px; padding: 0 10px 0 10px; display: block;">
+            <thead>
+                <tr class="orange-text text-accent-3">
+                    <th class="" style="width: 4%"></th>
+                    <th class="" style="width: auto">Started by:</th>
+                    <th class="" style="width: 15%">Players:</th>
+                    <th class="" style="width: 10%"><a class="btn orange accent-3"  href="/User/Game/newGame">New game</a></th>
+                </tr>
+            </thead>
 
-                    <tbody>
-                        @for (int i = 0; i < games.Count(); i++)
+            <tbody>
+                @{
+                    List<Game> games = GameManager.GetGames();
+                    if (games.Count() == 0)
+                    {
+                <tr>
+                    <td></td>
+                    <td>
+                        <p>no games, start a new game<p>
+                    </td>
+                    <td></td>
+                    <td>
+                        <a class="btn orange accent-3" href="/User/Game/newGame">New game</a>
+                    </td>
+                </tr>
+                    }
+                    else
+                    {
+                        for (int i = 0; i < games.Count(); i++)
                         {
                         <tr>
                             <td>@{Convert.ToString(i);}.</td>
@@ -49,10 +56,10 @@
                             }
                         </tr>
                         }
-                    </tbody>
+                    }
+                }
+             </tbody>
 
-                </table>
-            }
-        }
+        </table>
     </div>
 </div>
