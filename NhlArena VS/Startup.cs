@@ -82,7 +82,7 @@ namespace NhlArena_VS
                             {
                                 WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
 
-                                Client cs = new Client(webSocket);
+                                Client cs = new Client(webSocket, username);
                                 GameManager.ManageClient(cs);
                                 await cs.StartReceiving();
                             }

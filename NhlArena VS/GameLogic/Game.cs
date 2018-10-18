@@ -11,13 +11,15 @@ namespace GameLogic
     {
         private bool isActive = false;
         public Guid gameId { get; }
-        List<Client> players = new List<Client>();
+        private List<Client> players = new List<Client>();
+        public string gameName { get; }
 
         public Game(Client initailPlayer)
         {
             gameId = new Guid();
             players.Add(initailPlayer);
-
+            gameName = initailPlayer.username + "'s Game";
+            
             Thread gameThread = new Thread(Logic);
             gameThread.Start();
         }
@@ -43,6 +45,11 @@ namespace GameLogic
             {
                 Thread.Sleep(1000 / 60);
             }
+        }
+
+        public int GetPlayerCount()
+        {
+            return players.Count();
         }
     }
 }

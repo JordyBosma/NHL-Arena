@@ -12,10 +12,13 @@ namespace Clients
     public class Client : View
     {
         public Guid gameId { get; }
+        public string username { get; }
         public ClientSendManager sendManager { get; }
-        public Client(WebSocket socket, Guid gameId) : base(socket)
+
+        public Client(WebSocket socket, string username, Guid gameId) : base(socket)
         {
             this.gameId = gameId;
+            this.username = username;
             sendManager = new ClientSendManager();
         }
 
