@@ -13,12 +13,21 @@ THREE.FirstPersonControls = function (camera) {
 
     camera.rotation.set(0, 0, 0);
 
+    var material = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide });
+    var box = new Physijs.BoxMesh(
+        new THREE.BoxGeometry(0.1, 0.1, 5),
+        material
+    );
+
+    box.position.set(0.3, 0, -0.3);
+
     var pitchObject = new THREE.Object3D();
     pitchObject.add(camera);
 
     var yawObject = new THREE.Object3D();
     yawObject.position.y = 10;
     yawObject.add(pitchObject);
+    pitchObject.add(box);
 
     var PI_2 = Math.PI / 2;
 
@@ -154,5 +163,5 @@ THREE.FirstPersonControls = function (camera) {
         element.requestPointerLock();
     });
 
-    
+
 };

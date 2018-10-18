@@ -36,11 +36,8 @@
                 document.body.appendChild(renderer.domElement);
 
                 //create new camera with controls
-                camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 2000);
-
-                camera.position.z = 0;
-                camera.position.y = 0;
-                camera.position.x = 0;
+                camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+                
                 // Create scene
                 scene = new Physijs.Scene({reportSize: 2, fixedStep: 1 / 60 });
 
@@ -56,12 +53,7 @@
                 var light = new THREE.AmbientLight(0x404040);
                 light.intensity = 2;
                 scene.add(light);
-
-                var box = new Physijs.BoxMesh(
-                    new THREE.BoxGeometry(3, 3, 3)
-                );
-                scene.add(box);
-            }
+                }
 
             function playerControls() {
 
