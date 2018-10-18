@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WorldObjects;
 
 namespace Commands
 {
@@ -20,9 +21,15 @@ namespace Commands
     /// </summary>
     public class HitCommand : Command
     {
-        public HitCommand() : base("HitCommand")
-        {
+        public Player shootingPlayer { get; }
+        public Player hitPlayer { get; }
+        public int damage { get; }
 
+        public HitCommand(Player shootingPlayer, Player hitPlayer, int damage) : base("HitCommand")
+        {
+            this.shootingPlayer = shootingPlayer;
+            this.hitPlayer = hitPlayer;
+            this.damage = damage;
         }
     }
 

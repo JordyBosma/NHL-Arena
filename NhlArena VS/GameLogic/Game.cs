@@ -15,21 +15,21 @@ namespace GameLogic
         private List<Player> players = new List<Player>();
         public string gameName { get; }
 
-        public Game(Client initailPlayer)
+        public Game(Client initailClient)
         {
             gameId = new Guid();
-            players.Add(new Player(initailPlayer));
-            gameName = initailPlayer.username + "'s Game";
+            players.Add(new Player(initailClient));
+            gameName = initailClient.username + "'s Game";
             
             Thread gameThread = new Thread(Logic);
             gameThread.Start();
         }
 
-        public bool AddPlayer(Client newPlayer)
+        public bool AddPlayer(Client newClient)
         {
             if(players.Count() < 7)
             {
-                players.Add(new Player(newPlayer));
+                players.Add(new Player(newClient));
                 return true;
             }
             else
