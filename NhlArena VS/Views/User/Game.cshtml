@@ -1,6 +1,9 @@
 ﻿@{
+    Layout = "_DefaultLayout";
 }
-<script>
+<a onclick="SocketTest()" class="btn" href="#">SocketButton</a>
+@section Scripts{
+    <script>
         console.log("testYeet");
         var Socket = new WebSocket("wss://" + window.location.hostname + ":" + window.location.port + "/connect_client/@ViewData["game"]");
         Socket.onopen = function () {
@@ -11,5 +14,5 @@
         Socket.onerror = error => {
             console.log("websocket error ${error}");
         };
-
-</script>
+    </script>
+}
