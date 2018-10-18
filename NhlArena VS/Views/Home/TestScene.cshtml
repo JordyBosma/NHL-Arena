@@ -57,7 +57,7 @@
 
             function playerControls() {
 
-                // Check of de browser pointerlock
+                // Check for pointerlock in browser
                 if (controls.controlsEnabled) {
 
                     // Save the current time
@@ -69,25 +69,30 @@
                     velocity.x -= velocity.x * 10.0 * delta;
                     velocity.z -= velocity.z * 10.0 * delta;
 
-                    // As velocity.y is our "gravity," calculate delta
-                    velocity.y -= 9.8 * 20.0 * delta; // 100.0 = mass
+                    // Calculate "gravity" using delta
+                    velocity.y -= 9.8 * 20.0 * delta; // middle number = mass
 
+                    // Moves the camera (player) forward
                     if (controls.moveForward) {
                         velocity.z -= 400.0 * delta;
                     }
 
+                    // Moves the camera (player) backward
                     if (controls.moveBackward) {
                         velocity.z += 400.0 * delta;
                     }
 
+                    // Moves the camera (player) left
                     if (controls.moveLeft) {
                         velocity.x -= 400.0 * delta;
                     }
 
+                    // Moves the camera (player) right
                     if (controls.moveRight) {
                         velocity.x += 400.0 * delta;
                     }
 
+                    // Makes the camera (player) jump
                     if (controls.jump) {
                         if (velocity.y > 200) {
                             velocity.y = 0;
