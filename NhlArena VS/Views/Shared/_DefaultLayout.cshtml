@@ -12,24 +12,50 @@
     @RenderSection("Stylesheets", required: false)
 </head>
 <body>
-    <div class="gradient"></div>
-    <!-- Dropdown Structure -->
-    <ul id="dropdown1" class="dropdown-content grey darken-3">
-        <li><a class="orange-text text-accent-3" href="#!">one</a></li>
-        <li><a class="orange-text text-accent-3" href="#!">two</a></li>
-        <li><a class="orange-text text-accent-3" href="#!">three</a></li>
-    </ul>
-    <nav>
-        <div class="nav-wrapper red darken-4">
-            <a href="/Home/Index" class="brand-logo orange-text text-accent-3">NHL Arena</a>
-            <ul class="right hide-on-med-and-down">
-                <li><a class="orange-text text-accent-3" href="/Home/login">Login</a></li>
-                <li><a class="orange-text text-accent-3 " href="/Home/SignUp">SignUp</a></li>
-                <!-- Dropdown Trigger -->
-                <li><a class="dropdown-trigger orange-text text-accent-3" href="#!" data-target="dropdown1">Dropdown<i class="material-icons right">arrow_drop_down</i></a></li>
-            </ul>
-        </div>
-    </nav>
+    @if (Context.Session.GetString("username") == null)
+    {
+        <div class="gradient"></div>
+        <!-- Dropdown Structure -->
+        <ul id="dropdown1" class="dropdown-content grey darken-3">
+            <li><a class="orange-text text-accent-3" href="#!">one</a></li>
+            <li><a class="orange-text text-accent-3" href="#!">two</a></li>
+            <li><a class="orange-text text-accent-3" href="#!">three</a></li>
+        </ul>
+        <nav>
+            <div class="nav-wrapper red darken-4">
+                <a href="/Home/Index" class="brand-logo orange-text text-accent-3">NHL Arena</a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a class="orange-text text-accent-3" href="/Home/login">Login</a></li>
+                    <li><a class="orange-text text-accent-3 " href="/Home/SignUp">SignUp</a></li>
+                    <!-- Dropdown Trigger -->
+                    <li><a class="dropdown-trigger orange-text text-accent-3" href="#!" data-target="dropdown1">Dropdown<i class="material-icons right">arrow_drop_down</i></a></li>
+                </ul>
+            </div>
+        </nav>
+    }
+    else
+    {
+        <div class="gradient"></div>
+        <!-- Dropdown Structure -->
+        <ul id="dropdown1" class="dropdown-content grey darken-3">
+            <li><a class="orange-text text-accent-3" href="#!">one</a></li>
+            <li><a class="orange-text text-accent-3" href="#!">two</a></li>
+            <li><a class="orange-text text-accent-3" href="#!">three</a></li>
+        </ul>
+        <nav>
+            <div class="nav-wrapper red darken-4">
+                <a href="/Home/Index" class="brand-logo orange-text text-accent-3">NHL Arena</a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a>@Context.Session.GetString("username")</a></li>
+                    <li><a class="orange-text text-accent-3" href="/User/Logout">Logout</a></li>
+                    <li><a class="orange-text text-accent-3 " href="/User/Cutomise">Customise</a></li>
+                    <!-- Dropdown Trigger -->
+                    <li><a class="dropdown-trigger orange-text text-accent-3" href="#!" data-target="dropdown1">Dropdown<i class="material-icons right">arrow_drop_down</i></a></li>
+                </ul>
+            </div>
+        </nav>
+    }
+
 
 
     <Main class="">
