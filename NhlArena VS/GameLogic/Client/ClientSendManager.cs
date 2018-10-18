@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 
 namespace Commands
 {
-    public class CommandManager
+    public class ClientSendManager
     {
         private List<Command> Commandqueue = new List<Command>();
+
+        public ClientSendManager()
+        {
+
+        }
 
         public void AddCommand(Command cmd)
         {
@@ -28,8 +33,5 @@ namespace Commands
 
             return JsonConvert.SerializeObject(resultArray);
         }
-          
-
-        
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
 
-namespace Views
+namespace Client
 {
     abstract public class View
     {
@@ -19,7 +19,7 @@ namespace Views
 
         //connection code
         public abstract Task StartReceiving();
-        public abstract void SendMessage(string message);
+        public abstract void SendCommands();
         public virtual void SendCommand()
         {
             //SendMessage(c.ToJson());
