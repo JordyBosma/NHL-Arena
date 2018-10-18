@@ -35,12 +35,15 @@ namespace Commands
 
     /// <summary>
     /// player death van server naar client
+    /// update positie naar deathpos
     /// </summary>
     public class DeathCommand : Command
     {
-        public DeathCommand() : base("DeathCommand")
-        {
+        public Player deadPlayer { get; }
 
+        public DeathCommand(Player deadPlayer) : base("DeathCommand")
+        {
+            this.deadPlayer = deadPlayer;
         }
     }
 
@@ -49,9 +52,11 @@ namespace Commands
     /// </summary>
     public class UpdatePlayerStatsCommand : Command
     {
-        public UpdatePlayerStatsCommand() : base("UpdatePlayerStatsCommand")
-        {
+        public Player targetPlayer { get; }
 
+        public UpdatePlayerStatsCommand(Player updatePlayer) : base("UpdatePlayerStatsCommand")
+        {
+            this.targetPlayer = targetPlayer;
         }
     }
 
@@ -60,9 +65,13 @@ namespace Commands
     /// </summary>
     public class PlayerAmmoPickupCommand : Command
     {
-        public PlayerAmmoPickupCommand() : base("PlayerAmmoPickupCommand")
-        {
+        public string ammoType { get; }
+        public Player targetPlayer;
 
+        public PlayerAmmoPickupCommand(string ammoType, Player targetPlayer) : base("PlayerAmmoPickupCommand")
+        {
+            this.ammoType = ammoType;
+            this.targetPlayer = targetPlayer;
         }
     }
 
@@ -71,9 +80,11 @@ namespace Commands
     /// </summary>
     public class ErrorCommand : Command
     {
-        public ErrorCommand() : base("ErrorCommand")
-        {
+        public string errorMessage { get; }
 
+        public ErrorCommand(string errorMessage) : base("ErrorCommand")
+        {
+            this.errorMessage = errorMessage;
         }
     }
 
@@ -83,6 +94,11 @@ namespace Commands
     public class ObjectCommand : Command
     {
         public string model { get; }
+
+        public double posX { get; }
+        public double posY { get; }
+        public double posZ { get; }
+        public double rotationY { get; }
 
         public ObjectCommand(string objectCommandType, string model) : base(objectCommandType)
         {
