@@ -22,6 +22,14 @@ namespace NhlArena_VS.Controllers
             return View();
         }
 
+        [HttpGet()]
+        public IActionResult Game(string id)
+        {
+            if (!checkLogedIn()) return RedirectToAction("Login", "Home");
+            ViewData["game"] = id;
+            return View();
+        }
+
         public IActionResult Logout()
         {
             if (checkLogedIn())
