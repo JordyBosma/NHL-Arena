@@ -40,7 +40,7 @@ namespace GameLogic
 
             while (isActive)
             {
-                Thread.Sleep(25);               
+                Thread.Sleep(1000 / 60);
             }
         }
     }

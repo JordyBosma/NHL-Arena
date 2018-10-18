@@ -19,6 +19,7 @@ namespace GameLogic {
         public Client(WebSocket socket) : base(socket)
         {
         }
+
         public override async Task StartReceiving() {
             var buffer = new byte[1024 * 4];
 

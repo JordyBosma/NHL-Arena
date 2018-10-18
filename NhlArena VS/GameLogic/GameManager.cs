@@ -10,7 +10,7 @@ namespace GameLogic
     /// </summary>
     public static class GameManager
     {
-        static List<Game> activeGames = new List<Game>();
+        private static List<Game> activeGames = new List<Game>();
 
         /// <summary>
         /// checks if the client wants to connect to a new game or a excisting game, 
@@ -38,6 +38,11 @@ namespace GameLogic
                         }
                     }
                 }
+
+                //bro wtf is that guid
+                cs.OnError();
+                cs = null;
+                goto Outer;
             }
             else
             {
@@ -74,6 +79,15 @@ namespace GameLogic
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// returns active games for the Game selection screen.
+        /// </summary>
+        /// <returns></returns>
+        public static List<Game> GetGames()
+        {
+            return activeGames;
         }
     }
 }
