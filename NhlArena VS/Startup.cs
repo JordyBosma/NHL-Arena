@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using GameLogic;
+using Clients;
 
 namespace NhlArena_VS
 {
