@@ -10,7 +10,7 @@
             if (games.Count() == 0)
             {
                 <div class="card-panel red darken-4">
-                    <p>curently no games ongoing, start a new game<p>
+                    <p>curently no games ongoing, start a new game<p><a href="/User/Game/">New game</a>
                 </div>
             }
             else
@@ -19,8 +19,8 @@
                     <thead>
                         <tr class="orange-text text-accent-3">
                             <th class="" style="width: 4%"></th>
-                            <th class="" style="width: 20%">Started by:</th>
-                            <th class="" style="width: auto">Players:</th>
+                            <th class="" style="width: auto">Started by:</th>
+                            <th class="" style="width: 15%">Players:</th>
                             <th class="" style="width: 10%"></th>
                         </tr>
                     </thead>
@@ -28,14 +28,29 @@
                     <tbody>
                         @for (int i = 0; i < games.Count(); i++)
                         {
-                            <tr>
-                                <td>@{Convert.ToString(i);}.</td>
-                                <td>Eclair</td>
-                                <td>$0.87</td>
-                                <td><a class="btn orange accent-3">Join</a></td>
-                            </tr>
+                        <tr>
+                            <td>@{Convert.ToString(i);}.</td>
+                            <td>@games[i].gameName</td>
+                            @{int count = games[i].GetPlayerCount();
+                                if (count == 6)
+                                {
+                                    <td>6/6</td>
+                                    <td>
+                                        <a class="btn orange accent-3 disabled">full</a>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>@{Convert.ToString(count);}/6</td>
+                                    <td>
+                                        <a class="btn orange accent-3" href="/User/Game/@games[i].gameId">Join</a>
+                                    </td>
+                                }
+                            }
+                        </tr>
                         }
                     </tbody>
+
                 </table>
             }
         }
