@@ -8,7 +8,8 @@
  */
 
 THREE.FirstPersonControls = function (camera) {
-
+    var delay = 500;
+    var canJump = true;
     var scope = this;
 
     camera.rotation.set(0, 0, 0);
@@ -40,7 +41,6 @@ THREE.FirstPersonControls = function (camera) {
 
         pitchObject.rotation.x = Math.max(- PI_2, Math.min(PI_2, pitchObject.rotation.x));
     };
-
     this.enabled = false;
 
     this.getObject = function () {
@@ -72,10 +72,18 @@ THREE.FirstPersonControls = function (camera) {
                 scope.moveRight = true;
                 break;
             case 32: // spacebar
-                scope.jump = true;
+                if (canJump) {
+                    scope.jump = true;
+                    canJump = false;
+                    var timer = setTimeout(UpdateCanJump, delay);                                     
+                }
                 break;
         }
     };
+
+    function UpdateCanJump() {
+        canJump = true;
+    }
 
     var onKeyUp = function (event) {
         switch (event.keyCode) {

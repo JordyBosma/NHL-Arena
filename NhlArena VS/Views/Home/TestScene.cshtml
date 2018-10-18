@@ -37,9 +37,9 @@
 
                 //create new camera with controls
                 camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
-                
+
                 // Create scene
-                scene = new Physijs.Scene({reportSize: 2, fixedStep: 1 / 60 });
+                scene = new Physijs.Scene({ reportSize: 2, fixedStep: 1 / 60 });
 
                 // Create First Person Controls
                 controls = new THREE.FirstPersonControls(camera);
@@ -53,7 +53,7 @@
                 var light = new THREE.AmbientLight(0x404040);
                 light.intensity = 2;
                 scene.add(light);
-                }
+            }
 
             function playerControls() {
 
@@ -64,7 +64,6 @@
                     var time = performance.now();
                     // Create a delta value based on current time
                     var delta = (time - prevTime) / 1000;
-
                     // Set the velocity.x and velocity.z using the calculated time delta
                     velocity.x -= velocity.x * 10.0 * delta;
                     velocity.z -= velocity.z * 10.0 * delta;
@@ -94,13 +93,13 @@
 
                     // Makes the camera (player) jump
                     if (controls.jump) {
-                        if (velocity.y > 200) {
+                        if (velocity.y > 100) {
                             velocity.y = 0;
                         }
                         velocity.y += 50.0;
                         controls.jump = false;
                     }
-
+                    
                     // Update the position using the changed delta
                     controls.getObject().translateX(velocity.x * delta);
                     controls.getObject().translateY(velocity.y * delta);
@@ -116,7 +115,7 @@
                     prevTime = time;
                 }
             }
-            
+
             function onWindowResize() {
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
@@ -125,7 +124,7 @@
 
             function animate() {
                 requestAnimationFrame(animate);
-                
+
                 playerControls();
 
                 renderer.render(scene, camera);
