@@ -11591,23 +11591,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Jelle\\.nuget\\packages\\": {},
+    "C:\\Users\\swenv\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\GITHUB\\NHL-Arena\\NhlArena VS\\NhlArena VS.csproj",
+      "projectUniqueName": "C:\\Users\\swenv\\OneDrive\\Desktop\\GitHub Projects\\NHL-Arena\\NhlArena VS\\NhlArena VS.csproj",
       "projectName": "NhlArena VS",
-      "projectPath": "D:\\GITHUB\\NHL-Arena\\NhlArena VS\\NhlArena VS.csproj",
-      "packagesPath": "C:\\Users\\Jelle\\.nuget\\packages\\",
-      "outputPath": "D:\\GITHUB\\NHL-Arena\\NhlArena VS\\obj\\",
+      "projectPath": "C:\\Users\\swenv\\OneDrive\\Desktop\\GitHub Projects\\NHL-Arena\\NhlArena VS\\NhlArena VS.csproj",
+      "packagesPath": "C:\\Users\\swenv\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\swenv\\OneDrive\\Desktop\\GitHub Projects\\NHL-Arena\\NhlArena VS\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Jelle\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\swenv\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
