@@ -8,7 +8,6 @@ namespace GameLogic
 {
     abstract public class View
     {
-
         protected WebSocket socket;
 
         //base constructer
