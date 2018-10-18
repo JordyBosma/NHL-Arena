@@ -3,8 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Commands;
 
-namespace Commands
+namespace Clients
 {
     public class ClientSendManager
     {

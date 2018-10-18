@@ -5,9 +5,10 @@ using System.Threading;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
 using System.Text;
-using Commands
+using Commands;
 
-namespace GameLogic {
+namespace Clients
+{
     public class Client : View
     {
         public Guid gameId { get; }
