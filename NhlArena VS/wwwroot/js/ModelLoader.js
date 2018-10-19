@@ -9,7 +9,13 @@
 
         loadOBJModel("/models/objects/", "NHLArenaMap.obj", "/models/materials/", "NHLArenaMap.mtl", (mesh) => {
             mesh.scale.set(1, 1, 1);
-            selfRef.add(mesh);
+            var mapMaterial = Physijs.createMaterial(
+                new THREE.MeshLambertMaterial({ color: 0x111555 }),
+                .8, // high friction
+                .3 // low restitution
+            );
+            var mapMesh = new Physijs.Mesh(mesh.geometry, mapMaterial);
+            selfRef.add(mapMesh);
         });
     }
 }
@@ -25,9 +31,7 @@ function loadOBJModel(objPath, objName, materialPath, materialName, onload) {
     new THREE.MTLLoader()
         .setPath(materialPath)
         .load(materialName, function (materials) {
-
             materials.preload();
-
             new THREE.OBJLoader()
                 .setPath(objPath)
                 .setMaterials(materials)
