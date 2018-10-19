@@ -26,13 +26,24 @@ namespace Commands
             throw new NotImplementedException();
         }
 
-
         /// <summary>
         /// receive commands from clients
         /// </summary>
         /// <param name="value"></param>
         public void OnNext(List<Command> value)
         {
+            foreach(Command c in value)
+            {
+                string commandType = c.commandType;
+
+                switch (commandType)
+                {
+                    case "HitCommand":
+                        break;
+                    case "UpdatePlayerCommand":
+                        break;
+                }
+            }
             throw new NotImplementedException();
         }
 

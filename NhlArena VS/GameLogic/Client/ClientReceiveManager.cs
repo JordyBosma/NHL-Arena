@@ -35,7 +35,7 @@ namespace Clients
                         case "HitCommand":
                             cmdlist.Add( new HitCommand(new Guid(json[i].shootingPlayerGuid.Value), new Guid(json[i].hitPlayerGuid.Value), (int)json[i].damage.Value));
                             break;
-                        case "ErrorCommand":
+                        case "UpdatePlayerCommand":
                             cmdlist.Add(new ErrorCommand(json[i].errorMessage.Value));
                             break;                        
                         default:
