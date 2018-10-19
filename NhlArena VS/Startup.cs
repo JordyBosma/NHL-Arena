@@ -129,7 +129,7 @@ namespace NhlArena_VS
 
             //app.UseHttpsRedirection();
 
-            app.UseStaticFiles();
+            //app.UseStaticFiles();
             app.UseSession();
 
             app.UseMvc(routes =>
