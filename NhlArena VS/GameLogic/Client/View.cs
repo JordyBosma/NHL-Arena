@@ -7,7 +7,7 @@ using Commands;
 
 namespace Clients
 {
-    abstract public class View : IObservable<List<Command>>
+    abstract public class View : IObservable<List<Command>>, IObserver<Command>
     {
         protected WebSocket socket;
         private List<IObserver<List<Command>>> observers = new List<IObserver<List<Command>>>();
@@ -26,6 +26,11 @@ namespace Clients
             //SendMessage(c.ToJson());
         }
 
+        public virtual void OnError()
+        {
+            socket.Abort();
+        }
+
         public IDisposable Subscribe(IObserver<List<Command>> observer)
         {
             if (!observers.Contains(observer))
@@ -35,6 +40,10 @@ namespace Clients
             return new Unsubscriber<Command>(observers, observer);
         }
 
+        /// <summary>
+        /// send commands to commandmanager
+        /// </summary>
+        /// <param name="c"></param>
         public void SendCommandsToObservers(List<Command> c)
         {
             for (int i = 0; i < this.observers.Count; i++)
@@ -59,6 +68,25 @@ namespace Clients
                 if (_observers.Contains(_observer))
                     _observers.Remove(_observer);
             }
+        }
+
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnError(Exception e)
+        {
+            socket.Abort();
+        }
+
+        /// <summary>
+        /// receive commands from commandmanager
+        /// </summary>
+        /// <param name="value"></param>
+        public virtual void OnNext(Command value)
+        {
+            throw new NotImplementedException();
         }
     }
 }

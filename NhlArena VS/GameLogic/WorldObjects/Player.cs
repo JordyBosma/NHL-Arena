@@ -42,6 +42,6 @@ namespace WorldObjects
             //this.username = playerClient.username;
             this._health = 100;
             this._armour = 0;
-        }
+        }        
     }
 }

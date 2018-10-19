@@ -65,24 +65,13 @@ namespace Clients
             }
         }
 
-
-        public void OnCompleted()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnError(Exception error)
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// receive commands from commandmanager
         /// </summary>
         /// <param name="value"></param>
-        public void OnNext(Command value)
+        public override void OnNext(Command value)
         {
-            if(value is SendCommand)
+            if (value is SendCommand)
             {
                 SendCommands();
             }
