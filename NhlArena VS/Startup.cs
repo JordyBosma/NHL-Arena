@@ -131,8 +131,13 @@ namespace NhlArena_VS
 
             //app.UseHttpsRedirection();
 
+<<<<<<< HEAD
             app.UseStaticFiles();
             
+=======
+            //app.UseStaticFiles();
+            app.UseSession();
+>>>>>>> Basic-scene
 
             app.UseMvc(routes =>
             {
