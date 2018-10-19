@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace WorldObjects
 {
-    public class Player
+    public class Player : Object3D
     {
         private Client playerClient;
-        public Guid playerGuid { get; }
         public string username { get; }
 
         private bool _isMoving;
@@ -25,20 +24,9 @@ namespace WorldObjects
         public int kills { get { return _kills; } }
         public int deaths { get { return _deaths; } }
 
-        private double _posX;
-        private double _posY;
-        private double _posZ;
-        private double _rotationY;
-
-        public double posX { get { return _posX; } }
-        public double posY { get { return _posY; } }
-        public double posZ { get { return _posZ; } }
-        public double rotationY { get { return _rotationY; } }
-
-        public Player(Client playerClient)
+        public Player(Client playerClient, double x, double y, double z, double rotationX, double rotationY, double rotationZ) : base(x, y, z, rotationX, rotationY, rotationZ, "Player")
         {
             this.playerClient = playerClient;
-            this.playerGuid = new Guid();
             this.username = playerClient.username;
             this._health = 100;
             this._armour = 0;

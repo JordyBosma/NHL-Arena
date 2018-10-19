@@ -88,22 +88,40 @@ namespace Commands
         }
     }
 
+    public class UpdatePlayerCommand : Command
+    {
+        Guid playerGuid;
+        public double x { get; }
+        public double y { get; }
+        public double z { get; }
+        public double rotationY { get; }
+
+        public UpdatePlayerCommand(Guid playerGuid, double x, double y, double z, double rotationY): base("UpdatePlayerCommand")
+        {
+            this.playerGuid = playerGuid;
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.rotationY = rotationY;
+        }
+    }
+
     /// <summary>
     /// general object command
     /// </summary>
     public class ObjectCommand : Command
     {
-        
+        Object3D obj;
 
-        public ObjectCommand(string objectCommandType) : base(objectCommandType)
+        public ObjectCommand(string objectCommandType, Object3D obj) : base(objectCommandType)
         {
-            
+            this.obj = obj;
         }
     }
 
     public class NewObjectCommand : ObjectCommand
     {
-        public NewObjectCommand() : base("NewObjectCommand")
+        public NewObjectCommand(Object3D obj) : base("NewObjectCommand", obj)
         {
 
         }
@@ -111,7 +129,7 @@ namespace Commands
 
     public class UpdateObjectCommand : ObjectCommand
     {
-        public UpdateObjectCommand(string model) : base("UpdateObjectCommand")
+        public UpdateObjectCommand(Object3D obj) : base("UpdateObjectCommand", obj)
         {
 
         }
@@ -119,7 +137,7 @@ namespace Commands
 
     public class DeleteObjectCommand : ObjectCommand
     {
-        public DeleteObjectCommand(string model) : base("DeleteObjectCommand")
+        public DeleteObjectCommand(Object3D obj) : base("DeleteObjectCommand", obj)
         {
 
         }
