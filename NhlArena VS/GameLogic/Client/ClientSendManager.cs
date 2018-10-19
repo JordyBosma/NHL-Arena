@@ -16,23 +16,26 @@ namespace Clients
 
         }
 
+        /// <summary>
+        /// add command to the queue
+        /// </summary>
+        /// <param name="cmd">the command to send</param>
         public void AddCommand(Command cmd)
         {
             Commandqueue.Add(cmd);
         }
 
+        /// <summary>
+        /// serialized and clears the command queue
+        /// </summary>
+        /// <returns></returns>
         public string GetCommandsForSending()
         {
-            Command[] resultArray = new Command[Commandqueue.Count];
-
-            for(int i = 0; i <Commandqueue.Count; i++)
-            {
-                resultArray[i] = Commandqueue[i];
-            }
+            Command[] resultArray = Commandqueue.ToArray();
 
             Commandqueue.Clear();
 
-            return JsonConvert.SerializeObject(resultArray);
+            return JsonConvert.SerializeObject(resultArray, Formatting.Indented);
         }
     }
 }
