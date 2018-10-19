@@ -55,7 +55,6 @@ artifacts/
 *_i.h
 *.ilk
 *.meta
-*.obj
 *.pch
 *.pdb
 *.pgc
@@ -474,3 +473,5 @@ ASALocalRun/
 # End of https://www.gitignore.io/api/aspnetcore,visualstudio,visualstudiocode
 
 **/obj/project.assets.json
+*.cache
+NhlArena VS/obj/project.assets.json

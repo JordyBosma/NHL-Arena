@@ -66,6 +66,8 @@ namespace NhlArena_VS
                 ContentTypeProvider = provider
             });
 
+            app.UseSession();
+
             app.UseWebSockets();
             app.Use(async (context, next) =>
             {
@@ -76,7 +78,7 @@ namespace NhlArena_VS
                         string[] pathContents = context.Request.Path.ToString().Split('/');
 
                         //checks if path contains more than just connect_client, and if there is a session with an logged in user.
-                        if (pathContents[2] != null && !string.IsNullOrEmpty(context.Session.GetString("id")) && !string.IsNullOrEmpty(context.Session.GetString("username")))
+                        if (pathContents[2] != null && !(string.IsNullOrEmpty(context.Session.GetString("username"))))
                         {
                             if (pathContents[2] == "newGame")
                             {
@@ -126,11 +128,7 @@ namespace NhlArena_VS
                 //app.UseHsts();
             }
 
-
             //app.UseHttpsRedirection();
-
-            app.UseStaticFiles();
-            app.UseSession();
 
             app.UseMvc(routes =>
             {

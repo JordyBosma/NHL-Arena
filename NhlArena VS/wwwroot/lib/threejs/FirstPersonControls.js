@@ -8,10 +8,19 @@
  */
 
 THREE.FirstPersonControls = function (camera) {
-
+    var delay = 500;
+    var canJump = true;
     var scope = this;
 
     camera.rotation.set(0, 0, 0);
+
+    var material = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide });
+    var box = new Physijs.BoxMesh(
+        new THREE.BoxGeometry(0.1, 0.1, 5),
+        material
+    );
+
+    box.position.set(0.3, 0, -0.3);
 
     var pitchObject = new THREE.Object3D();
     pitchObject.add(camera);
@@ -19,11 +28,11 @@ THREE.FirstPersonControls = function (camera) {
     var yawObject = new THREE.Object3D();
     yawObject.position.y = 10;
     yawObject.add(pitchObject);
+    pitchObject.add(box);
 
     var PI_2 = Math.PI / 2;
 
     var onMouseMove = function (event) {
-
         var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
         var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
 
@@ -31,21 +40,18 @@ THREE.FirstPersonControls = function (camera) {
         pitchObject.rotation.x -= movementY * 0.002;
 
         pitchObject.rotation.x = Math.max(- PI_2, Math.min(PI_2, pitchObject.rotation.x));
-
     };
-
     this.enabled = false;
 
     this.getObject = function () {
-
         return yawObject;
-
     };
 
     this.moveForward = false;
     this.moveBackward = false;
     this.moveLeft = false;
     this.moveRight = false;
+    this.jump = false;
 
     var onKeyDown = function (event) {
         switch (event.keyCode) {
@@ -65,8 +71,19 @@ THREE.FirstPersonControls = function (camera) {
             case 68: // d
                 scope.moveRight = true;
                 break;
+            case 32: // spacebar
+                if (canJump) {
+                    scope.jump = true;
+                    canJump = false;
+                    var timer = setTimeout(UpdateCanJump, delay);                                     
+                }
+                break;
         }
     };
+
+    function UpdateCanJump() {
+        canJump = true;
+    }
 
     var onKeyUp = function (event) {
         switch (event.keyCode) {
@@ -85,6 +102,9 @@ THREE.FirstPersonControls = function (camera) {
             case 39: // right
             case 68: // d
                 scope.moveRight = false;
+                break;
+            case 32: // spacebar
+                scope.jump = false;
                 break;
         }
     };
@@ -150,5 +170,6 @@ THREE.FirstPersonControls = function (camera) {
         element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
         element.requestPointerLock();
     });
+
 
 };
