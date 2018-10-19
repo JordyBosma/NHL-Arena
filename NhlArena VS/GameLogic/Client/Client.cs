@@ -9,17 +9,19 @@ using Commands;
 
 namespace Clients
 {
-    public class Client : View
+    public class Client : View, IObserver<Command>
     {
         public Guid gameId { get; }
         public string username { get; }
         public ClientSendManager sendManager { get; }
+        public ClientReceiveManager receiveManager { get; }        
 
         public Client(WebSocket socket, string username, Guid gameId) : base(socket)
         {
             this.gameId = gameId;
             this.username = username;
             sendManager = new ClientSendManager();
+            receiveManager = new ClientReceiveManager();
         }
 
         public Client(WebSocket socket, string username) : base(socket)
@@ -39,7 +41,7 @@ namespace Clients
                 //System.Diagnostics.Debug.WriteLine("Received the following information from client: " + yeetmessage );
 
                 result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-
+                SendCommandsToObservers(receiveManager.ReceiveString(Encoding.UTF8.GetString(buffer)));
 
             }
 
@@ -60,6 +62,22 @@ namespace Clients
             {
                 Console.WriteLine("Error while sending information to client, probably a Socket disconnect");
                 Console.WriteLine(e);
+            }
+        }
+
+        /// <summary>
+        /// receive commands from commandmanager
+        /// </summary>
+        /// <param name="value"></param>
+        public override void OnNext(Command value)
+        {
+            if (value is SendCommand)
+            {
+                SendCommands();
+            }
+            else
+            {
+                sendManager.AddCommand(value);
             }
         }
     }

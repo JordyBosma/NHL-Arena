@@ -17,18 +17,32 @@ namespace Commands
     }
 
     /// <summary>
+    /// This is only a trigger for the client.cs, DO NOT SEND THROUGH SOCKET!!!!
+    /// DO NOT SEND THROUGH SOCKET!!!!
+    /// DO NOT SEND THROUGH SOCKET!!!!
+    /// DO NOT SEND THROUGH SOCKET!!!!
+    /// </summary>
+    public class SendCommand : Command
+    {
+        public SendCommand() : base("")
+        {
+
+        }
+    }
+
+    /// <summary>
     /// gemaakte hits van een spele op andere spelers
     /// </summary>
     public class HitCommand : Command
     {
-        public Guid shootingPlayer { get; }
-        public Guid hitPlayer { get; }
+        public Guid shootingPlayerGuid { get; }
+        public Guid hitPlayerGuid { get; }
         public int damage { get; }
 
-        public HitCommand(Guid shootingPlayer, Guid hitPlayer, int damage) : base("HitCommand")
+        public HitCommand(Guid shootingPlayerGuid, Guid hitPlayerGuid, int damage) : base("HitCommand")
         {
-            this.shootingPlayer = shootingPlayer;
-            this.hitPlayer = hitPlayer;
+            this.shootingPlayerGuid = shootingPlayerGuid;
+            this.hitPlayerGuid = hitPlayerGuid;
             this.damage = damage;
         }
     }
