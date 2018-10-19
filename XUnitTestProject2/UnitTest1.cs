@@ -25,15 +25,18 @@ namespace XUnitTestProject2
 
 
             HitCommand cmd = new HitCommand(p.playerGuid, x.playerGuid, 10);
-            HitCommand cmd2 = new HitCommand(x, p, 15);
+            HitCommand cmd2 = new HitCommand(x.playerGuid, p.playerGuid, 15);
             cmdlist.Add(cmd);
             cmdlist.Add(cmd2);
 
             string jsonstring = JsonConvert.SerializeObject(cmdlist,Formatting.Indented);
 
 
-            List<Command> result = crm.ReceiveString(jsonstring);            
-            Assert.Equal(cmdlist, result);
+            List<Command> result = crm.ReceiveString(jsonstring);
+            for(int i = 0; i< cmdlist.Count; i++)
+            {
+                Assert.Equal(cmdlist[i].ToString(), result[i].ToString());
+            }
 
         }
 }

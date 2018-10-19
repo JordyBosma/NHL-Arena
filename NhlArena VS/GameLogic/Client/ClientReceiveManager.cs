@@ -33,10 +33,10 @@ namespace Clients
                     switch (json[i].commandType.Value)
                     {
                         case "HitCommand":
-                            cmdlist.Add( new HitCommand(new Player(json[i].shootingPlayer.playerGuid.Value), json[i].hitPlayer.playerGuid.Value, json[i].damage.Value));
+                            cmdlist.Add( new HitCommand(new Guid(json[i].shootingPlayerGuid.Value), new Guid(json[i].hitPlayerGuid.Value), (int)json[i].damage.Value));
                             break;
                         case "ErrorCommand":
-                            cmdlist.Add(new ErrorCommand());
+                            cmdlist.Add(new ErrorCommand(json[i].errorMessage.Value));
                             break;                        
                         default:
                             cmdlist.Add(null);

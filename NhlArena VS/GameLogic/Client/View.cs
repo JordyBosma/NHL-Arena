@@ -7,9 +7,10 @@ using Commands;
 
 namespace Clients
 {
-    abstract public class View
+    abstract public class View : IObservable<List<Command>>
     {
         protected WebSocket socket;
+        private List<IObserver<List<Command>>> observers = new List<IObserver<List<Command>>>();
 
         //base constructer
         public View(WebSocket socket)
@@ -25,20 +26,39 @@ namespace Clients
             //SendMessage(c.ToJson());
         }
 
-        //IObserver Implementation:
-        public virtual void OnCompleted()
+        public IDisposable Subscribe(IObserver<List<Command>> observer)
         {
-            throw new NotImplementedException();
+            if (!observers.Contains(observer))
+            {
+                observers.Add(observer);
+            }
+            return new Unsubscriber<Command>(observers, observer);
         }
 
-        public virtual void OnError()
+        public void SendCommandsToObservers(List<Command> c)
         {
-            socket.Abort();
+            for (int i = 0; i < this.observers.Count; i++)
+            {
+                this.observers[i].OnNext(c);
+            }
         }
 
-        public virtual void OnNext()
+        internal class Unsubscriber<Command> : IDisposable
         {
-            //SendCommand(value);
+            private List<IObserver<List<Command>>> _observers;
+            private IObserver<List<Command>> _observer;
+
+            internal Unsubscriber(List<IObserver<List<Command>>> observers, IObserver<List<Command>> observer)
+            {
+                this._observers = observers;
+                this._observer = observer;
+            }
+
+            public void Dispose()
+            {
+                if (_observers.Contains(_observer))
+                    _observers.Remove(_observer);
+            }
         }
     }
 }
