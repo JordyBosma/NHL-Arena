@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TestUI</title>
+
+    <!--need-->
+    <link rel="stylesheet" href="~/lib/materialize/materialize.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="~/css/UI.css" rel="stylesheet" />
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            background: black;
+        }
+    </style>
+</head>
+<body>
+    <label for="toggle-background" style="position:relative;">showcontent</label>
+    <input id="toggle-background" type="checkbox" class="toggleCheckBox">
+    <div class="overlayBackground"></div>
+
+    <button onclick="ui.ShowMenu(true)">true</button>
+    <button onclick="ui.ShowMenu(false)">false</button>
+    <label for="toggle-1">showcontent</label>
+    <input id="toggle-1" type="checkbox" class="toggleCheckBox mainMenu__checkbox">
+    <div id="mainMenu" class="card center popIn">
+        <a>hoi</a>
+    </div>
+
+    <!--need-->
+    <script src="~/lib/jQuery v3.3.1.js"></script>
+    <script src="~/lib/materialize/materialize.min.js"></script>
+
+    <script src="~/lib/threejs/three.min.js"></script>
+    <script src="~/lib/threejs/OrbitControls.js"></script>
+    <script src="~/lib/phisijs/ammo.js"></script>
+    <script src="~/lib/phisijs/physi.js"></script>
+
+    <script src="~/lib/phisijs/simplex-noise.js"></script>
+    <script src="~/lib/phisijs/stats.js"></script>
+    <script src="~/lib/phisijs/tween.js"></script>
+    <script src="~/lib/threejs/FirstPersonControls.js"></script>
+    <script src="~/lib/threejs/MTLLoader.js"></script>
+    <script src="~/lib/threejs/OBJLoader.js"></script>
+    <script src="~/js/BasicPlane.js"></script>
+    <script src="~/js/ModelLoader.js"></script>
+    <script src="~/js/UIManager.js"></script>
+    <script>
+        var ui = new UIManager();
+    </script>
+
+</body>
+</html>

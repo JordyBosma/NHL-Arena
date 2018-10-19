@@ -1,0 +1,71 @@
+﻿.show{
+    display: block;
+}
+
+.hidden{
+    display: none;
+}
+
+.showEffect {
+    display: block;
+    top: 50vh;
+}
+
+.hiddenEffect {
+    display: none;
+    top: 47vh;
+}
+
+.toggleCheckBox {
+    position: relative;
+    top: -9999999px;
+    left: -9999999px;
+}
+
+.center {
+    visibility: hidden;
+    width: 200px;
+    height: 100px;
+    position: fixed;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+    transition: top 2s, opacity 2s, visibility 0s linear 2s;
+}
+
+.fallIn {
+    top: 45vh;
+    transform: translate(-50%, -50%);
+    transition: top 2s, opacity 2s, visibility 0s linear 2s;
+    opacity: 0;
+}
+
+.popIn {
+    top: 50vh;
+    transform: scale(0,0);
+    transition: transform 2s, visibility 0s linear 2s;
+}
+
+.mainMenu__checkbox:checked ~ div.fallIn {
+    visibility: visible;
+    transition: top 2s, opacity 2s;
+    top: 50vh;
+    opacity: 1;
+}
+.mainMenu__checkbox:checked ~ div.popIn {
+    visibility: visible;
+    transition: transform 2s;
+    transform: scale(1,1);
+}
+
+.overlayBackground {
+    position: fixed;
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    transition: background-color 1s linear;
+}
+
+#toggle-background:checked ~ div {
+    background-color: rgba(0,0,0,0.3);
+    transition: background-color 1s linear;
+}
