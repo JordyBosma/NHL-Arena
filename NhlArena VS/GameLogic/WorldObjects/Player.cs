@@ -24,9 +24,9 @@ namespace WorldObjects
 
         public Player(Client playerClient)
         {
-            this.playerClient = playerClient;
-            this.playerGuid = new Guid();
-            this.username = playerClient.username;
+            this.playerClient = playerClient;            
+            playerGuid = Guid.NewGuid();
+            //this.username = playerClient.username;
             this._health = 100;
             this._armour = 0;
         }
