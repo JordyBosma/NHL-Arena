@@ -21,11 +21,11 @@ namespace Commands
     /// </summary>
     public class HitCommand : Command
     {
-        public Player shootingPlayer { get; }
-        public Player hitPlayer { get; }
+        public Guid shootingPlayer { get; }
+        public Guid hitPlayer { get; }
         public int damage { get; }
 
-        public HitCommand(Player shootingPlayer, Player hitPlayer, int damage) : base("HitCommand")
+        public HitCommand(Guid shootingPlayer, Guid hitPlayer, int damage) : base("HitCommand")
         {
             this.shootingPlayer = shootingPlayer;
             this.hitPlayer = hitPlayer;
@@ -35,12 +35,15 @@ namespace Commands
 
     /// <summary>
     /// player death van server naar client
+    /// update positie naar deathpos
     /// </summary>
     public class DeathCommand : Command
     {
-        public DeathCommand() : base("DeathCommand")
-        {
+        public Player deadPlayer { get; }
 
+        public DeathCommand(Player deadPlayer) : base("DeathCommand")
+        {
+            this.deadPlayer = deadPlayer;
         }
     }
 
@@ -49,9 +52,11 @@ namespace Commands
     /// </summary>
     public class UpdatePlayerStatsCommand : Command
     {
-        public UpdatePlayerStatsCommand() : base("UpdatePlayerStatsCommand")
-        {
+        public Player targetPlayer { get; }
 
+        public UpdatePlayerStatsCommand(Player updatePlayer) : base("UpdatePlayerStatsCommand")
+        {
+            this.targetPlayer = targetPlayer;
         }
     }
 
@@ -60,9 +65,13 @@ namespace Commands
     /// </summary>
     public class PlayerAmmoPickupCommand : Command
     {
-        public PlayerAmmoPickupCommand() : base("PlayerAmmoPickupCommand")
-        {
+        public string ammoType { get; }
+        public Player targetPlayer;
 
+        public PlayerAmmoPickupCommand(string ammoType, Player targetPlayer) : base("PlayerAmmoPickupCommand")
+        {
+            this.ammoType = ammoType;
+            this.targetPlayer = targetPlayer;
         }
     }
 
@@ -71,9 +80,11 @@ namespace Commands
     /// </summary>
     public class ErrorCommand : Command
     {
-        public ErrorCommand() : base("ErrorCommand")
-        {
+        public string errorMessage { get; }
 
+        public ErrorCommand(string errorMessage) : base("ErrorCommand")
+        {
+            this.errorMessage = errorMessage;
         }
     }
 
@@ -82,17 +93,17 @@ namespace Commands
     /// </summary>
     public class ObjectCommand : Command
     {
-        public string model { get; }
+        
 
-        public ObjectCommand(string objectCommandType, string model) : base(objectCommandType)
+        public ObjectCommand(string objectCommandType) : base(objectCommandType)
         {
-            this.model = model;
+            
         }
     }
 
     public class NewObjectCommand : ObjectCommand
     {
-        public NewObjectCommand(string model) : base("NewObjectCommand", model)
+        public NewObjectCommand() : base("NewObjectCommand")
         {
 
         }
@@ -100,7 +111,7 @@ namespace Commands
 
     public class UpdateObjectCommand : ObjectCommand
     {
-        public UpdateObjectCommand(string model) : base("UpdateObjectCommand", model)
+        public UpdateObjectCommand(string model) : base("UpdateObjectCommand")
         {
 
         }
@@ -108,7 +119,7 @@ namespace Commands
 
     public class DeleteObjectCommand : ObjectCommand
     {
-        public DeleteObjectCommand(string model) : base("DeleteObjectCommand", model)
+        public DeleteObjectCommand(string model) : base("DeleteObjectCommand")
         {
 
         }

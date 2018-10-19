@@ -20,7 +20,7 @@ namespace GameLogic
         /// <param name="cs"></param>
         public static void ManageClient(Client cs)
         {
-            if (cs.gameId != null)
+            if (cs.gameId != default(Guid))
             {
                 foreach (Game game in activeGames)
                 {

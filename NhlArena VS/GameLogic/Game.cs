@@ -17,7 +17,7 @@ namespace GameLogic
 
         public Game(Client initailClient)
         {
-            gameId = new Guid();
+            gameId = Guid.NewGuid();
             players.Add(new Player(initailClient));
             gameName = initailClient.username + "'s Game";
             

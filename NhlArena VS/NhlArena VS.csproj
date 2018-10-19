@@ -12,7 +12,11 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\" />
-    <Folder Include="wwwroot\js\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\models\materials\NHLArenaMap.mtl" />
+	<None Include="wwwroot\models\objects\NHLArenaMap.obj" />
   </ItemGroup>
 
   <ItemGroup>

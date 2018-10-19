@@ -5,10 +5,13 @@
     }
     init() {
         var selfRef = this;
-        var geometry = new THREE.BoxGeometry(200, 2, 200);
-        var material = new THREE.MeshBasicMaterial({ color: 0xffffff});
 
-        var box = new THREE.Mesh(geometry, material);
+        var material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+        var box = new Physijs.BoxMesh(
+            new THREE.BoxGeometry(200, 2, 200),
+            material
+        );
+        
         box.position.x = -10;
         box.position.y = 0;
         box.position.z = -100;
