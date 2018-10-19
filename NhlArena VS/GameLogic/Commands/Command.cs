@@ -103,7 +103,7 @@ namespace Commands
 
     public class NewObjectCommand : ObjectCommand
     {
-        public NewObjectCommand() : base("NewObjectCommand", model)
+        public NewObjectCommand() : base("NewObjectCommand")
         {
 
         }
@@ -111,7 +111,7 @@ namespace Commands
 
     public class UpdateObjectCommand : ObjectCommand
     {
-        public UpdateObjectCommand(string model) : base("UpdateObjectCommand", model)
+        public UpdateObjectCommand(string model) : base("UpdateObjectCommand")
         {
 
         }
@@ -119,7 +119,7 @@ namespace Commands
 
     public class DeleteObjectCommand : ObjectCommand
     {
-        public DeleteObjectCommand(string model) : base("DeleteObjectCommand", model)
+        public DeleteObjectCommand(string model) : base("DeleteObjectCommand")
         {
 
         }
