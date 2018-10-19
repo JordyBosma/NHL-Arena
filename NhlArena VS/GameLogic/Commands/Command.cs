@@ -21,11 +21,11 @@ namespace Commands
     /// </summary>
     public class HitCommand : Command
     {
-        public Player shootingPlayer { get; }
-        public Player hitPlayer { get; }
+        public Guid shootingPlayer { get; }
+        public Guid hitPlayer { get; }
         public int damage { get; }
 
-        public HitCommand(Player shootingPlayer, Player hitPlayer, int damage) : base("HitCommand")
+        public HitCommand(Guid shootingPlayer, Guid hitPlayer, int damage) : base("HitCommand")
         {
             this.shootingPlayer = shootingPlayer;
             this.hitPlayer = hitPlayer;
@@ -93,22 +93,17 @@ namespace Commands
     /// </summary>
     public class ObjectCommand : Command
     {
-        public string model { get; }
+        
 
-        public double posX { get; }
-        public double posY { get; }
-        public double posZ { get; }
-        public double rotationY { get; }
-
-        public ObjectCommand(string objectCommandType, string model) : base(objectCommandType)
+        public ObjectCommand(string objectCommandType) : base(objectCommandType)
         {
-            this.model = model;
+            
         }
     }
 
     public class NewObjectCommand : ObjectCommand
     {
-        public NewObjectCommand(string model) : base("NewObjectCommand", model)
+        public NewObjectCommand() : base("NewObjectCommand", model)
         {
 
         }
