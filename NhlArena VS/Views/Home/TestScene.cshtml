@@ -57,8 +57,8 @@
                 light.intensity = 2;
                 scene.add(light);
 
-                var light = new THREE.HemisphereLight(0xDDDDDD, 0x454545, 1);
-                scene.add(light);
+                var light2 = new THREE.HemisphereLight(0xDDDDDD, 0x454545, 1);
+                scene.add(light2);
             }
 
             function playerControls() {
@@ -79,22 +79,22 @@
 
                     // Moves the camera (player) forward
                     if (controls.moveForward) {
-                        velocity.z -= 400.0 * delta;
+                        velocity.z -= 200.0 * delta;
                     }
 
                     // Moves the camera (player) backward
                     if (controls.moveBackward) {
-                        velocity.z += 400.0 * delta;
+                        velocity.z += 200.0 * delta;
                     }
 
                     // Moves the camera (player) left
                     if (controls.moveLeft) {
-                        velocity.x -= 400.0 * delta;
+                        velocity.x -= 200.0 * delta;
                     }
 
                     // Moves the camera (player) right
                     if (controls.moveRight) {
-                        velocity.x += 400.0 * delta;
+                        velocity.x += 200.0 * delta;
                     }
 
                     // Makes the camera (player) jump
