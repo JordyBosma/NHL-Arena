@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GameLogic;
+using WorldObjects;
 
 namespace Commands
 {
-    public class CommandManager : IObserver<List<Command>> , IObservable<Command>
+    public class CommandManager : IObserver<List<Command>>, IObservable<Command>
     {
         private Game game;
         private List<IObserver<Command>> observers = new List<IObserver<Command>>();
@@ -32,19 +33,57 @@ namespace Commands
         /// <param name="value"></param>
         public void OnNext(List<Command> value)
         {
-            foreach(Command c in value)
+            foreach (Command c in value)
             {
                 string commandType = c.commandType;
 
                 switch (commandType)
                 {
                     case "HitCommand":
+                        HitCommand hit = (HitCommand)c;
+                        HitHandler(hit);
                         break;
                     case "UpdatePlayerCommand":
+
                         break;
                 }
             }
-            throw new NotImplementedException();
+        }
+
+        public void HitHandler(HitCommand hit)
+        {
+            List<Player> players = game.getPlayerList();
+            Player hitPlayer = null;
+            Player shootingPlayer = null;
+
+            foreach (Player p in players)
+            {
+                if (p.guid == hit.hitPlayerGuid || p.guid == hit.hitPlayerGuid)
+                {
+                    if (p.guid == hit.hitPlayerGuid)
+                    {
+                        hitPlayer = p;
+                    }
+                    else
+                    {
+                        shootingPlayer = p;
+                    }
+                }
+            }
+
+            if (hitPlayer.DoDamage(hit.damage))
+            {
+                shootingPlayer.addKill();
+                DeathCommand cmd = new DeathCommand(hitPlayer);
+                UpdatePlayerStatsCommand cmd2 = new UpdatePlayerStatsCommand(shootingPlayer);
+                SendCommandsToObservers(cmd);
+                SendCommandsToObservers(cmd2);
+            }
+            else
+            {
+                UpdatePlayerStatsCommand cmd = new UpdatePlayerStatsCommand(shootingPlayer);
+                SendCommandsToObservers(cmd);
+            }
         }
 
         public IDisposable Subscribe(IObserver<Command> observer)

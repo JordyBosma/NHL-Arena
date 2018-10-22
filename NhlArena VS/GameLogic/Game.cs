@@ -61,6 +61,11 @@ namespace GameLogic
             }
         }
 
+        public List<Player> getPlayerList()
+        {
+            return players;
+        }
+
         public int GetPlayerCount()
         {
             return players.Count();
