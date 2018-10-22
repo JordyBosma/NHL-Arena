@@ -22,13 +22,16 @@
     </style>
 </head>
 <body>
-    <label for="toggle-background" style="position:relative;">showcontent</label>
-    <input id="toggle-background" type="checkbox" class="toggleCheckBox">
+    <div style="position:absolute;">
+        <label for="toggle-background" style="position:relative;">showcontent</label>
+        <input id="toggle-background" type="checkbox" class="toggleCheckBox">
 
 
-    <button onclick="ui.ShowMenu(true)">true</button>
-    <button onclick="ui.ShowMenu(false)">false</button>
-    <label for="toggle-1">showcontent</label>
+        <button onclick="ui.ShowMenu(true)">true</button>
+        <button onclick="ui.ShowMenu(false)">false</button>
+        <label for="toggle-1">showcontent</label>
+    </div>
+
     <input id="toggle-1" type="checkbox" class="toggleCheckBox mainMenu__checkbox">
     <div onclick="ui.ShowMenu(false)" class="overlayBackground"></div>
     <div id="mainMenu" class="card red darken-4 center fallIn" style="width: 300px;">
