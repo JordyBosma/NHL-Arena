@@ -27,8 +27,8 @@
         <input id="toggle-background" type="checkbox" class="toggleCheckBox">
 
 
-        <button onclick="ui.ShowMenu(true)">true</button>
-        <button onclick="ui.ShowMenu(false)">false</button>
+        <button onclick="ui.ShowOptionMenu(true)">true</button>
+        <button onclick="ui.ShowOptionMenu(false)">false</button>
         <label for="toggle-1">showcontent</label>
     </div>
 
@@ -36,7 +36,10 @@
     <div onclick="ui.ShowMenu(false)" class="overlayBackground"></div>
     <div id="mainMenu" class="card red darken-4 center fallIn" style="width: 300px;">
         <div class="card-content orange-text text-accent-3">
-            <i class="material-icons card__option" onclick="ui.ShowMenu(false)">clear</i>
+            <div class="orange-text text-accent-3 card__option">
+                <i class="material-icons" onclick="ui.SwitchSoundOnOff(this)">volume_mute</i>
+                <i class="material-icons" onclick="ui.ShowOptionMenu(false)">clear</i>
+            </div>
             <span class="card-title">Options:</span>
             <a class="btn orange menu__option">Leave</a>
             <a class="btn orange menu__option">Leave</a>
