@@ -8,10 +8,6 @@
  */
 
 THREE.FirstPersonControls = function (camera, scene) {
-    var raycaster = new THREE.Raycaster();
-    var originVector = new THREE.Vector3();
-    var directionVector = new THREE.Vector2();
-    
     var delay = 500;
     var canJump = true;
     var scope = this;
@@ -20,11 +16,11 @@ THREE.FirstPersonControls = function (camera, scene) {
 
     var material = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide });
     var box = new Physijs.BoxMesh(
-        new THREE.BoxGeometry(0.1, 0.1, 5),
+        new THREE.BoxGeometry(0.1, 0.1, 0.1),
         material
     );
 
-    box.position.set(0.3, 0, -0.3);
+    box.position.set(0, 0, -10);
 
     var pitchObject = new THREE.Object3D();
     pitchObject.add(camera);
@@ -40,26 +36,12 @@ THREE.FirstPersonControls = function (camera, scene) {
         var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
         var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
 
-        directionVector.x = movementX;
-        directionVector.y = movementY;
-
         yawObject.rotation.y -= movementX * 0.002;
         pitchObject.rotation.x -= movementY * 0.002;
 
         pitchObject.rotation.x = Math.max(- PI_2, Math.min(PI_2, pitchObject.rotation.x));
     };
     this.enabled = false;
-
-    //set raycaster
-    raycaster.set(originVector, directionVector);
-
-    var intersects = raycaster.intersectObjects(scene.children);
-
-    for (var i = 0; i < intersects.length; i++) {
-
-        intersects[i].object.material.color.set(0xff0000);
-
-    }
 
     this.getObject = function () {
         return yawObject;

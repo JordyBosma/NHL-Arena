@@ -24,6 +24,10 @@
             var camera, scene, renderer;
             var controls;
 
+            var raycaster = new THREE.Raycaster();
+            var originVector = new THREE.Vector3();
+            var directionVector = new THREE.Vector3();
+            var intersects;
             var prevTime = performance.now();
             var velocity = new THREE.Vector3();
 
@@ -59,8 +63,27 @@
 
                 var light2 = new THREE.HemisphereLight(0xDDDDDD, 0x454545, 1);
                 scene.add(light2);
-            }
 
+            }
+            
+            function CastRays() {
+                originVector.x = controls.getObject().position.x;
+                originVector.y = controls.getObject().position.y;
+                originVector.z = controls.getObject().position.z;
+                directionVector.x = 1;
+
+                scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
+
+                raycaster.set(originVector, originVector);
+
+                intersects = raycaster.intersectObjects(scene.children);
+
+                for (var i = 0; i < intersects.length; i++) {
+
+                    intersects[i].object.material.color.set(0xff0000);
+                }
+            }
+            
             function playerControls() {
 
                 // Check for pointerlock in browser
@@ -127,10 +150,10 @@
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
             }
-            var animate;
-            animate = function() {
-                requestAnimationFrame(animate);
 
+            function animate() {
+                requestAnimationFrame(animate);
+                CastRays();
                 playerControls();
 
                 renderer.render(scene, camera);
