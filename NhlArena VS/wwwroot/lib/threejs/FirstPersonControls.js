@@ -7,7 +7,11 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.FirstPersonControls = function (camera) {
+THREE.FirstPersonControls = function (camera, scene) {
+    var raycaster = new THREE.Raycaster();
+    var originVector = new THREE.Vector3();
+    var directionVector = new THREE.Vector2();
+    
     var delay = 500;
     var canJump = true;
     var scope = this;
@@ -36,12 +40,26 @@ THREE.FirstPersonControls = function (camera) {
         var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
         var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
 
+        directionVector.x = movementX;
+        directionVector.y = movementY;
+
         yawObject.rotation.y -= movementX * 0.002;
         pitchObject.rotation.x -= movementY * 0.002;
 
         pitchObject.rotation.x = Math.max(- PI_2, Math.min(PI_2, pitchObject.rotation.x));
     };
     this.enabled = false;
+
+    //set raycaster
+    raycaster.set(originVector, directionVector);
+
+    var intersects = raycaster.intersectObjects(scene.children);
+
+    for (var i = 0; i < intersects.length; i++) {
+
+        intersects[i].object.material.color.set(0xff0000);
+
+    }
 
     this.getObject = function () {
         return yawObject;
@@ -75,7 +93,7 @@ THREE.FirstPersonControls = function (camera) {
                 if (canJump) {
                     scope.jump = true;
                     canJump = false;
-                    var timer = setTimeout(UpdateCanJump, delay);                                     
+                    var timer = setTimeout(UpdateCanJump, delay);
                 }
                 break;
         }
@@ -170,6 +188,4 @@ THREE.FirstPersonControls = function (camera) {
         element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
         element.requestPointerLock();
     });
-
-
 };

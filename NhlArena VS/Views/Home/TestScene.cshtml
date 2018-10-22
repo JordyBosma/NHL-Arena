@@ -19,11 +19,7 @@
 <body>
 
     <script>
-
-        'use strict'
-        Physijs.scripts.worker = '/lib/phisijs/physijs_worker.js';
-        Physijs.scripts.ammo = '/lib/phisijs/ammo.js';
-
+        
         window.onload = function () {
             var camera, scene, renderer;
             var controls;
@@ -39,20 +35,20 @@
 
                 document.body.appendChild(renderer.domElement);
 
-                //create new camera with controls
-                camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+                // Create new camera with controls
+                camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
 
                 // Create scene
                 scene = new Physijs.Scene({ reportSize: 2, fixedStep: 1 / 60 });
 
                 // Create First Person Controls
-                controls = new THREE.FirstPersonControls(camera);
+                controls = new THREE.FirstPersonControls(camera, scene);
                 scene.add(controls.getObject());
 
                 window.addEventListener('resize', onWindowResize, false);
 
-                //var basicPlane = new BasicPlane();
-                //scene.add(basicPlane);
+                var basicPlane = new BasicPlane();
+                scene.add(basicPlane);
 
                 var NHLMap = new NHLArenaMap();
                 scene.add(NHLMap);
@@ -131,8 +127,8 @@
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
             }
-
-            function animate() {
+            var animate;
+            animate = function() {
                 requestAnimationFrame(animate);
 
                 playerControls();

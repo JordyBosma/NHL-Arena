@@ -7,16 +7,9 @@
     init() {
         var selfRef = this;
 
-        loadOBJModel("/models/objects/", "NHLArenaMap.obj", "/models/materials/", "NHLArenaMap.mtl", (mesh) => {
+        loadOBJModel("/models/objects/", "Ramp.obj", "/models/materials/", "Ramp.mtl", (mesh) => {
             mesh.scale.set(1, 1, 1);
-            var mapMaterial = Physijs.createMaterial(
-                new THREE.MeshLambertMaterial(mesh.children[0].material/*{ color: 0x111555, side: THREE.DoubleSide }*/),
-                .8, // high friction
-                .3 // low restitution
-            );
-            var mapGeometry = new Physijs.ConcaveMesh(mesh.children[0].geometry);
-            var mapMesh = new Physijs.ConcaveMesh(mapGeometry, mapMaterial);
-            selfRef.add(mapMesh);
+            selfRef.add(mesh);
             
         });
     }
