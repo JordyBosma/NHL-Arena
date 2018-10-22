@@ -10,6 +10,7 @@ namespace WorldObjects
     {
         private Client playerClient;
         public string username { get; }
+        public Guid playerGuid { get; }
 
         private bool _isMoving;
         public bool isMoving;
@@ -26,8 +27,17 @@ namespace WorldObjects
 
         public Player(Client playerClient, double x, double y, double z, double rotationX, double rotationY, double rotationZ) : base(x, y, z, rotationX, rotationY, rotationZ, "Player")
         {
+
             this.playerClient = playerClient;
-            this.username = playerClient.username;
+            if(playerClient == null)
+            {
+                this.username = "foobar";
+            }
+            else
+            {
+                this.username = playerClient.username;
+            }            
+            playerGuid = Guid.NewGuid();
             this._health = 100;
             this._armour = 0;
         }
