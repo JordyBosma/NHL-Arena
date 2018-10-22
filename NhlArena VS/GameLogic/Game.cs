@@ -30,7 +30,7 @@ namespace GameLogic
             initialClient.Subscribe(commandManager);
             commandManager.Subscribe(initialClient);
 
-            Thread gameThread = new Thread(Logic);
+            Thread gameThread = new Thread(TickTimer);
             gameThread.Start();
         }
 
@@ -51,7 +51,7 @@ namespace GameLogic
             }
         }
 
-        public void Logic()
+        public void TickTimer()
         {
             isActive = true;
 
