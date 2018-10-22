@@ -20,6 +20,10 @@
 
     <script>
 
+        'use strict'
+        Physijs.scripts.worker = '/lib/phisijs/physijs_worker.js';
+        Physijs.scripts.ammo = '/lib/phisijs/ammo.js';
+
         window.onload = function () {
             var camera, scene, renderer;
             var controls;
