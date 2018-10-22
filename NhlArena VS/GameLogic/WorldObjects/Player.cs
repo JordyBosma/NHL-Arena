@@ -10,8 +10,6 @@ namespace WorldObjects
     {
         private Client playerClient;
         public string username { get; }
-        public Guid playerGuid { get; }
-
         private bool _isMoving;
         public bool isMoving;
 
@@ -27,19 +25,64 @@ namespace WorldObjects
 
         public Player(Client playerClient, double x, double y, double z, double rotationX, double rotationY, double rotationZ) : base(x, y, z, rotationX, rotationY, rotationZ, "Player")
         {
-
             this.playerClient = playerClient;
-            if(playerClient == null)
+            if (playerClient == null)
             {
                 this.username = "foobar";
             }
             else
             {
                 this.username = playerClient.username;
-            }            
-            playerGuid = Guid.NewGuid();
+            }
             this._health = 100;
             this._armour = 0;
+        }
+
+        public bool DoDamage(int damage)
+        {
+            int armourDamageMultiplier = 2;
+            int currentDamage = damage;
+
+            if (_armour > 0)
+            {
+                int armourDamage = currentDamage * armourDamageMultiplier;
+
+                if (armourDamage > _armour)
+                {
+                    armourDamage -= _armour;
+                    currentDamage = armourDamage / 2;
+                }
+                else
+                {
+                    _armour -= armourDamage;
+                    return false;
+                }
+            }
+
+            if (currentDamage > _health)
+            {
+                _health = 100;
+                _deaths++;
+                return true;
+            }
+
+            _health -= currentDamage;
+            return false;
+        }
+
+        public void addKill()
+        {
+            _kills++;
+        }
+
+        public override void Move(double x, double y, double z)
+        {
+            base.Move(x, y, z);
+        }
+
+        public override void Rotate(double rotationX, double rotationY, double rotationZ)
+        {
+            base.Rotate(rotationX, rotationY, rotationZ);
         }
     }
 }
