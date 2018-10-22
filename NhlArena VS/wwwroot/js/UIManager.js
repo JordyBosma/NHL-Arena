@@ -11,12 +11,12 @@
 
     
     SwitchSoundOnOff(document) {
-        if (document.textContent === "volume_up") {
-            volume = false;
-            document.textContent = "volume_mute";
+        if (document.innerText === "volume_up") {
+            this.volume = false;
+            document.innerText = "volume_mute";
         } else {
-            volume = true;
-            document.textContent = "volume_up";
+            this.volume = true;
+            document.innerText = "volume_up";
         }
     }
 
