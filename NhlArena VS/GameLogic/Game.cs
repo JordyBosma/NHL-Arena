@@ -18,7 +18,7 @@ namespace GameLogic
         public Game(Client initailClient)
         {
             gameId = Guid.NewGuid();
-            players.Add(new Player(initailClient));
+            players.Add(new Player(initailClient, 0, 0, 0, 0, 0, 0));
             gameName = initailClient.username + "'s Game";
             
             Thread gameThread = new Thread(Logic);
@@ -29,7 +29,7 @@ namespace GameLogic
         {
             if(players.Count() < 7)
             {
-                players.Add(new Player(newClient));
+                players.Add(new Player(newClient, 0, 0, 0, 0, 0, 0));
                 return true;
             }
             else
