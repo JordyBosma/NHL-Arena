@@ -125,7 +125,7 @@ namespace Commands
     /// </summary>
     public class ObjectCommand : Command
     {
-        Object3D obj;
+        public Object3D obj;
 
         public ObjectCommand(string objectCommandType, Object3D obj) : base(objectCommandType)
         {

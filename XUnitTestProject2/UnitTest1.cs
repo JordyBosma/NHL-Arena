@@ -29,7 +29,7 @@ namespace XUnitTestProject2
             cmdlist.Add(cmd);
             cmdlist.Add(cmd2);
 
-            string jsonstring = JsonConvert.SerializeObject(cmdlist, Formatting.Indented);
+            string jsonstring = JsonConvert.SerializeObject(cmdlist);
 
 
             List<Command> result = crm.ReceiveString(jsonstring);

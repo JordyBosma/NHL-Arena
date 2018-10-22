@@ -39,19 +39,5 @@
         </div>
     </div>
 </div>
-@section Scripts{
-    <script>
-        console.log("testYeet");
-        var Socket = new WebSocket("wss://" + window.location.hostname + ":" + window.location.port + "/connect_client/9999999");
-        Socket.onopen = function () {
-            console.log("yeet");
-            Socket.send("Hello World");
 
-        };
-        Socket.onerror = error => {
-            console.log("websocket error ${error}");
-        };
-
-    </script>
-}
 

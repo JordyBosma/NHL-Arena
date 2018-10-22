@@ -85,6 +85,23 @@ namespace NhlArena_VS
                                 WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
                                 string username = context.Session.GetString("username");
 
+                                ////testing
+                                //List<Commands.Command> cmdlist = new List<Commands.Command>();
+
+                                //WorldObjects.Player p = new WorldObjects.Player(null, 10, 0, 0, 0, 0, 0);
+                                //WorldObjects.Player x = new WorldObjects.Player(null, 0, 0, 0, 0, 0, 0);
+
+
+                                //Commands.NewObjectCommand cmd = new Commands.NewObjectCommand(p);
+                                //Commands.NewObjectCommand cmd2 = new Commands.NewObjectCommand(x);
+                                //cmdlist.Add(cmd);
+                                //cmdlist.Add(cmd2);
+
+                                //string jsonstring = Newtonsoft.Json.JsonConvert.SerializeObject(cmdlist);
+                                //byte[] message = Encoding.UTF8.GetBytes(jsonstring);
+                                //await webSocket.SendAsync(new ArraySegment<byte>(message, 0, message.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+                                ////testing
+
                                 Client cs = new Client(webSocket, username);
                                 GameManager.ManageClient(cs);
                                 await cs.StartReceiving();
