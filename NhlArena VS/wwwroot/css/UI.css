@@ -25,7 +25,6 @@
 .center {
     visibility: hidden;
     width: 200px;
-    height: 100px;
     position: fixed;
     left: 50vw;
     transform: translate(-50%, -50%);
@@ -35,26 +34,26 @@
 .fallIn {
     top: 45vh;
     transform: translate(-50%, -50%);
-    transition: top 2s, opacity 2s, visibility 0s linear 2s;
+    transition: top 0.5s, opacity 0.5s, visibility 0s linear 0.5s;
     opacity: 0;
 }
 
 .popIn {
     top: 50vh;
-    transform: scale(0,0);
-    transition: transform 2s, visibility 0s linear 2s;
+    transform: translate(-50%, -50%) scale(0,0);
+    transition: transform 0.5s, visibility 0s linear 0.5s;
 }
 
 .mainMenu__checkbox:checked ~ div.fallIn {
     visibility: visible;
-    transition: top 2s, opacity 2s;
+    transition: top 0.5s, opacity 0.5s;
     top: 50vh;
     opacity: 1;
 }
 .mainMenu__checkbox:checked ~ div.popIn {
     visibility: visible;
-    transition: transform 2s;
-    transform: scale(1,1);
+    transition: transform 0.5s;
+    transform: translate(-50%, -50%) scale(1,1);
 }
 
 .overlayBackground {
@@ -62,10 +61,24 @@
     display: block;
     width: 100vw;
     height: 100vh;
-    transition: background-color 1s linear;
+    transition: background-color 0.5s linear, visibility 0s linear 0.5s;
+    visibility: hidden;
 }
 
-#toggle-background:checked ~ div {
+#toggle-background:checked ~ div, .mainMenu__checkbox:checked ~ div.overlayBackground {
     background-color: rgba(0,0,0,0.3);
-    transition: background-color 1s linear;
+    transition: background-color 0.5s linear;
+    visibility: visible;
+}
+
+.card__option{
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    cursor: pointer;
+}
+
+.menu__option{
+    width: 80%;
+    margin: 10px 0;
 }
