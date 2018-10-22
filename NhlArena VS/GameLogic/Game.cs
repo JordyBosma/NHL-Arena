@@ -14,14 +14,14 @@ namespace GameLogic
         private bool isActive = false;
         public Guid gameId { get; }
         CommandManager commandManager;
-        
-        private List<Player> players = new List<Player>();
+
+        private List<Object3D> worldObjects = new List<Object3D>();
         public string gameName { get; }
 
         public Game(Client initialClient)
         {
             gameId = Guid.NewGuid();
-            players.Add(new Player(initialClient, 0, 0, 0, 0, 0, 0));
+            worldObjects.Add(new Player(initialClient, 0, 0, 0, 0, 0, 0));
             gameName = initialClient.username + "'s Game";
 
             commandManager = new CommandManager(this);
@@ -36,13 +36,15 @@ namespace GameLogic
 
         public bool AddPlayer(Client newClient)
         {
-            if(players.Count() < 7)
+            if (worldObjects.Count() < 7)
             {
-                players.Add(new Player(newClient, 0, 0, 0, 0, 0, 0));
+                Player newPlayer = new Player(newClient, 0, 0, 0, 0, 0, 0);
+                worldObjects.Add(newPlayer);
 
                 //subscribes commandmanager and client to each other
                 newClient.Subscribe(commandManager);
                 commandManager.Subscribe(newClient);
+                commandManager.InitializePlayer(newPlayer);
                 return true;
             }
             else
@@ -58,17 +60,28 @@ namespace GameLogic
             while (isActive)
             {
                 Thread.Sleep(1000 / 60);
+                commandManager.SendCommandQueue();
             }
         }
 
-        public List<Player> getPlayerList()
+        public List<Object3D> getWorldObjects()
         {
-            return players;
+            return worldObjects;
         }
 
         public int GetPlayerCount()
         {
-            return players.Count();
+            int count = 0;
+
+            foreach (Object3D obj in worldObjects)
+            {
+                if (obj is Player)
+                {
+                    count++;
+                }
+            }
+
+            return count;
         }
     }
 }

@@ -104,7 +104,7 @@ namespace Commands
 
     public class UpdatePlayerCommand : Command
     {
-        Guid playerGuid;
+        public Guid playerGuid { get; }
         public double x { get; }
         public double y { get; }
         public double z { get; }

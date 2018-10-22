@@ -44,7 +44,8 @@ namespace Commands
                         HitHandler(hit);
                         break;
                     case "UpdatePlayerCommand":
-
+                        UpdatePlayerCommand uPlayer = (UpdatePlayerCommand)c;
+                        PlayerUpdateHandler(uPlayer);
                         break;
                 }
             }
@@ -52,21 +53,24 @@ namespace Commands
 
         public void HitHandler(HitCommand hit)
         {
-            List<Player> players = game.getPlayerList();
+            List<Object3D> worldObjects = game.getWorldObjects();
             Player hitPlayer = null;
             Player shootingPlayer = null;
 
-            foreach (Player p in players)
+            foreach (Object3D obj in worldObjects)
             {
-                if (p.guid == hit.hitPlayerGuid || p.guid == hit.hitPlayerGuid)
+                if (obj is Player)
                 {
-                    if (p.guid == hit.hitPlayerGuid)
+                    if (obj.guid == hit.hitPlayerGuid || obj.guid == hit.hitPlayerGuid)
                     {
-                        hitPlayer = p;
-                    }
-                    else
-                    {
-                        shootingPlayer = p;
+                        if (obj.guid == hit.hitPlayerGuid)
+                        {
+                            hitPlayer = (Player)obj;
+                        }
+                        else
+                        {
+                            shootingPlayer = (Player)obj;
+                        }
                     }
                 }
             }
@@ -86,6 +90,39 @@ namespace Commands
             }
         }
 
+        public void PlayerUpdateHandler(UpdatePlayerCommand uPlayer)
+        {
+            List<Object3D> worldObjects = game.getWorldObjects();
+
+            foreach (Object3D obj in worldObjects)
+            {
+                if (obj is Player)
+                {
+                    if (obj.guid == uPlayer.playerGuid)
+                    {
+                        obj.Move(uPlayer.x, uPlayer.y, uPlayer.z);
+                        obj.Rotate(0, uPlayer.rotationY, 0);
+                        //checkPickUp
+                        UpdateObjectCommand cmd = new UpdateObjectCommand(obj);
+                        SendCommandsToObservers(cmd);
+                    }
+                }
+            }
+        }
+
+        public void InitializePlayer(Player newPlayer)
+        {
+            NewObjectCommand cmd = new NewObjectCommand(newPlayer);
+            SendCommandsToObservers(cmd);
+
+            List<Object3D> worldObjects = game.getWorldObjects();
+            foreach(Object3D obj in worldObjects)
+            {
+                NewObjectCommand cmd2 = new NewObjectCommand(obj);
+                observers[observers.Count() - 1].OnNext(cmd2);
+            }
+        }
+
         public IDisposable Subscribe(IObserver<Command> observer)
         {
             if (!observers.Contains(observer))
@@ -99,12 +136,18 @@ namespace Commands
         /// send commands to clients
         /// </summary>
         /// <param name="c"></param>
-        public void SendCommandsToObservers(Command c)
+        private void SendCommandsToObservers(Command c)
         {
             for (int i = 0; i < this.observers.Count; i++)
             {
                 this.observers[i].OnNext(c);
             }
+        }
+
+        public void SendCommandQueue()
+        {
+            SendCommand send = new SendCommand();
+            SendCommandsToObservers(send);
         }
 
         internal class Unsubscriber<Command> : IDisposable

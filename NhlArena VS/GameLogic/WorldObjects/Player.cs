@@ -10,8 +10,6 @@ namespace WorldObjects
     {
         private Client playerClient;
         public string username { get; }
-        public Guid playerGuid { get; }
-
         private bool _isMoving;
         public bool isMoving;
 
@@ -36,7 +34,6 @@ namespace WorldObjects
             {
                 this.username = playerClient.username;
             }
-            playerGuid = Guid.NewGuid();
             this._health = 100;
             this._armour = 0;
         }
@@ -76,6 +73,16 @@ namespace WorldObjects
         public void addKill()
         {
             _kills++;
+        }
+
+        public override void Move(double x, double y, double z)
+        {
+            base.Move(x, y, z);
+        }
+
+        public override void Rotate(double rotationX, double rotationY, double rotationZ)
+        {
+            base.Rotate(rotationX, rotationY, rotationZ);
         }
     }
 }
