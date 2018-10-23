@@ -19,17 +19,16 @@
 <body>
 
     <script>
-        
-        window.onload = function () {
-            var camera, scene, renderer;
-            var controls;
 
-            var raycaster = new THREE.Raycaster();
-            var originVector = new THREE.Vector3();
-            var directionVector = new THREE.Vector3();
-            var intersects;
-            var prevTime = performance.now();
-            var velocity = new THREE.Vector3();
+        window.onload = function () {
+            var camera, scene, renderer, player;
+
+            //var raycaster = new THREE.Raycaster();
+            //var originVector = new THREE.Vector3();
+            //var directionVector = new THREE.Vector3();
+            //var intersects;
+            //var prevTime = performance.now();
+            //var velocity = new THREE.Vector3();
 
             function init() {
 
@@ -46,8 +45,8 @@
                 scene = new Physijs.Scene({ reportSize: 2, fixedStep: 1 / 60 });
 
                 // Create First Person Controls
-                controls = new THREE.FirstPersonControls(camera, scene);
-                scene.add(controls.getObject());
+                player = new Player(camera);
+                scene.add(player);
 
                 window.addEventListener('resize', onWindowResize, false);
 
@@ -65,85 +64,85 @@
                 scene.add(light2);
 
             }
-            
-            function CastRays() {
-                originVector.x = controls.getObject().position.x;
-                originVector.y = controls.getObject().position.y;
-                originVector.z = controls.getObject().position.z;
-                directionVector.x = 1;
 
-                scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
+            //function CastRays() {
+            //    originVector.x = player.getObject().position.x;
+            //    originVector.y = player.getObject().position.y;
+            //    originVector.z = player.getObject().position.z;
+            //    directionVector.x = 1;
 
-                raycaster.set(originVector, originVector);
+            //    scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
 
-                intersects = raycaster.intersectObjects(scene.children);
+            //    raycaster.set(originVector, originVector);
 
-                for (var i = 0; i < intersects.length; i++) {
+            //    intersects = raycaster.intersectObjects(scene.children);
 
-                    intersects[i].object.material.color.set(0xff0000);
-                }
-            }
-            
-            function playerControls() {
+            //    for (var i = 0; i < intersects.length; i++) {
 
-                // Check for pointerlock in browser
-                if (controls.controlsEnabled) {
+            //        intersects[i].object.material.color.set(0xff0000);
+            //    }
+            //}
 
-                    // Save the current time
-                    var time = performance.now();
-                    // Create a delta value based on current time
-                    var delta = (time - prevTime) / 1000;
-                    // Set the velocity.x and velocity.z using the calculated time delta
-                    velocity.x -= velocity.x * 10.0 * delta;
-                    velocity.z -= velocity.z * 10.0 * delta;
+            //function playerControls() {
 
-                    // Calculate "gravity" using delta
-                    velocity.y -= 9.8 * 20.0 * delta; // middle number = mass
+            //    // Check for pointerlock in browser
+            //    //if (player.controlsEnabled) {
 
-                    // Moves the camera (player) forward
-                    if (controls.moveForward) {
-                        velocity.z -= 200.0 * delta;
-                    }
+            //    //    // Save the current time
+            //    //    var time = performance.now();
+            //    //    // Create a delta value based on current time
+            //    //    var delta = (time - prevTime) / 1000;
+            //    //    // Set the velocity.x and velocity.z using the calculated time delta
+            //    //    velocity.x -= velocity.x * 10.0 * delta;
+            //    //    velocity.z -= velocity.z * 10.0 * delta;
 
-                    // Moves the camera (player) backward
-                    if (controls.moveBackward) {
-                        velocity.z += 200.0 * delta;
-                    }
+            //    //    // Calculate "gravity" using delta
+            //    //    velocity.y -= 9.8 * 20.0 * delta; // middle number = mass
 
-                    // Moves the camera (player) left
-                    if (controls.moveLeft) {
-                        velocity.x -= 200.0 * delta;
-                    }
+            //    //    // Moves the camera (player) forward
+            //    //    if (player.moveForward) {
+            //    //        velocity.z -= 200.0 * delta;
+            //    //    }
 
-                    // Moves the camera (player) right
-                    if (controls.moveRight) {
-                        velocity.x += 200.0 * delta;
-                    }
+            //    //    // Moves the camera (player) backward
+            //    //    if (player.moveBackward) {
+            //    //        velocity.z += 200.0 * delta;
+            //    //    }
 
-                    // Makes the camera (player) jump
-                    if (controls.jump) {
-                        if (velocity.y > 100) {
-                            velocity.y = 0;
-                        }
-                        velocity.y += 50.0;
-                        controls.jump = false;
-                    }
+            //    //    // Moves the camera (player) left
+            //    //    if (player.moveLeft) {
+            //    //        velocity.x -= 200.0 * delta;
+            //    //    }
 
-                    // Update the position using the changed delta
-                    controls.getObject().translateX(velocity.x * delta);
-                    controls.getObject().translateY(velocity.y * delta);
-                    controls.getObject().translateZ(velocity.z * delta);
+            //    //    // Moves the camera (player) right
+            //    //    if (player.moveRight) {
+            //    //        velocity.x += 200.0 * delta;
+            //    //    }
 
-                    // Prevent the camera/player from falling out of the 'world'
-                    if (controls.getObject().position.y < 3) {
-                        velocity.y = 0;
-                        controls.getObject().position.y = 3;
-                    }
+            //    //    // Makes the camera (player) jump
+            //    //    if (player.jump) {
+            //    //        if (velocity.y > 100) {
+            //    //            velocity.y = 0;
+            //    //        }
+            //    //        velocity.y += 50.0;
+            //    //        player.jump = false;
+            //    //    }
 
-                    // Save the time for future delta calculations
-                    prevTime = time;
-                }
-            }
+            //    //    // Update the position using the changed delta
+            //    //    player.getObject().translateX(velocity.x * delta);
+            //    //    player.getObject().translateY(velocity.y * delta);
+            //    //    player.getObject().translateZ(velocity.z * delta);
+
+            //    //    // Prevent the camera/player from falling out of the 'world'
+            //    //    if (player.getObject().position.y < 3) {
+            //    //        velocity.y = 0;
+            //    //        player.getObject().position.y = 3;
+            //    //    }
+
+            //    //    // Save the time for future delta calculations
+            //    //    prevTime = time;
+            //    //}
+            //}
 
             function onWindowResize() {
                 camera.aspect = window.innerWidth / window.innerHeight;
@@ -153,8 +152,7 @@
 
             function animate() {
                 requestAnimationFrame(animate);
-                CastRays();
-                playerControls();
+                Player.Update();
 
                 renderer.render(scene, camera);
             }
@@ -165,6 +163,7 @@
     </script>
     <script src="~/lib/threejs/three.min.js"></script>
     <script src="~/lib/threejs/OrbitControls.js"></script>
+    <script src="~/lib/threejs/Player.js"></script>
     <script src="~/lib/phisijs/ammo.js"></script>
     <script src="~/lib/phisijs/physi.js"></script>
     <script src="~/lib/phisijs/physijs_worker.js"></script>

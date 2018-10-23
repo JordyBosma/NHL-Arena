@@ -7,7 +7,7 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.FirstPersonControls = function (camera, scene) {
+THREE.FirstPersonControls = function (camera) {
     var delay = 500;
     var canJump = true;
     var scope = this;
