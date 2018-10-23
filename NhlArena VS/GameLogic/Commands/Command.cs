@@ -104,7 +104,7 @@ namespace Commands
 
     public class UpdatePlayerCommand : Command
     {
-        Guid playerGuid;
+        public Guid playerGuid { get; }
         public double x { get; }
         public double y { get; }
         public double z { get; }
@@ -125,7 +125,7 @@ namespace Commands
     /// </summary>
     public class ObjectCommand : Command
     {
-        Object3D obj;
+        public Object3D obj { get; }
 
         public ObjectCommand(string objectCommandType, Object3D obj) : base(objectCommandType)
         {
