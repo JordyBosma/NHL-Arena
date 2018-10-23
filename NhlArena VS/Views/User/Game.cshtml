@@ -19,11 +19,15 @@
 <body>
 
     <script>
+        var Socket;
+        var camera, scene, renderer;
+        var controls;
+        var worldObjects = {};
+        var commandArray = [];
+        var playerGuid;
 
-        window.onload = function () {
-            var camera, scene, renderer;
-            var controls;
-            var worldObjects = {};
+        window.onload = function () {           
+            
 
             var prevTime = performance.now();
             var velocity = new THREE.Vector3();
@@ -60,25 +64,32 @@
 
                 var light2 = new THREE.HemisphereLight(0xDDDDDD, 0x454545, 1);
                 scene.add(light2);
+                
+            }
 
-                console.log("testYeet");
-                var Socket = new WebSocket("wss://" + window.location.hostname + ":" + window.location.port + "/connect_client/@ViewData["game"]");
+            //socket
+            console.log("Connecting...");
+            Socket = new WebSocket("ws://" + window.location.hostname + ":" + window.location.port + "/connect_client/@ViewData["game"]");
                 Socket.onopen = function () {
-                    console.log("yeet");
-                    Socket.send("Hello World");
-
+                    console.log("socket open");
                 };
                 Socket.onerror = error => {
                     console.log("websocket error ${error}");
                 };
+                Socket.onclose = CloseEvent =>
+                {
+                    console.log("socket closed");
+                    console.log(CloseEvent);
+                };
                 Socket.onmessage = function (event)
                 {
                     var command = JSON.parse(event.data);
-                    console.log(command);
-
                     for (var i = 0; i < command.length; i++)
                     {
                         switch (command[i].commandType) {
+                            case "InitializePlayerCommand":
+                                playerGuid = command[i].playerGuid
+                                break;
                             case "DeathCommand":
                                 console.log("death");
                                 break;
@@ -88,16 +99,17 @@
                                 break;
                             case "ErrorCommand":
                                 break;
-                            case "UpdatePlayerCommand":
-                                break;
                             case "NewObjectCommand":
                                 if (command[i].obj.type == "Player")
                                 {
-                                    var player = new Player(command[i].obj.x, command[i].obj.z);
-                                    scene.add(player);
-                                    worldObjects[command[i].obj.guid] = player;
+                                    if (command[i].obj.guid != playerGuid){
+                                        var player = new Player(command[i].obj.x, command[i].obj.z);
+                                        scene.add(player);
+                                        worldObjects[command[i].obj.guid] = player;
+
+                                        worldObjects[command[i].obj.guid] = command.obj;
+                                    }                                    
                                 }
-                                worldObjects[command[i].obj.guid] = command.obj;
                                 break;
                             case "UpdateObjectCommand":
                                 if (Object.keys(worldObjects).indexOf(command[i].obj.guid) < 0) {
@@ -112,6 +124,8 @@
                                 object.rotation.x = command[i].obj.rotationX;
                                 object.rotation.y = command[i].obj.rotationY;
                                 object.rotation.z = command[i].obj.rotationZ;
+
+                                console.log(command[i]);
                                 break;
                             case "DeleteObjectCommand":
                                 if (Object.keys(worldObjects).indexOf(command.parameters.guid) < 0) {
@@ -123,8 +137,26 @@
                                 break;
                         }
                     }
+                    Respond();
+
+                    function Respond()
+                    {
+                        var cmdarray = [];
+                        cmdarray[0] = updatePlayerCommand = {
+                            commandType: "UpdatePlayerCommand",
+                            playerGuid: playerGuid,
+                            x: controls.getObject().position.x,
+                            y: controls.getObject().position.y,
+                            z: controls.getObject().position.z,
+                            rotationY: controls.getObject().rotation.y
+                        };
+                        var cmd = JSON.stringify(cmdarray);
+                        console.log(Socket.readyState);
+                        Socket.send(cmd);
+                        console.log(Socket.readyState);
+                    }
+
                 }
-            }
 
             function playerControls() {
 

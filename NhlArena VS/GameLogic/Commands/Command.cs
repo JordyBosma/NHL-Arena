@@ -102,6 +102,16 @@ namespace Commands
         }
     }
 
+    public class InitializePlayerCommand : Command
+    {
+        public Guid playerGuid { get; }
+
+        public InitializePlayerCommand(Guid playerGuid) : base("InitializePlayerCommand")
+        {
+            this.playerGuid = playerGuid;
+        }
+    }
+
     public class UpdatePlayerCommand : Command
     {
         public Guid playerGuid { get; }

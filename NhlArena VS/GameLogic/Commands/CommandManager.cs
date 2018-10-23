@@ -112,14 +112,17 @@ namespace Commands
 
         public void InitializePlayer(Player newPlayer)
         {
-            NewObjectCommand cmd = new NewObjectCommand(newPlayer);
-            SendCommandsToObservers(cmd);
+            InitializePlayerCommand cmd = new InitializePlayerCommand(newPlayer.guid);
+            observers[observers.Count - 1].OnNext(cmd);
+
+            NewObjectCommand cmd2 = new NewObjectCommand(newPlayer);
+            SendCommandsToObservers(cmd2);            
 
             List<Object3D> worldObjects = game.getWorldObjects();
             foreach(Object3D obj in worldObjects)
             {
-                NewObjectCommand cmd2 = new NewObjectCommand(obj);
-                observers[observers.Count() - 1].OnNext(cmd2);
+                NewObjectCommand cmd3 = new NewObjectCommand(obj);
+                observers[observers.Count() - 1].OnNext(cmd3);
             }
         }
 

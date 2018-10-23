@@ -21,7 +21,9 @@ namespace GameLogic
         public Game(Client initialClient)
         {
             gameId = Guid.NewGuid();
-            worldObjects.Add(new Player(initialClient, 0, 0, 0, 0, 0, 0));
+            initialClient.SetGameId(gameId);
+            Player initialPlayer = new Player(initialClient, 0, 0, 0, 0, 0, 0);
+            worldObjects.Add(initialPlayer);
             gameName = initialClient.username + "'s Game";
 
             commandManager = new CommandManager(this);
@@ -29,6 +31,8 @@ namespace GameLogic
             //subscribes commandmanager and client to each other
             initialClient.Subscribe(commandManager);
             commandManager.Subscribe(initialClient);
+
+            commandManager.InitializePlayer(initialPlayer);
 
             Thread gameThread = new Thread(TickTimer);
             gameThread.Start();

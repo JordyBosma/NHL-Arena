@@ -11,7 +11,7 @@ namespace Clients
 {
     public class Client : View, IObserver<Command>
     {
-        public Guid gameId { get; }
+        public Guid gameId;
         public string username { get; }
         public ClientSendManager sendManager { get; }
         public ClientReceiveManager receiveManager { get; }        
@@ -27,6 +27,13 @@ namespace Clients
         public Client(WebSocket socket, string username) : base(socket)
         {
             this.username = username;
+            sendManager = new ClientSendManager();
+            receiveManager = new ClientReceiveManager();
+        }
+
+        public void SetGameId(Guid gameId)
+        {
+            this.gameId = gameId;
         }
 
         public override async Task StartReceiving() {

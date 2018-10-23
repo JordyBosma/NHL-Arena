@@ -36,7 +36,7 @@ namespace Clients
                             cmdlist.Add( new HitCommand(new Guid(json[i].shootingPlayerGuid.Value), new Guid(json[i].hitPlayerGuid.Value), (int)json[i].damage.Value));
                             break;
                         case "UpdatePlayerCommand":
-                            cmdlist.Add(new ErrorCommand(json[i].errorMessage.Value));
+                            cmdlist.Add(new UpdatePlayerCommand(new Guid(json[i].playerGuid.Value), json[i].x.Value, json[i].y.Value, json[i].z.Value, json[i].rotationY.Value));
                             break;                        
                         default:
                             cmdlist.Add(null);
