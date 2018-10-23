@@ -47,6 +47,10 @@ THREE.FirstPersonControls = function (camera, scene) {
         return yawObject;
     };
 
+    this.getCrosshair = function () {
+        return box;
+    }
+
     this.moveForward = false;
     this.moveBackward = false;
     this.moveLeft = false;
