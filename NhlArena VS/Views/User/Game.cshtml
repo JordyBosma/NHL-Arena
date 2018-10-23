@@ -26,8 +26,8 @@
         var commandArray = [];
         var playerGuid;
 
-        window.onload = function () {           
-            
+        window.onload = function () {
+
 
             var prevTime = performance.now();
             var velocity = new THREE.Vector3();
@@ -64,7 +64,7 @@
 
                 var light2 = new THREE.HemisphereLight(0xDDDDDD, 0x454545, 1);
                 scene.add(light2);
-                
+
             }
 
             //socket
@@ -74,7 +74,7 @@
                     console.log("socket open");
                 };
                 Socket.onerror = error => {
-                    console.log("websocket error ${error}");
+                    console.log(error);
                 };
                 Socket.onclose = CloseEvent =>
                 {
@@ -108,7 +108,7 @@
                                         worldObjects[command[i].obj.guid] = player;
 
                                         worldObjects[command[i].obj.guid] = command.obj;
-                                    }                                    
+                                    }
                                 }
                                 break;
                             case "UpdateObjectCommand":
@@ -137,24 +137,8 @@
                                 break;
                         }
                     }
-                    Respond();
 
-                    function Respond()
-                    {
-                        var cmdarray = [];
-                        cmdarray[0] = updatePlayerCommand = {
-                            commandType: "UpdatePlayerCommand",
-                            playerGuid: playerGuid,
-                            x: controls.getObject().position.x,
-                            y: controls.getObject().position.y,
-                            z: controls.getObject().position.z,
-                            rotationY: controls.getObject().rotation.y
-                        };
-                        var cmd = JSON.stringify(cmdarray);
-                        console.log(Socket.readyState);
-                        Socket.send(cmd);
-                        console.log(Socket.readyState);
-                    }
+
 
                 }
 
@@ -226,9 +210,46 @@
             }
 
             function animate() {
-                requestAnimationFrame(animate);
+                setTimeout(function () { requestAnimationFrame(animate); }, 1000 / 30);
 
                 playerControls();
+
+                Respond();
+                function Respond() {
+
+                    console.log(Socket.readyState);
+                    var obj = new controls.getObject();
+                    var testx = obj.position.x.toFixed(2);
+                    var testy = 10.00.toFixed(2);
+                    var testz = obj.position.z.toFixed(2);
+
+                    if ((testx < 500 && testz < 500) && (testx > -500 && testz > -500)) {
+                        var cmdarray = [];
+
+                        cmdarray[0] = updatePlayerCommand = {
+                            commandType: "UpdatePlayerCommand",
+                            playerGuid: playerGuid,
+                            x: testx,
+                            y: testy,
+                            z: testz
+                        };
+
+                        try {
+                            var cmd = JSON.stringify(cmdarray);
+                        }
+                        catch{
+                            console.log("command Error");
+                        }
+
+                        console.log(cmd);
+                        //console.log(Socket.readyState);
+                        Socket.send(cmd);
+                        //console.log(Socket.readyState);
+                    }
+                    else {
+                        console.log("out of bounds");
+                    }
+                }
 
                 renderer.render(scene, camera);
             }
