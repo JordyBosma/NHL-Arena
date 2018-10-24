@@ -1,7 +1,7 @@
 ﻿:root {
-    --part-color: red;
+    --part-color: rgb(183, 28, 28);
     --part-border: 8px;
-    --part-border-c: blue;
+    --part-border-c: rgb(255, 145, 0);
     --part-height: 56px;
 }
 

@@ -44,13 +44,13 @@
     transition: transform 0.5s, visibility 0s linear 0.5s;
 }
 
-.mainMenu__checkbox:checked ~ div.fallIn {
+.menu__checkbox:checked + div + div.fallIn {
     visibility: visible;
     transition: top 0.5s, opacity 0.5s;
     top: 50vh;
     opacity: 1;
 }
-.mainMenu__checkbox:checked ~ div.popIn {
+.menu__checkbox:checked + div + div.popIn {
     visibility: visible;
     transition: transform 0.5s;
     transform: translate(-50%, -50%) scale(1,1);
@@ -65,7 +65,7 @@
     visibility: hidden;
 }
 
-#toggle-background:checked ~ div, .mainMenu__checkbox:checked ~ div.overlayBackground {
+#toggle-background:checked ~ div, .menu__checkbox:checked + div.overlayBackground {
     background-color: rgba(0,0,0,0.3);
     transition: background-color 0.5s linear;
     visibility: visible;

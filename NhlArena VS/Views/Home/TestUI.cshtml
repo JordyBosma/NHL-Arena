@@ -30,7 +30,7 @@
 
     <div class="part__container part--top UItopleft">
         <div class="part__center">
-            <i class="material-icons noselect">home</i>
+            <i class="material-icons noselect" onclick="ui.ShowExitMenu(true)">home</i>
             <i class="material-icons noselect volume" onclick="ui.SwitchSoundOnOff(this)">volume_mute</i>
             <i class="material-icons noselect" onclick="ui.ShowOptionMenu(true)">info</i>
         </div>
@@ -40,7 +40,7 @@
     <div class="part__container part--top UItimer">
         <div class="part__left"></div>
         <div class="part__center">
-            <div style="margin: auto;">hoithere</div>
+            <div id="gameTimer" style=""></div>
         </div>
         <div class="part__right"></div>
     </div>
@@ -62,7 +62,7 @@
 
             <button onclick="ui.ShowOptionMenu(true)">true</button>
             <button onclick="ui.ShowOptionMenu(false)">false</button>
-            <label for="toggle-1">showcontent</label>
+            <label for="toggle-OptionMenu">showcontent</label>
         </div>
     </div>
     <!--
@@ -70,7 +70,7 @@
 
         </div>
     -->
-    <input id="toggle-1" type="checkbox" class="toggleCheckBox mainMenu__checkbox">
+    <input id="toggle-OptionMenu" type="checkbox" class="toggleCheckBox menu__checkbox">
     <div onclick="ui.ShowOptionMenu(false)" class="overlayBackground"></div>
     <div id="mainMenu" class="card red darken-4 center fallIn" style="width: 300px;">
         <div class="card-content orange-text text-accent-3">
@@ -81,7 +81,20 @@
             <span class="card-title">Options:</span>
             <a class="btn orange menu__option">Leave</a>
             <a class="btn orange menu__option">Leave</a>
-            <a class="btn orange menu__option">Leave</a>
+            <a class="btn orange menu__option" href="/User/Main">Leave</a>
+        </div>
+    </div>
+
+    <input id="toggle-ExitMenu" type="checkbox" class="toggleCheckBox menu__checkbox">
+    <div onclick="ui.ShowExitMenu(false)" class="overlayBackground"></div>
+    <div id="exitMenu" class="card red darken-4 center popIn" style="width: 300px;">
+        <div class="card-content orange-text text-accent-3">
+            <div class="orange-text text-accent-3 card__option">
+                <i class="material-icons" onclick="ui.ShowExitMenu(false)">clear</i>
+            </div>
+            <span class="card-title">Options:</span>
+            <a class="btn orange menu__option" href="/User/Main">Leave</a>
+            <a class="btn orange menu__option" onclick="ui.ShowExitMenu(false)">Cancel</a>
         </div>
     </div>
 
