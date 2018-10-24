@@ -22,6 +22,9 @@
 
         window.onload = function () {
 
+            var camera, scene, renderer;
+            var player;
+
             function init() {
                 renderer = new THREE.WebGLRenderer({ antialias: true });
                 renderer.setPixelRatio(window.devicePixelRatio);
@@ -36,8 +39,7 @@
                 scene = new Physijs.Scene({ reportSize: 2, fixedStep: 1 / 60 });
 
                 // Create First Person Controls
-                player = new Player(camera);
-                //scene.add(player);
+                player = new Player(camera, scene);
 
                 window.addEventListener('resize', onWindowResize, false);
 
@@ -53,27 +55,7 @@
 
                 var light2 = new THREE.HemisphereLight(0xDDDDDD, 0x454545, 1);
                 scene.add(light2);
-
-
             }
-
-            //function CastRays() {
-            //    originVector.x = player.getObject().position.x;
-            //    originVector.y = player.getObject().position.y;
-            //    originVector.z = player.getObject().position.z;
-            //    directionVector.x = 1;
-
-            //    scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
-
-            //    raycaster.set(originVector, originVector);
-
-            //    intersects = raycaster.intersectObjects(scene.children);
-
-            //    for (var i = 0; i < intersects.length; i++) {
-
-            //        intersects[i].object.material.color.set(0xff0000);
-            //    }
-            //}
 
             //function playerControls() {
 
@@ -155,6 +137,7 @@
     </script>
     <script src="~/lib/threejs/three.min.js"></script>
     <script src="~/lib/threejs/OrbitControls.js"></script>
+    <script src="~/lib/threejs/FirstPersonControls.js"></script>
     <script src="~/lib/threejs/Player.js"></script>
     <script src="~/lib/phisijs/ammo.js"></script>
     <script src="~/lib/phisijs/physi.js"></script>
@@ -162,7 +145,6 @@
     <script src="~/lib/phisijs/simplex-noise.js"></script>
     <script src="~/lib/phisijs/stats.js"></script>
     <script src="~/lib/phisijs/tween.js"></script>
-    <script src="~/lib/threejs/ThreeFirstPersonControls.js"></script>
     <script src="~/lib/threejs/MTLLoader.js"></script>
     <script src="~/lib/threejs/OBJLoader.js"></script>
     <script src="~/js/BasicPlane.js"></script>

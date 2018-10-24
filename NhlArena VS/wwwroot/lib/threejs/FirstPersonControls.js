@@ -8,27 +8,29 @@
  */
 
 THREE.FirstPersonControls = function (camera) {
+    //var player = new THREE.Object3D();
     var delay = 500;
     var canJump = true;
     var scope = this;
-
     camera.rotation.set(0, 0, 0);
 
-    var material = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide });
-    var box = new Physijs.BoxMesh(
+    var blackBoxMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide });
+    var blackBox = new Physijs.BoxMesh(
         new THREE.BoxGeometry(0.1, 0.1, 0.1),
-        material
+        blackBoxMaterial
     );
-
-    box.position.set(0, 0, -10);
+    blackBox.position.set(0, 0, -10);
 
     var pitchObject = new THREE.Object3D();
     pitchObject.add(camera);
+    pitchObject.add(blackBox);
 
     var yawObject = new THREE.Object3D();
     yawObject.position.y = 10;
     yawObject.add(pitchObject);
-    pitchObject.add(box);
+
+    //player.add(yawObject);
+    //player.position.y = 10;
 
     var PI_2 = Math.PI / 2;
 
@@ -43,7 +45,7 @@ THREE.FirstPersonControls = function (camera) {
     };
     this.enabled = false;
 
-    this.getObject = function () {
+    this.GetPlayer = function () {
         return yawObject;
     };
 
