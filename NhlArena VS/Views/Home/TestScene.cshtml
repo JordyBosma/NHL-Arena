@@ -21,17 +21,8 @@
     <script>
 
         window.onload = function () {
-            var camera, scene, renderer, player;
-
-            //var raycaster = new THREE.Raycaster();
-            //var originVector = new THREE.Vector3();
-            //var directionVector = new THREE.Vector3();
-            //var intersects;
-            //var prevTime = performance.now();
-            //var velocity = new THREE.Vector3();
 
             function init() {
-
                 renderer = new THREE.WebGLRenderer({ antialias: true });
                 renderer.setPixelRatio(window.devicePixelRatio);
                 renderer.setSize(window.innerWidth, window.innerHeight + 5);
@@ -46,7 +37,7 @@
 
                 // Create First Person Controls
                 player = new Player(camera);
-                scene.add(player);
+                //scene.add(player);
 
                 window.addEventListener('resize', onWindowResize, false);
 
@@ -62,6 +53,7 @@
 
                 var light2 = new THREE.HemisphereLight(0xDDDDDD, 0x454545, 1);
                 scene.add(light2);
+
 
             }
 
@@ -152,7 +144,7 @@
 
             function animate() {
                 requestAnimationFrame(animate);
-                Player.Update();
+                player.Update();
 
                 renderer.render(scene, camera);
             }
@@ -170,7 +162,7 @@
     <script src="~/lib/phisijs/simplex-noise.js"></script>
     <script src="~/lib/phisijs/stats.js"></script>
     <script src="~/lib/phisijs/tween.js"></script>
-    <script src="~/lib/threejs/FirstPersonControls.js"></script>
+    <script src="~/lib/threejs/ThreeFirstPersonControls.js"></script>
     <script src="~/lib/threejs/MTLLoader.js"></script>
     <script src="~/lib/threejs/OBJLoader.js"></script>
     <script src="~/js/BasicPlane.js"></script>
