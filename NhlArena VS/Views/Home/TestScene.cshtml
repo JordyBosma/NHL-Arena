@@ -24,9 +24,15 @@
             var camera, scene, renderer;
             var controls;
 
-            var raycaster = new THREE.Raycaster();
-            var originVector = new THREE.Vector3();
-            var directionVector = new THREE.Vector3();
+            //var raycaster = new THREE.Raycaster();
+            //var originVector = new THREE.Vector3();
+            //var targetVector = new THREE.Vector3();
+            //var directionVector = new THREE.Vector3();
+
+            var fromPosition = new THREE.Vector3();
+            var toPosition = new THREE.Vector3();
+            var direction = new THREE.Vector3();
+            var player;
             var intersects;
             var prevTime = performance.now();
             var velocity = new THREE.Vector3();
@@ -39,7 +45,7 @@
 
                 document.body.appendChild(renderer.domElement);
 
-                // Create new camera with controls
+                // Create new camera
                 camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
 
                 // Create scene
@@ -51,37 +57,72 @@
 
                 window.addEventListener('resize', onWindowResize, false);
 
+                // Create basicPlane
                 var basicPlane = new BasicPlane();
                 scene.add(basicPlane);
 
+                // Create NHLMap
                 var NHLMap = new NHLArenaMap();
                 scene.add(NHLMap);
 
+                // Create box
+                var material = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide, wireframe: true });
+                var box = new Physijs.BoxMesh(
+                    new THREE.BoxGeometry(5, 5, 5),
+                    material
+                );
+                box.position.set(5, 5, -10);
+                scene.add(box);
+
+                // Create player
+                player = controls.getObject();
+            
+                // Create lights
                 var light = new THREE.AmbientLight(0x404040);
                 light.intensity = 2;
                 scene.add(light);
 
                 var light2 = new THREE.HemisphereLight(0xDDDDDD, 0x454545, 1);
                 scene.add(light2);
-
             }
             
             function CastRays() {
-                originVector.x = controls.getObject().position.x;
-                originVector.y = controls.getObject().position.y;
-                originVector.z = controls.getObject().position.z;
-                directionVector.x = 1;
+                var originPoint = player.position.clone();
+                
+                //fromPosition.x = player.position.x;
+                //fromPosition.y = player.position.y;
+                //fromPosition.z = player.position.z;
 
-                scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
+                //toPosition.x = player.position.x;
+                //toPosition.y = player.position.y;
+                //toPosition.z = player.position.z;
 
-                raycaster.set(originVector, originVector);
+                //direction.x = fromPosition.x - toPosition.x;
+                //direction.y = fromPosition.y - toPosition.y;
+                
+                scene.add(new THREE.ArrowHelper(direction, fromPosition, 100, 0xff0000));
 
-                intersects = raycaster.intersectObjects(scene.children);
+                //raycaster.set(fromPosition, direction);
+                //console.log(camera.position);
 
-                for (var i = 0; i < intersects.length; i++) {
+                //intersects = raycaster.intersectObjects(scene.children);
+                //console.log(scene.children);
 
-                    intersects[i].object.material.color.set(0xff0000);
+                for (var vertexIndex = 0; vertexIndex < controls.getObject().geometry.vertices.length; vertexIndex++) {
+                    var localVertex = controls.getObject().geometry.vertices[vertexIndex].clone();
+                    var globalVertex = localVertex.applyMatrix4(controls.getObject().matrix);
+                    var directionVector = globalVertex.sub(controls.getObject().position);
+
+                    var ray = new THREE.Raycaster(originPoint, directionVector.clone().normalize());
+                    var collisionResults = ray.intersectObjects(scene.children);
+                    if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length())
+                        intersects[i].object.material.color.set(0xff0000); 
                 }
+            }
+
+            function LogPositionGetObject() {
+                window.setInterval(1000);
+                console.log(controls.getObject().position.x, controls.getObject().position.y, controls.getObject().position.z);
             }
             
             function playerControls() {
