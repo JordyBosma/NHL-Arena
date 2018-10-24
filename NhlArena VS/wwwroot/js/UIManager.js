@@ -1,7 +1,16 @@
 ﻿class UIManager {
     constructor(x) {
-        this.optionM = document.getElementById("OptionMenu");
         this.volume = true;
+    }
+
+    setAngleUIParts() {
+        var ps = document.getElementsByClassName("part__container");
+        for (var i = 0; i < ps.length; i++) {
+            var style = window.getComputedStyle(ps[i]);
+            var height = style.getPropertyValue('height');
+
+            ps[i].style.setProperty('--part-angle', Math.acos(height / (height * 0.75)));
+        }
     }
 
     ShowOptionMenu(b) {
@@ -10,13 +19,18 @@
     }
 
     
-    SwitchSoundOnOff(document) {
-        if (document.innerText === "volume_up") {
+    SwitchSoundOnOff(clicked) {
+        var newInnerText;
+        if (clicked.innerText === "volume_up") {
             this.volume = false;
-            document.innerText = "volume_mute";
+            newInnerText = "volume_mute";
         } else {
             this.volume = true;
-            document.innerText = "volume_up";
+            newInnerText = "volume_up";
+        }
+        var soundSwitchButtons = document.getElementsByClassName("volume");
+        for (var i = 0; i < soundSwitchButtons.length; i++) {
+            soundSwitchButtons[i].innerText = newInnerText;
         }
     }
 

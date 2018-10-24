@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="~/lib/materialize/materialize.min.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="~/css/UI.css" rel="stylesheet" />
+    <link href="~/css/UI_parts.css" rel="stylesheet" />
 
     <style>
         body {
@@ -22,22 +23,59 @@
     </style>
 </head>
 <body>
-    <div style="position:absolute;">
-        <label for="toggle-background" style="position:relative;">showcontent</label>
-        <input id="toggle-background" type="checkbox" class="toggleCheckBox">
 
+    <!--<div class="topleftmenu">
 
-        <button onclick="ui.ShowOptionMenu(true)">true</button>
-        <button onclick="ui.ShowOptionMenu(false)">false</button>
-        <label for="toggle-1">showcontent</label>
+    </div>-->
+
+    <div class="part__container part--top UItopleft">
+        <div class="part__center">
+            <i class="material-icons noselect">home</i>
+            <i class="material-icons noselect volume" onclick="ui.SwitchSoundOnOff(this)">volume_mute</i>
+            <i class="material-icons noselect" onclick="ui.ShowOptionMenu(true)">info</i>
+        </div>
+        <div class="part__right"></div>
     </div>
 
+    <div class="part__container part--top UItimer">
+        <div class="part__left"></div>
+        <div class="part__center">
+            <div style="margin: auto;">hoithere</div>
+        </div>
+        <div class="part__right"></div>
+    </div>
+
+    <div class="part__container part--bottom UIbottom">
+        <div class="part__left"></div>
+        <div class="part__center">
+            <div style="margin: auto;">hoithere</div>
+        </div>
+        <div class="part__right"></div>
+    </div>
+
+    <div class="part__container part--top UItopright">
+        <div class="part__left"></div>
+        <div class="part__center">
+            <label for="toggle-background" style="position:relative;">showcontent</label>
+            <input id="toggle-background" type="checkbox" class="toggleCheckBox">
+
+
+            <button onclick="ui.ShowOptionMenu(true)">true</button>
+            <button onclick="ui.ShowOptionMenu(false)">false</button>
+            <label for="toggle-1">showcontent</label>
+        </div>
+    </div>
+    <!--
+        <div style="position:absolute; right:0;">
+
+        </div>
+    -->
     <input id="toggle-1" type="checkbox" class="toggleCheckBox mainMenu__checkbox">
-    <div onclick="ui.ShowMenu(false)" class="overlayBackground"></div>
+    <div onclick="ui.ShowOptionMenu(false)" class="overlayBackground"></div>
     <div id="mainMenu" class="card red darken-4 center fallIn" style="width: 300px;">
         <div class="card-content orange-text text-accent-3">
             <div class="orange-text text-accent-3 card__option">
-                <i class="material-icons" onclick="ui.SwitchSoundOnOff(this)">volume_mute</i>
+                <i class="material-icons volume" onclick="ui.SwitchSoundOnOff(this)">volume_mute</i>
                 <i class="material-icons" onclick="ui.ShowOptionMenu(false)">clear</i>
             </div>
             <span class="card-title">Options:</span>

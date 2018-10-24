@@ -1,0 +1,115 @@
+﻿:root {
+    --part-color: rgba(0,0,0,0.4);
+    --part-border: 4px;
+    --part-border-c: rgba(1,2,3,0.4);
+}
+
+.UItimer {
+    left: 50vw;
+    top: 0;
+    transform: translate(-50%, 0);
+}
+
+.UIbottom {
+    left: 50vw;
+    bottom: 0;
+    transform: translate(-50%, 0);
+}
+
+.part__container {
+    position: fixed;
+    overflow: hidden;
+    --part-height: 40px;
+    --part-height2: 40;
+    --part-angle: 25deg;
+}
+
+    .part__container:after {
+        clear: both;
+    }
+
+.part__center {
+    height: var(--part-height);
+    float: left;
+    background: rgba(0,0,0,0.4);
+    position: relative;
+}
+
+.part--top > .part__center {
+    border-bottom: solid var(--part-border) var(--part-border-c);
+}
+
+.part--bottom > .part__center {
+    border-top: solid var(--part-border) var(--part-border-c);
+}
+
+.part__right, .part__left {
+    width: calc(0.75 * var(--part-height));
+    position: relative;
+    float: left;
+    height: var(--part-height);
+}
+
+    .part__right:before, .part__left:before {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 0;
+        height: 0;
+        z-index: 1;
+    }
+
+    .part__right:after, .part__left:after {
+        content: "";
+        display: block;
+        position: absolute;
+        width: calc(0.75 * var(--part-height));
+        height: var(--part-height);
+        z-index: 3;
+    }
+
+.part--top > .part__right:before, .part--top > .part__left:before {
+    border-top: calc(0.5 * var(--part-height)) solid var(--part-color);
+    border-bottom: calc(0.5 * var(--part-height)) solid transparent;
+}
+
+.part--bottom > .part__right:before, .part--bottom > .part__left:before {
+    border-top: calc(0.5 * var(--part-height)) solid transparent;
+    border-bottom: calc(0.5 * var(--part-height)) solid var(--part-color);
+}
+
+/*right*/
+.part__right:after {
+    border-right: solid 4px var(--part-border-c);
+}
+
+.part__right:before {
+    border-left: calc(0.5 * 0.75 * var(--part-height)) solid var(--part-color);
+    border-right: calc(0.5 * 0.75 * var(--part-height)) solid transparent;
+}
+
+.part--top > .part__right:after {
+    transform: translateX(-50%) skewX(calc(-1 * var(--part-angle)));
+}
+
+.part--bottom > .part__right:after {
+    transform: translateX(-50%) skewX(var(--part-angle));
+}
+
+/*left*/
+.part__left:after {
+    border-left: solid 4px var(--part-border-c);
+}
+
+.part__left:before {
+    border-left: calc(0.5 * 0.75 * var(--part-height)) solid transparent;
+    border-right: calc(0.5 * 0.75 * var(--part-height)) solid var(--part-color);
+}
+
+.part--top > .part__left:after {
+    transform: translateX(50%) skewX(var(--part-angle));
+}
+
+.part--bottom > .part__left:after {
+    transform: translateX(50%) skewX(calc(-1 * var(--part-angle)));
+}

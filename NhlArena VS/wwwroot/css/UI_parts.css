@@ -1,0 +1,115 @@
+﻿:root {
+    --part-color: red;
+    --part-border: 8px;
+    --part-border-c: blue;
+    --part-height: 56px;
+}
+
+.UItopleft {
+    top: 0;
+    left: 0;
+}
+    .UItopleft i{
+        margin-left: 10px;
+        font-size: 40px;
+    }
+
+.UItimer {
+    left: 50vw;
+    top: 0;
+    transform: translate(-50%, 0);
+}
+.UIbottom {
+    left: 50vw;
+    bottom: 0;
+    transform: translate(-50%, 0);
+}
+.UItopright {
+    top: 0;
+    right: 0;
+}
+
+.part__container {
+    position: fixed;
+}
+
+.part__container:after {
+    clear: both;
+}
+
+.part__center {
+    padding: 4px;
+    height: var(--part-height);
+    float: left;
+    background: var(--part-color);
+    position:relative;
+}
+
+.part--top > .part__center {
+    border-bottom: solid var(--part-border) var(--part-border-c);
+}
+
+.part--bottom > .part__center {
+    border-top: solid var(--part-border) var(--part-border-c);
+}
+
+.part__right, .part__left {
+    position: relative;
+    float: left;
+}
+.part__left {
+    display: flex;
+    justify-content: flex-end
+}
+.part__right:before, .part__left:before, .part__right:after, .part__left:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+
+.part__right:before, .part__left:before {
+    border-width: calc(0.5 * (var(--part-height) - var(--part-border))) calc(0.5 * 0.75 * (var(--part-height) - var(--part-border)));
+    z-index: 3;
+}
+.part__right:after, .part__left:after {
+    border-width: calc(0.5 * var(--part-height)) calc(0.5 * 1.4 * var(--part-height));
+    z-index: 1;
+}
+
+
+.part--bottom > .part__right:before, .part--bottom > .part__left:before {
+    margin-top: var(--part-border);
+}
+
+
+.part--top > .part__right:before {
+    border-color: var(--part-color) transparent transparent var(--part-color);
+}
+.part--top > .part__right:after {
+    border-color: var(--part-border-c) transparent transparent var(--part-border-c);
+}
+.part--top > .part__left:before {
+    border-color: var(--part-color) var(--part-color) transparent transparent;
+}
+.part--top > .part__left:after {
+    border-color: var(--part-border-c) var(--part-border-c) transparent transparent;
+}
+
+.part--bottom > .part__right:before {
+    border-color: transparent transparent var(--part-color) var(--part-color);
+}
+
+.part--bottom > .part__right:after {
+    border-color: transparent transparent var(--part-border-c) var(--part-border-c);
+}
+
+.part--bottom > .part__left:before {
+    border-color: transparent var(--part-color) var(--part-color) transparent;
+}
+
+.part--bottom > .part__left:after {
+    border-color: transparent var(--part-border-c) var(--part-border-c) transparent;
+}
