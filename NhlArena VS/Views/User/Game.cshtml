@@ -137,9 +137,28 @@
                                 break;
                         }
                     }
+                    Respond();
 
+                    function Respond() {
 
+                        var obj = new controls.getObject();
 
+                        var cmdarray = [];
+
+                        cmdarray[0] = updatePlayerCommand = {
+                            commandType: "UpdatePlayerCommand",
+                            playerGuid: playerGuid,
+                            x: obj.position.x.toFixed(2),
+                            y: obj.position.y.toFixed(2),
+                            z: obj.position.z.toFixed(2)
+                        };
+
+                        var cmd = JSON.stringify(cmdarray);
+                        console.log(cmd);
+                        //console.log(Socket.readyState);
+                        Socket.send(cmd);
+                        //console.log(Socket.readyState);
+                    }
                 }
 
             function playerControls() {
@@ -210,46 +229,9 @@
             }
 
             function animate() {
-                setTimeout(function () { requestAnimationFrame(animate); }, 1000 / 30);
+                requestAnimationFrame(animate);
 
                 playerControls();
-
-                Respond();
-                function Respond() {
-
-                    console.log(Socket.readyState);
-                    var obj = new controls.getObject();
-                    var testx = obj.position.x.toFixed(2);
-                    var testy = 10.00.toFixed(2);
-                    var testz = obj.position.z.toFixed(2);
-
-                    if ((testx < 500 && testz < 500) && (testx > -500 && testz > -500)) {
-                        var cmdarray = [];
-
-                        cmdarray[0] = updatePlayerCommand = {
-                            commandType: "UpdatePlayerCommand",
-                            playerGuid: playerGuid,
-                            x: testx,
-                            y: testy,
-                            z: testz
-                        };
-
-                        try {
-                            var cmd = JSON.stringify(cmdarray);
-                        }
-                        catch{
-                            console.log("command Error");
-                        }
-
-                        console.log(cmd);
-                        //console.log(Socket.readyState);
-                        Socket.send(cmd);
-                        //console.log(Socket.readyState);
-                    }
-                    else {
-                        console.log("out of bounds");
-                    }
-                }
 
                 renderer.render(scene, camera);
             }

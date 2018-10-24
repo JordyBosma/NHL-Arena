@@ -18,17 +18,8 @@ namespace Clients
 
         public List<Command> ReceiveString(string cmdString)
         {
-            try
-            {
-                dynamic jsonobject = JsonConvert.DeserializeObject(cmdString);
-                return ConvertToCommands(jsonobject);
-            }
-            catch
-            {
-                List<Command> errorlist = new List<Command>();
-                errorlist.Add(new ErrorCommand("fout met dezerializen van json"));
-                return errorlist;
-            }
+            dynamic jsonobject = JsonConvert.DeserializeObject(cmdString, new JsonSerializerSettings { CheckAdditionalContent = false });
+            return ConvertToCommands(jsonobject);
         }
 
         private List<Command> ConvertToCommands(dynamic json)
