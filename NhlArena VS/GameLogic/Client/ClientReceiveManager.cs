@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Commands;
@@ -36,7 +37,7 @@ namespace Clients
                             cmdlist.Add(new HitCommand(new Guid(json[i].shootingPlayerGuid.Value), new Guid(json[i].hitPlayerGuid.Value), (int)json[i].damage.Value));
                             break;
                         case "UpdatePlayerCommand":
-                            cmdlist.Add(new UpdatePlayerCommand(new Guid(json[i].playerGuid.Value), 1, 1, 1));
+                            cmdlist.Add(new UpdatePlayerCommand(new Guid(json[i].playerGuid.Value), double.Parse(json[i].x.Value, CultureInfo.InvariantCulture), double.Parse(json[i].y.Value, CultureInfo.InvariantCulture), double.Parse(json[i].z.Value, CultureInfo.InvariantCulture)));
                             break;
                         default:
                             cmdlist.Add(null);

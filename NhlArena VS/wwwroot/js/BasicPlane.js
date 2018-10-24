@@ -7,7 +7,7 @@
         var selfRef = this;
 
         var material = new THREE.MeshBasicMaterial({ color: 0xffffff });
-        var box = new Physijs.BoxMesh(
+        var box = new THREE.Mesh(
             new THREE.BoxGeometry(200, 2, 200),
             material
         );

@@ -33,20 +33,23 @@ namespace Commands
         /// <param name="value"></param>
         public void OnNext(List<Command> value)
         {
-            foreach (Command c in value)
+            if (value != null)
             {
-                string commandType = c.commandType;
-
-                switch (commandType)
+                foreach (Command c in value)
                 {
-                    case "HitCommand":
-                        HitCommand hit = (HitCommand)c;
-                        HitHandler(hit);
-                        break;
-                    case "UpdatePlayerCommand":
-                        UpdatePlayerCommand uPlayer = (UpdatePlayerCommand)c;
-                        PlayerUpdateHandler(uPlayer);
-                        break;
+                    string commandType = c.commandType;
+
+                    switch (commandType)
+                    {
+                        case "HitCommand":
+                            HitCommand hit = (HitCommand)c;
+                            HitHandler(hit);
+                            break;
+                        case "UpdatePlayerCommand":
+                            UpdatePlayerCommand uPlayer = (UpdatePlayerCommand)c;
+                            PlayerUpdateHandler(uPlayer);
+                            break;
+                    }
                 }
             }
         }
