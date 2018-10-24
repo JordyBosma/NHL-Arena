@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Commands;
@@ -10,16 +11,15 @@ namespace Clients
 {
     public class ClientReceiveManager
     {
-        
+
         public ClientReceiveManager()
         {
-            
+
         }
 
         public List<Command> ReceiveString(string cmdString)
-        {            
-            dynamic jsonobject = JsonConvert.DeserializeObject(cmdString);
-
+        {
+            dynamic jsonobject = JsonConvert.DeserializeObject(cmdString, new JsonSerializerSettings { CheckAdditionalContent = false });
             return ConvertToCommands(jsonobject);
         }
 
@@ -30,14 +30,15 @@ namespace Clients
                 List<Command> cmdlist = new List<Command>();
                 for (int i = 0; i < json.Count; i++)
                 {
+                    Random rnd = new Random();
                     switch (json[i].commandType.Value)
                     {
                         case "HitCommand":
-                            cmdlist.Add( new HitCommand(new Guid(json[i].shootingPlayerGuid.Value), new Guid(json[i].hitPlayerGuid.Value), (int)json[i].damage.Value));
+                            cmdlist.Add(new HitCommand(new Guid(json[i].shootingPlayerGuid.Value), new Guid(json[i].hitPlayerGuid.Value), (int)json[i].damage.Value));
                             break;
                         case "UpdatePlayerCommand":
-                            cmdlist.Add(new ErrorCommand(json[i].errorMessage.Value));
-                            break;                        
+                            cmdlist.Add(new UpdatePlayerCommand(new Guid(json[i].playerGuid.Value), double.Parse(json[i].x.Value, CultureInfo.InvariantCulture), double.Parse(json[i].y.Value, CultureInfo.InvariantCulture), double.Parse(json[i].z.Value, CultureInfo.InvariantCulture)));
+                            break;
                         default:
                             cmdlist.Add(null);
                             break;
@@ -45,7 +46,7 @@ namespace Clients
                 }
                 return cmdlist;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLineIf(e is NullReferenceException, "you called something that doesnt exist.");
                 System.Diagnostics.Debug.WriteLine(e);

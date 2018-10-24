@@ -14,10 +14,8 @@ THREE.FirstPersonControls = function (camera, scene) {
 
     camera.rotation.set(0, 0, 0);
 
-    var material = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide });
-    var box = new Physijs.BoxMesh(
-        new THREE.BoxGeometry(0.1, 0.1, 0.1),
-        material
+    var box = new THREE.Mesh(
+        new THREE.BoxGeometry(0.1, 0.1, 5)
     );
 
     box.position.set(0, 0, -10);
@@ -26,7 +24,7 @@ THREE.FirstPersonControls = function (camera, scene) {
     pitchObject.add(camera);
 
     var yawObject = new THREE.Object3D();
-    yawObject.position.y = 10;
+    yawObject.position.y = 2;
     yawObject.add(pitchObject);
     pitchObject.add(box);
 

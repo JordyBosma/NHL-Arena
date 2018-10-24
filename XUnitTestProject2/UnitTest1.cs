@@ -24,12 +24,12 @@ namespace XUnitTestProject2
             Player x = new Player(null, 0, 0, 0, 0, 0, 0);
 
 
-            HitCommand cmd = new HitCommand(p.playerGuid, x.playerGuid, 10);
-            HitCommand cmd2 = new HitCommand(x.playerGuid, p.playerGuid, 15);
+            HitCommand cmd = new HitCommand(p.guid, x.guid, 10);
+            HitCommand cmd2 = new HitCommand(x.guid, p.guid, 15);
             cmdlist.Add(cmd);
             cmdlist.Add(cmd2);
 
-            string jsonstring = JsonConvert.SerializeObject(cmdlist, Formatting.Indented);
+            string jsonstring = JsonConvert.SerializeObject(cmdlist);
 
 
             List<Command> result = crm.ReceiveString(jsonstring);

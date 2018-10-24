@@ -33,20 +33,23 @@ namespace Commands
         /// <param name="value"></param>
         public void OnNext(List<Command> value)
         {
-            foreach (Command c in value)
+            if (value != null)
             {
-                string commandType = c.commandType;
-
-                switch (commandType)
+                foreach (Command c in value)
                 {
-                    case "HitCommand":
-                        HitCommand hit = (HitCommand)c;
-                        HitHandler(hit);
-                        break;
-                    case "UpdatePlayerCommand":
-                        UpdatePlayerCommand uPlayer = (UpdatePlayerCommand)c;
-                        PlayerUpdateHandler(uPlayer);
-                        break;
+                    string commandType = c.commandType;
+
+                    switch (commandType)
+                    {
+                        case "HitCommand":
+                            HitCommand hit = (HitCommand)c;
+                            HitHandler(hit);
+                            break;
+                        case "UpdatePlayerCommand":
+                            UpdatePlayerCommand uPlayer = (UpdatePlayerCommand)c;
+                            PlayerUpdateHandler(uPlayer);
+                            break;
+                    }
                 }
             }
         }
@@ -101,7 +104,7 @@ namespace Commands
                     if (obj.guid == uPlayer.playerGuid)
                     {
                         obj.Move(uPlayer.x, uPlayer.y, uPlayer.z);
-                        obj.Rotate(0, uPlayer.rotationY, 0);
+                        //obj.Rotate(0, uPlayer.rotationY, 0);
                         //checkPickUp
                         UpdateObjectCommand cmd = new UpdateObjectCommand(obj);
                         SendCommandsToObservers(cmd);
@@ -112,14 +115,17 @@ namespace Commands
 
         public void InitializePlayer(Player newPlayer)
         {
-            NewObjectCommand cmd = new NewObjectCommand(newPlayer);
-            SendCommandsToObservers(cmd);
+            InitializePlayerCommand cmd = new InitializePlayerCommand(newPlayer.guid);
+            observers[observers.Count - 1].OnNext(cmd);
+
+            NewObjectCommand cmd2 = new NewObjectCommand(newPlayer);
+            SendCommandsToObservers(cmd2);            
 
             List<Object3D> worldObjects = game.getWorldObjects();
             foreach(Object3D obj in worldObjects)
             {
-                NewObjectCommand cmd2 = new NewObjectCommand(obj);
-                observers[observers.Count() - 1].OnNext(cmd2);
+                NewObjectCommand cmd3 = new NewObjectCommand(obj);
+                observers[observers.Count() - 1].OnNext(cmd3);
             }
         }
 
