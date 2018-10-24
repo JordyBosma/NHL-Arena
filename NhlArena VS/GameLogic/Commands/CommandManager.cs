@@ -101,7 +101,7 @@ namespace Commands
                     if (obj.guid == uPlayer.playerGuid)
                     {
                         obj.Move(uPlayer.x, uPlayer.y, uPlayer.z);
-                        obj.Rotate(0, uPlayer.rotationY, 0);
+                        //obj.Rotate(0, uPlayer.rotationY, 0);
                         //checkPickUp
                         UpdateObjectCommand cmd = new UpdateObjectCommand(obj);
                         SendCommandsToObservers(cmd);
