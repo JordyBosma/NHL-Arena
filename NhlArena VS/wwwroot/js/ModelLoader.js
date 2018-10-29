@@ -23,6 +23,7 @@ class Player extends THREE.Group {
         var selfRef = this;
         loadOBJModel("/models/objects/", "CharacterBase.obj", "/models/materials/", "CharacterBase.mtl", (mesh) => {
             mesh.scale.set(1, 1, 1);
+            mesh.rotation.y = Math.PI;
             selfRef.add(mesh);
         });
     }
