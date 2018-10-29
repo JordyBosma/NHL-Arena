@@ -13,7 +13,7 @@
     }
 }
 
-class Player extends THREE.Group {
+class Character extends THREE.Group {
     constructor() {
         super();
         this.init();
