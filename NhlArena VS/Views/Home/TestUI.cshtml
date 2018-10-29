@@ -23,11 +23,7 @@
     </style>
 </head>
 <body>
-
-    <!--<div class="topleftmenu">
-
-    </div>-->
-
+    <!--top:-->
     <div class="part__container part--top UItopleft">
         <div class="part__center">
             <i class="material-icons noselect" onclick="ui.ShowExitMenu(true)">home</i>
@@ -40,11 +36,20 @@
     <div class="part__container part--top UItimer">
         <div class="part__left"></div>
         <div class="part__center">
-            <div id="gameTimer" style=""></div>
+            <div id="gameTimer" style="">--:--</div>
         </div>
         <div class="part__right"></div>
     </div>
 
+    <div class="part__container part--top UItopright">
+        <div class="part__left"></div>
+        <div class="part__center gamescore">
+            <div id="gameScoreK">K: --</div>
+            <div id="gameScoreD">D: --</div>
+        </div>
+    </div>
+
+    <!--bottom:-->
     <div class="part__container part--bottom UIbottom">
         <div class="part__left"></div>
         <div class="part__center">
@@ -53,8 +58,7 @@
         <div class="part__right"></div>
     </div>
 
-    <div class="part__container part--top UItopright">
-        <div class="part__left"></div>
+    <div class="part__container part--bottom UIbottomleft">
         <div class="part__center">
             <label for="toggle-background" style="position:relative;">showcontent</label>
             <input id="toggle-background" type="checkbox" class="toggleCheckBox">
@@ -64,6 +68,7 @@
             <button onclick="ui.ShowOptionMenu(false)">false</button>
             <label for="toggle-OptionMenu">showcontent</label>
         </div>
+        <div class="part__right"></div>
     </div>
     <!--
         <div style="position:absolute; right:0;">

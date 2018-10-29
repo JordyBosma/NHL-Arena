@@ -92,3 +92,61 @@
     user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
 }
+
+.gamescore {
+    color: white;
+    font-size: 22px;
+    letter-spacing: 3px;
+}
+    .gamescore div {
+        float: left;
+        padding-right: 18px;
+    }
+    .gamescore div:last-child {
+        float: left;
+        padding-right: 6px;
+    }
+    .gamescore:after {
+        clear: both;
+    }
+
+/*part style:*/
+.UItopleft {
+    top: 0;
+    left: 0;
+}
+
+    .UItopleft i {
+        color: white;
+        margin-left: 10px;
+        font-size: 40px;
+    }
+    .UItopleft i:last-child {
+        padding-right: 6px;
+    }
+
+.UItimer {
+    color: white;
+    font-size: 30px;
+    letter-spacing: 6px;
+    left: 50vw;
+    top: 0;
+    transform: translate(-50%, 0);
+}
+
+.UItopright {
+
+    top: 0;
+    right: 0;
+}
+
+.UIbottomleft {
+    bottom: 0;
+    left: 0;
+}
+
+.UIbottom {
+    left: 50vw;
+    bottom: 0;
+    transform: translate(-50%, 0);
+}

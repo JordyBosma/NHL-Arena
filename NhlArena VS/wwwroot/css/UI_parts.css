@@ -5,30 +5,6 @@
     --part-height: 56px;
 }
 
-.UItopleft {
-    top: 0;
-    left: 0;
-}
-    .UItopleft i{
-        margin-left: 10px;
-        font-size: 40px;
-    }
-
-.UItimer {
-    left: 50vw;
-    top: 0;
-    transform: translate(-50%, 0);
-}
-.UIbottom {
-    left: 50vw;
-    bottom: 0;
-    transform: translate(-50%, 0);
-}
-.UItopright {
-    top: 0;
-    right: 0;
-}
-
 .part__container {
     position: fixed;
 }
@@ -56,9 +32,13 @@
 .part__right, .part__left {
     position: relative;
     float: left;
+    height: var(--part-height);
+    display: flex;
+}
+.part__right {
+    justify-content: flex-start;
 }
 .part__left {
-    display: flex;
     justify-content: flex-end
 }
 .part__right:before, .part__left:before, .part__right:after, .part__left:after {
@@ -80,8 +60,8 @@
 }
 
 
-.part--bottom > .part__right:before, .part--bottom > .part__left:before {
-    margin-top: var(--part-border);
+.part--bottom > .part__right:before, .part--bottom > .part__left:before, .part--bottom > .part__right:after, .part--bottom > .part__left:after {
+    align-self: flex-end;
 }
 
 
