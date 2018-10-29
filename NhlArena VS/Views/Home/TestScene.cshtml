@@ -56,15 +56,12 @@
 
                 raycasting();
 
-                // Add basicplane
                 var basicPlane = new BasicPlane();
                 scene.add(basicPlane);
 
-                // Load NHL Map
                 var NHLMap = new NHLArenaMap();
                 scene.add(NHLMap);
 
-                // Add lights
                 var light = new THREE.AmbientLight(0x404040);
                 light.intensity = 2;
                 scene.add(light);
@@ -72,9 +69,6 @@
                 var light2 = new THREE.HemisphereLight(0xDDDDDD, 0x454545, 1);
                 scene.add(light2);
 
-                // Add player
-                var character = new Character();
-                scene.add(character);
             }
 
             //socket
@@ -283,6 +277,7 @@
     <script src="~/lib/threejs/OBJLoader.js"></script>
     <script src="~/js/BasicPlane.js"></script>
     <script src="~/js/ModelLoader.js"></script>
+    <script src="~/js/Player.js"></script>
 </body>
 </html>
 
