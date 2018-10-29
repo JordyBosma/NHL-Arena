@@ -118,19 +118,19 @@ namespace Commands
         public double x { get; }
         public double y { get; }
         public double z { get; }
-        public double rX { get; }
-        public double rY { get; }
-        public double rZ { get; }
+        public double rotationX { get; }
+        public double rotationY { get; }
+        public double rotationZ { get; }
 
-        public UpdatePlayerCommand(Guid playerGuid, double x, double y, double z, double rX, double rY, double rZ): base("UpdatePlayerCommand")
+        public UpdatePlayerCommand(Guid playerGuid, double x, double y, double z, double rotationX, double rotationY, double rotationZ): base("UpdatePlayerCommand")
         {
             this.playerGuid = playerGuid;
             this.x = x;
             this.y = y;
             this.z = z;
-            this.rX = rX;
-            this.rY = rY;
-            this.rZ = rZ;
+            this.rotationX = rotationX;
+            this.rotationY = rotationY;
+            this.rotationZ = rotationZ;
         }
     }
 
