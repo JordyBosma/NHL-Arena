@@ -8,7 +8,7 @@
 
     init(x,y,z) {
         var selfref = this;
-        var geometry = new THREE.BoxGeometry(0.9, 0.9, 0.9);
+        var geometry = new THREE.BoxGeometry(1, 1, 1);
         var player = new THREE.Mesh(geometry);
         player.position.y = y;
         player.position.x = x;

@@ -6,15 +6,24 @@ using System.Net.WebSockets;
 using System.Threading.Tasks;
 using System.Text;
 using Commands;
+using WorldObjects;
 
 namespace Clients
 {
     public class Client : View, IObserver<Command>
     {
         public Guid gameId;
+        private Player player;
         public string username { get; }
-        public ClientSendManager sendManager { get; }
-        public ClientReceiveManager receiveManager { get; }        
+        private ClientSendManager sendManager { get; }
+        private ClientReceiveManager receiveManager { get; }        
+
+        public Client(WebSocket socket, string username) : base(socket)
+        {
+            this.username = username;
+            sendManager = new ClientSendManager();
+            receiveManager = new ClientReceiveManager();
+        }
 
         public Client(WebSocket socket, string username, Guid gameId) : base(socket)
         {
@@ -24,16 +33,14 @@ namespace Clients
             receiveManager = new ClientReceiveManager();
         }
 
-        public Client(WebSocket socket, string username) : base(socket)
-        {
-            this.username = username;
-            sendManager = new ClientSendManager();
-            receiveManager = new ClientReceiveManager();
-        }
-
         public void SetGameId(Guid gameId)
         {
             this.gameId = gameId;
+        }
+
+        public void SetPlayer(Player player)
+        {
+            this.player = player;
         }
 
         public override async Task StartReceiving() {
@@ -46,10 +53,18 @@ namespace Clients
             {
                 //string yeetmessage = Encoding.UTF8.GetString(buffer);
                 //System.Diagnostics.Debug.WriteLine("Received the following information from client: " + yeetmessage );
-
+                WebSocketState state = socket.State;
                 result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                 SendCommandsToObservers(receiveManager.ReceiveString(Encoding.UTF8.GetString(buffer)));
 
+            }
+
+            if(socket.State != WebSocketState.Open)
+            {
+                List<Command> cmdList = new List<Command>();
+                cmdList.Add(new DeleteObjectCommand(player));
+
+                SendCommandsToObservers(cmdList);
             }
 
             Console.WriteLine("ClientView has disconnected");

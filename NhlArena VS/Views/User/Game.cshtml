@@ -22,12 +22,11 @@
         var Socket;
         var camera, scene, renderer;
         var controls;
-        var worldObjects = {};
-        var commandArray = [];
-        var playerGuid;
+        var worldObjects = {};        
 
         window.onload = function () {
-
+            var commandArray = [];
+            var playerGuid;
 
             var prevTime = performance.now();
             var velocity = new THREE.Vector3();
@@ -44,7 +43,7 @@
                 camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
 
                 // Create scene
-                scene = new THREE.Scene({ reportSize: 10, fixedStep: 1 / 60 });
+                scene = new THREE.Scene();
 
                 // Create First Person Controls
                 controls = new THREE.FirstPersonControls(camera);
@@ -103,9 +102,10 @@
                                 if (command[i].obj.type == "Player")
                                 {
                                     if (command[i].obj.guid != playerGuid){
-                                        var player = new Player(command[i].obj.x,0, command[i].obj.z);
+                                        var player = new Player(command[i].obj.x, 0, command[i].obj.z);
                                         scene.add(player);
                                         worldObjects[command[i].obj.guid] = player;
+                                        console.log(command[i]);
                                     }
                                 }
                                 break;

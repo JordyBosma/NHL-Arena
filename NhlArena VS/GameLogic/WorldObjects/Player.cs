@@ -36,6 +36,7 @@ namespace WorldObjects
             }
             this._health = 100;
             this._armour = 0;
+            playerClient.SetPlayer(this);
         }
 
         public bool DoDamage(int damage)
@@ -77,6 +78,10 @@ namespace WorldObjects
 
         public override void Move(double x, double y, double z)
         {
+            if (this.x == x && this.y == y && this.z == z) isMoving = false;
+            else isMoving = true;
+
+
             base.Move(x, y, z);
         }
 
@@ -84,5 +89,6 @@ namespace WorldObjects
         {
             base.Rotate(rotationX, rotationY, rotationZ);
         }
+
     }
 }

@@ -13,7 +13,7 @@
         );
         
         box.position.x = -10;
-        box.position.y = 0;
+        box.position.y = -1;
         box.position.z = -100;
         selfRef.add(box);
     }
