@@ -6,6 +6,7 @@ using System.Threading;
 using Clients;
 using WorldObjects;
 using Commands;
+using ItemLogic;
 
 namespace GameLogic
 {
@@ -14,6 +15,7 @@ namespace GameLogic
         private bool isActive = false;
         public Guid gameId { get; }
         CommandManager commandManager;
+        SpawnLogic spawnLogic;
 
         private List<Object3D> worldObjects = new List<Object3D>();
         public string gameName { get; }
@@ -27,6 +29,7 @@ namespace GameLogic
             gameName = initialClient.username + "'s Game";
 
             commandManager = new CommandManager(this);
+            spawnLogic = new SpawnLogic();
 
             //subscribes commandmanager and client to each other
             initialClient.Subscribe(commandManager);
