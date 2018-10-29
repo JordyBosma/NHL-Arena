@@ -75,7 +75,7 @@
                     velocity.z -= velocity.z * 10.0 * delta;
 
                     // Calculate "gravity" using delta
-                    velocity.y -= 9.8 * 20.0 * delta; // middle number = mass
+                    //velocity.y -= 9.8 * 20.0 * delta; // middle number = mass
 
                     // Moves the camera (player) forward
                     if (controls.moveForward) {
@@ -99,11 +99,24 @@
 
                     // Makes the camera (player) jump
                     if (controls.jump) {
-                        if (velocity.y > 100) {
-                            velocity.y = 0;
-                        }
-                        velocity.y += 50.0;
+                        //if (velocity.y > 100) {
+                        //    velocity.y = 0;
+                        //}
+                        //velocity.y = 50.0;
+                        controls.getObject().position.y += 1;
                         controls.jump = false;
+                    }
+
+                    if (controls.goDown) {
+                        controls.getObject().position.y -= 1;
+                        controls.goDown = false;
+                    }
+
+                    if (controls.logPos) {
+                        console.log("pos x" + controls.getObject().position.x);
+                        console.log("pos y" + controls.getObject().position.y);
+                        console.log("pos z" + controls.getObject().position.z);
+                        controls.logPos = false;
                     }
 
                     // Update the position using the changed delta
@@ -144,7 +157,6 @@
     <script src="~/lib/threejs/OrbitControls.js"></script>
     <script src="~/lib/phisijs/ammo.js"></script>
     <script src="~/lib/phisijs/physi.js"></script>
-    <script src="~/lib/phisijs/physijs_worker.js"></script>
     <script src="~/lib/phisijs/simplex-noise.js"></script>
     <script src="~/lib/phisijs/stats.js"></script>
     <script src="~/lib/phisijs/tween.js"></script>
