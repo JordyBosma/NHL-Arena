@@ -6,14 +6,28 @@
 
     init() {
         var selfRef = this;
-
         loadOBJModel("/models/objects/", "Ramp.obj", "/models/materials/", "Ramp.mtl", (mesh) => {
             mesh.scale.set(1, 1, 1);
             selfRef.add(mesh);
-            
         });
     }
 }
+
+class Character extends THREE.Group {
+    constructor() {
+        super();
+        this.init();
+    }
+
+    init() {
+        var selfRef = this;
+        loadOBJModel("/models/objects/", "CharacterBase.obj", "/models/materials/", "CharacterBase.mtl", (mesh) => {
+            mesh.scale.set(1, 1, 1);
+            selfRef.add(mesh);
+        });
+    }
+} 
+
 /**
  * Load an OBJ model from the server
  * @param {string} objPath The path to the model (.obj) on the server
