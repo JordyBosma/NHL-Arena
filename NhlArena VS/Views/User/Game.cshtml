@@ -103,7 +103,7 @@
                                 if (command[i].obj.type == "Player")
                                 {
                                     if (command[i].obj.guid != playerGuid){
-                                        var player = new Player(command[i].obj.x,0, command[i].obj.z);
+                                        var player = new Player(command[i].obj.x, 0, command[i].obj.z);
                                         scene.add(player);
                                         worldObjects[command[i].obj.guid] = player;
                                     }
@@ -148,7 +148,10 @@
                             playerGuid: playerGuid,
                             x: obj.position.x.toFixed(2),
                             y: obj.position.y.toFixed(2),
-                            z: obj.position.z.toFixed(2)
+                            z: obj.position.z.toFixed(2),
+                            rX: obj.rotation.x.toFixed(2),
+                            rY: obj.rotation.y.toFixed(2),
+                            rZ: obj.rotation.z.toFixed(2)
                         };
 
                         var cmd = JSON.stringify(cmdarray);
@@ -245,9 +248,6 @@
     <script src="~/lib/threejs/OBJLoader.js"></script>
     <script src="~/js/BasicPlane.js"></script>
     <script src="~/js/ModelLoader.js"></script>
-    <script src="~/js/Player.js"></script>
-
-
 </body>
 </html>
 
