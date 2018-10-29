@@ -19,23 +19,20 @@
 <body>
 
     <script>
-        
+        var Socket;
+        var camera, scene, renderer;
+        var controls;
+        var worldObjects = {};
+        var commandArray = [];
+        var playerGuid;
+        var raycast;
+        var arrowHelper;
+
         window.onload = function () {
-            var camera, scene, renderer;
-            var controls;
 
-            //var raycaster = new THREE.Raycaster();
-            //var originVector = new THREE.Vector3();
-            //var targetVector = new THREE.Vector3();
-            //var directionVector = new THREE.Vector3();
-
-            var fromPosition = new THREE.Vector3();
-            var toPosition = new THREE.Vector3();
-            var direction = new THREE.Vector3();
-            var player;
-            var intersects;
             var prevTime = performance.now();
             var velocity = new THREE.Vector3();
+            raycast = new THREE.Raycaster();
 
             function init() {
 
@@ -45,86 +42,127 @@
 
                 document.body.appendChild(renderer.domElement);
 
-                // Create new camera
-                camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+                //create new camera with controls
+                camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
 
                 // Create scene
-                scene = new Physijs.Scene({ reportSize: 2, fixedStep: 1 / 60 });
+                scene = new THREE.Scene({ reportSize: 10, fixedStep: 1 / 60 });
 
                 // Create First Person Controls
-                controls = new THREE.FirstPersonControls(camera, scene);
+                controls = new THREE.FirstPersonControls(camera);
                 scene.add(controls.getObject());
 
                 window.addEventListener('resize', onWindowResize, false);
 
-                // Create basicPlane
+                raycasting();
+
                 var basicPlane = new BasicPlane();
                 scene.add(basicPlane);
 
-                // Create NHLMap
                 var NHLMap = new NHLArenaMap();
                 scene.add(NHLMap);
 
-                // Create box
-                var material = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide, wireframe: true });
-                var box = new Physijs.BoxMesh(
-                    new THREE.BoxGeometry(5, 5, 5),
-                    material
-                );
-                box.position.set(5, 5, -10);
-                scene.add(box);
-
-                // Create player
-                player = controls.getObject();
-            
-                // Create lights
                 var light = new THREE.AmbientLight(0x404040);
                 light.intensity = 2;
                 scene.add(light);
 
                 var light2 = new THREE.HemisphereLight(0xDDDDDD, 0x454545, 1);
                 scene.add(light2);
+
             }
-            
-            function CastRays() {
-                var originPoint = player.position.clone();
-                
-                //fromPosition.x = player.position.x;
-                //fromPosition.y = player.position.y;
-                //fromPosition.z = player.position.z;
 
-                //toPosition.x = player.position.x;
-                //toPosition.y = player.position.y;
-                //toPosition.z = player.position.z;
+            //socket
+            console.log("Connecting...");
+            Socket = new WebSocket("ws://" + window.location.hostname + ":" + window.location.port + "/connect_client/@ViewData["game"]");
+                Socket.onopen = function () {
+                    console.log("socket open");
+                };
+                Socket.onerror = error => {
+                    console.log(error);
+                };
+                Socket.onclose = CloseEvent =>
+                {
+                    console.log("socket closed");
+                    console.log(CloseEvent);
+                };
+                Socket.onmessage = function (event)
+                {
+                    var command = JSON.parse(event.data);
+                    for (var i = 0; i < command.length; i++)
+                    {
+                        switch (command[i].commandType) {
+                            case "InitializePlayerCommand":
+                                playerGuid = command[i].playerGuid
+                                break;
+                            case "DeathCommand":
+                                console.log("death");
+                                break;
+                            case "UpdatePlayerStatsCommand":
+                                break;
+                            case "PlayerAmmoPickupCommand":
+                                break;
+                            case "ErrorCommand":
+                                break;
+                            case "NewObjectCommand":
+                                if (command[i].obj.type == "Player")
+                                {
+                                    if (command[i].obj.guid != playerGuid){
+                                        var player = new Player(command[i].obj.x,0, command[i].obj.z);
+                                        scene.add(player);
+                                        worldObjects[command[i].obj.guid] = player;
+                                    }
+                                }
+                                break;
+                            case "UpdateObjectCommand":
+                                if (Object.keys(worldObjects).indexOf(command[i].obj.guid) < 0) {
+                                    break;
+                                }
+                                var object = worldObjects[command[i].obj.guid];
 
-                //direction.x = fromPosition.x - toPosition.x;
-                //direction.y = fromPosition.y - toPosition.y;
-                
-                scene.add(new THREE.ArrowHelper(direction, fromPosition, 100, 0xff0000));
+                                object.position.x = command[i].obj.x;
+                                object.position.y = command[i].obj.y;
+                                object.position.z = command[i].obj.z;
 
-                //raycaster.set(fromPosition, direction);
-                //console.log(camera.position);
+                                object.rotation.x = command[i].obj.rotationX;
+                                object.rotation.y = command[i].obj.rotationY;
+                                object.rotation.z = command[i].obj.rotationZ;
 
-                //intersects = raycaster.intersectObjects(scene.children);
-                //console.log(scene.children);
+                                console.log(command[i].obj.y);
+                                break;
+                            case "DeleteObjectCommand":
+                                if (Object.keys(worldObjects).indexOf(command.parameters.guid) < 0) {
+                                    break;
+                                }
+                                var object = worldObjects[command[i].obj.guid];
+                                scene.remove(object)
+                                delete worldObjects[command[i].obj.guid]
+                                break;
+                        }
+                    }
+                    Respond();
 
-                for (var vertexIndex = 0; vertexIndex < controls.getObject().geometry.vertices.length; vertexIndex++) {
-                    var localVertex = controls.getObject().geometry.vertices[vertexIndex].clone();
-                    var globalVertex = localVertex.applyMatrix4(controls.getObject().matrix);
-                    var directionVector = globalVertex.sub(controls.getObject().position);
+                    function Respond() {
 
-                    var ray = new THREE.Raycaster(originPoint, directionVector.clone().normalize());
-                    var collisionResults = ray.intersectObjects(scene.children);
-                    if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length())
-                        intersects[i].object.material.color.set(0xff0000); 
+                        var obj = new controls.getObject();
+
+                        var cmdarray = [];
+
+                        cmdarray[0] = updatePlayerCommand = {
+                            commandType: "UpdatePlayerCommand",
+                            playerGuid: playerGuid,
+                            x: obj.position.x.toFixed(2),
+                            y: obj.position.y.toFixed(2),
+                            z: obj.position.z.toFixed(2)
+                        };
+
+                        var cmd = JSON.stringify(cmdarray);
+                        //console.log(cmd);
+                        //console.log(Socket.readyState);
+                        Socket.send(cmd);
+                        //console.log(Socket.readyState);
+                    }
                 }
-            }
 
-            function LogPositionGetObject() {
-                window.setInterval(1000);
-                console.log(controls.getObject().position.x, controls.getObject().position.y, controls.getObject().position.z);
-            }
-            
             function playerControls() {
 
                 // Check for pointerlock in browser
@@ -176,9 +214,9 @@
                     controls.getObject().translateZ(velocity.z * delta);
 
                     // Prevent the camera/player from falling out of the 'world'
-                    if (controls.getObject().position.y < 3) {
+                    if (controls.getObject().position.y < 2) {
                         velocity.y = 0;
-                        controls.getObject().position.y = 3;
+                        controls.getObject().position.y = 2;
                     }
 
                     // Save the time for future delta calculations
@@ -192,11 +230,39 @@
                 renderer.setSize(window.innerWidth, window.innerHeight);
             }
 
+            function raycasting()
+            {
+                var directionVect1 = new THREE.Vector3(0, 0, 1);
+                var directionVect2 = new THREE.Vector3(1, 0, 1);
+                var directionVect3 = new THREE.Vector3(1, 0, 0);
+                var directionVect4 = new THREE.Vector3(1, 0, -1);
+                var directionVect5 = new THREE.Vector3(0, 0, -1);
+                var directionVect6 = new THREE.Vector3(-1, 0, -1);
+                var directionVect7 = new THREE.Vector3(-1, 0, 0);
+                var directionVect8 = new THREE.Vector3(-1, 0, 1);
+
+                raycast.set(controls.getObject().position, directionVect1);
+
+                arrowHelper1 = new THREE.ArrowHelper(directionVect1, raycast.ray.origin, 50, 0xff0000);
+                arrowHelper2 = new THREE.ArrowHelper(directionVect2, raycast.ray.origin, 50, 0xff0000);
+                arrowHelper3 = new THREE.ArrowHelper(directionVect3, raycast.ray.origin, 50, 0xff0000);
+                arrowHelper4 = new THREE.ArrowHelper(directionVect4, raycast.ray.origin, 50, 0xff0000);
+                arrowHelper5 = new THREE.ArrowHelper(directionVect5, raycast.ray.origin, 50, 0xff0000);
+                arrowHelper6 = new THREE.ArrowHelper(directionVect6, raycast.ray.origin, 50, 0xff0000);
+                arrowHelper7 = new THREE.ArrowHelper(directionVect7, raycast.ray.origin, 50, 0xff0000);
+                arrowHelper8 = new THREE.ArrowHelper(directionVect8, raycast.ray.origin, 50, 0xff0000);
+
+                scene.add(arrowHelper1, arrowHelper2, arrowHelper3, arrowHelper4, arrowHelper5, arrowHelper6, arrowHelper7, arrowHelper8);
+            }
+
+            function raycastfun() {
+                scene.add(new THREE.ArrowHelper(new THREE.Vector3(1, 0, 1), controls.getObject.position, 50, 0xff0000));
+            }
+
             function animate() {
                 requestAnimationFrame(animate);
-                CastRays();
+                //raycasting();
                 playerControls();
-
                 renderer.render(scene, camera);
             }
             init();
@@ -206,18 +272,15 @@
     </script>
     <script src="~/lib/threejs/three.min.js"></script>
     <script src="~/lib/threejs/OrbitControls.js"></script>
-    <script src="~/lib/phisijs/ammo.js"></script>
-    <script src="~/lib/phisijs/physi.js"></script>
-    <script src="~/lib/phisijs/physijs_worker.js"></script>
-    <script src="~/lib/phisijs/simplex-noise.js"></script>
-    <script src="~/lib/phisijs/stats.js"></script>
-    <script src="~/lib/phisijs/tween.js"></script>
     <script src="~/lib/threejs/FirstPersonControls.js"></script>
     <script src="~/lib/threejs/MTLLoader.js"></script>
     <script src="~/lib/threejs/OBJLoader.js"></script>
     <script src="~/js/BasicPlane.js"></script>
     <script src="~/js/ModelLoader.js"></script>
-
-
+    <script src="~/js/Player.js"></script>
 </body>
 </html>
+
+
+
+

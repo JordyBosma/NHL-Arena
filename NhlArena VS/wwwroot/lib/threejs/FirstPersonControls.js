@@ -14,11 +14,11 @@ THREE.FirstPersonControls = function (camera, scene) {
 
     camera.rotation.set(0, 0, 0);
 
-    var box = new THREE.Mesh(
-        new THREE.BoxGeometry(0.1, 0.1, 5)
-    );
+    //var box = new THREE.Mesh(
+    //    new THREE.BoxGeometry(0.1, 0.1, 5)
+    //);
 
-    box.position.set(0, 0, -10);
+    //box.position.set(0, 0, -10);
 
     var pitchObject = new THREE.Object3D();
     pitchObject.add(camera);
@@ -26,7 +26,7 @@ THREE.FirstPersonControls = function (camera, scene) {
     var yawObject = new THREE.Object3D();
     yawObject.position.y = 2;
     yawObject.add(pitchObject);
-    pitchObject.add(box);
+    //pitchObject.add(box);
 
     var PI_2 = Math.PI / 2;
 
@@ -45,9 +45,9 @@ THREE.FirstPersonControls = function (camera, scene) {
         return yawObject;
     };
 
-    this.getCrosshair = function () {
-        return box;
-    }
+    //this.getCrosshair = function () {
+    //    return box;
+    //}
 
     this.moveForward = false;
     this.moveBackward = false;

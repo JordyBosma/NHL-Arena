@@ -12,7 +12,7 @@
             material
         );
         var material2 = new THREE.MeshBasicMaterial({ color: 0x888888 });
-        var box2 = new Physijs.BoxMesh(
+        var box2 = new THREE.Mesh(
             new THREE.BoxGeometry(200, 10, 1),
             material2
         );
