@@ -29,7 +29,7 @@ namespace GameLogic
             gameName = initialClient.username + "'s Game";
 
             commandManager = new CommandManager(this);
-            spawnLogic = new SpawnLogic();
+            spawnLogic = new SpawnLogic(commandManager);
 
             //subscribes commandmanager and client to each other
             initialClient.Subscribe(commandManager);
@@ -63,6 +63,7 @@ namespace GameLogic
         public void TickTimer()
         {
             isActive = true;
+
 
             while (isActive)
             {
