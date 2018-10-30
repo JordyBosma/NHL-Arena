@@ -13,6 +13,25 @@
         });
     }
 }
+
+class DamageBoost extends THREE.Group {
+    constructor(x, y, z) {
+        super();
+        this.init(x, y, z);
+    }
+
+    init(x, y, z) {
+        var selfRef = this;
+
+        loadOBJModel("/models/objects/", "Crate_Milk.obj", "/models/materials/", "Crate_Milk.mtl", (mesh) => {
+            mesh.scale.set(1, 1, 1);
+            selfRef.position.x = x;
+            selfRef.position.y = y;
+            selfRef.position.z = z;
+            selfRef.add(mesh);
+        });
+    }
+}
 /**
  * Load an OBJ model from the server
  * @param {string} objPath The path to the model (.obj) on the server

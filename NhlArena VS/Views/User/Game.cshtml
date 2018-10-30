@@ -108,6 +108,10 @@
                                         worldObjects[command[i].obj.guid] = player;
                                     }
                                 }
+                                if (command[i].obj.type == "DamageBoost") {
+                                    var damageBoost = new DamageBoost(command[i].obj.x, 1, command[i].obj.z);
+                                    scene.add(damageBoost);
+                                }
                                 break;
                             case "UpdateObjectCommand":
                                 if (Object.keys(worldObjects).indexOf(command[i].obj.guid) < 0) {
