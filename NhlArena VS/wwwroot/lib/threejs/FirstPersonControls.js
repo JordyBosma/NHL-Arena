@@ -8,8 +8,6 @@
  */
 
 THREE.FirstPersonControls = function (camera, scene) {
-    var delay = 500;
-    var canJump = true;
     var scope = this;
 
     camera.rotation.set(0, 0, 0);
@@ -24,9 +22,10 @@ THREE.FirstPersonControls = function (camera, scene) {
     pitchObject.add(camera);
 
     var yawObject = new THREE.Object3D();
-    yawObject.position.y = 2;
     yawObject.add(pitchObject);
     //pitchObject.add(box);
+
+    
 
     var PI_2 = Math.PI / 2;
 
@@ -74,18 +73,11 @@ THREE.FirstPersonControls = function (camera, scene) {
                 scope.moveRight = true;
                 break;
             case 32: // spacebar
-                if (canJump) {
-                    scope.jump = true;
-                    canJump = false;
-                    var timer = setTimeout(UpdateCanJump, delay);
-                }
+                scope.jump = true;
                 break;
         }
     };
 
-    function UpdateCanJump() {
-        canJump = true;
-    }
 
     var onKeyUp = function (event) {
         switch (event.keyCode) {

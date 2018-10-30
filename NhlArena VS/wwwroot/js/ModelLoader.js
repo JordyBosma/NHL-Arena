@@ -6,8 +6,8 @@
 
     init() {
         var selfRef = this;
-
-        loadOBJModel("/models/objects/", "Ramp.obj", "/models/materials/", "Ramp.mtl", (mesh) => {
+        this.name = "NHLArenaMap";
+        loadOBJModel("/models/objects/", "NHLArenaMap.obj", "/models/materials/", "NHLArenaMap.mtl", (mesh) => {
             mesh.scale.set(1, 1, 1);
             selfRef.add(mesh);
             
