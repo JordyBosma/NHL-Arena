@@ -36,7 +36,7 @@
     <div class="part__container part--top UItimer">
         <div class="part__left"></div>
         <div class="part__center">
-            <div id="gameTimer" style="">--:--</div>
+            <div id="gameTimer" style="">00:00</div>
         </div>
         <div class="part__right"></div>
     </div>
@@ -44,16 +44,23 @@
     <div class="part__container part--top UItopright">
         <div class="part__left"></div>
         <div class="part__center gamescore">
-            <div id="gameScoreK">K: --</div>
-            <div id="gameScoreD">D: --</div>
+            <div id="gameScoreK">K: 00</div>
+            <div id="gameScoreD">D: 00</div>
         </div>
     </div>
 
     <!--bottom:-->
     <div class="part__container part--bottom UIbottom">
         <div class="part__left"></div>
-        <div class="part__center">
-            <div style="margin: auto;">hoithere</div>
+        <div class="part__center" style="width: 350px;">
+            <div class="bar__container">
+                <div class="bar__label">Herkansing:</div>
+                <div id="bar--herkansing" class="bar__bar "></div>  
+            </div>
+            <div class="bar__container">
+                <div class="bar__label">Ecs:</div>
+                <div id="bar--ecs" class="bar__bar "></div>
+            </div>
         </div>
         <div class="part__right"></div>
     </div>

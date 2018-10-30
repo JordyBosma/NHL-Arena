@@ -7,7 +7,9 @@
         this.isRunning = false;
         this.runTimer;
         this.StartTimer(360);
-        this.UpdateGameScores(10, 10);
+        this.UpdateGameScores(8, 14);
+        this.UpdatePlayerArmor(70);
+        this.UpdatePlayerHealth(60);
     }
 
     UpdateGameScores(K, D) {
@@ -20,6 +22,13 @@
             Val = "0" + Val;
         }
         document.getElementById(Type).innerText = Prompt + Val;
+    }
+
+    UpdatePlayerArmor(val) {
+        document.getElementById("bar--herkansing").style.width = val + "%";
+    }
+    UpdatePlayerHealth(val) {
+        document.getElementById("bar--ecs").style.width = val + "%";
     }
 
     ShowOptionMenu(b) {
