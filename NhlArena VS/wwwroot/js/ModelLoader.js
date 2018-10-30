@@ -6,7 +6,7 @@
 
     init() {
         var selfRef = this;
-        loadOBJModel("/models/objects/", "Ramp.obj", "/models/materials/", "Ramp.mtl", (mesh) => {
+        loadOBJModel("/models/objects/NHLArenaMap/", "Ramp.obj", "/models/materials/NHLArenaMap/", "Ramp.mtl", (mesh) => {
             mesh.scale.set(1, 1, 1);
             selfRef.add(mesh);
         });
@@ -21,8 +21,9 @@ class Player extends THREE.Group {
 
     init() {
         var selfRef = this;
-        loadOBJModel("/models/objects/", "CharacterBase.obj", "/models/materials/", "CharacterBase.mtl", (mesh) => {
+        loadOBJModel("/models/objects/Character/", "CharacterRed.obj", "/models/materials/Character/", "CharacterRed.mtl", (mesh) => {
             mesh.scale.set(1, 1, 1);
+            mesh.position.set(0, 3, -10);
             mesh.position.y -= 2;
             mesh.rotation.y = Math.PI;
             selfRef.add(mesh);
