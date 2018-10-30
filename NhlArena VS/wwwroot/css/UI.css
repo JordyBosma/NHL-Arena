@@ -1,0 +1,189 @@
+﻿.show{
+    display: block;
+}
+
+.hidden{
+    display: none;
+}
+
+.showEffect {
+    display: block;
+    top: 50vh;
+}
+
+.hiddenEffect {
+    display: none;
+    top: 47vh;
+}
+
+.toggleCheckBox {
+    position: relative;
+    top: -9999999px;
+    left: -9999999px;
+}
+
+.center {
+    visibility: hidden;
+    width: 200px;
+    position: fixed;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+    transition: top 2s, opacity 2s, visibility 0s linear 2s;
+}
+
+.fallIn {
+    top: 45vh;
+    transform: translate(-50%, -50%);
+    transition: top 0.5s, opacity 0.5s, visibility 0s linear 0.5s;
+    opacity: 0;
+}
+
+.popIn {
+    top: 50vh;
+    transform: translate(-50%, -50%) scale(0,0);
+    transition: transform 0.5s, visibility 0s linear 0.5s;
+}
+
+.menu__checkbox:checked + div + div.fallIn {
+    visibility: visible;
+    transition: top 0.5s, opacity 0.5s;
+    top: 50vh;
+    opacity: 1;
+}
+.menu__checkbox:checked + div + div.popIn {
+    visibility: visible;
+    transition: transform 0.5s;
+    transform: translate(-50%, -50%) scale(1,1);
+}
+
+.overlayBackground {
+    position: fixed;
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    transition: background-color 0.5s linear, visibility 0s linear 0.5s;
+    visibility: hidden;
+}
+
+#toggle-background:checked ~ div, .menu__checkbox:checked + div.overlayBackground {
+    background-color: rgba(0,0,0,0.3);
+    transition: background-color 0.5s linear;
+    visibility: visible;
+}
+
+.card__option{
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    cursor: pointer;
+}
+
+.menu__option{
+    width: 80%;
+    margin: 5px 0;
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+.gamescore {
+    color: white;
+    font-size: 22px;
+    letter-spacing: 3px;
+}
+    .gamescore div {
+        float: left;
+        padding-right: 18px;
+    }
+    .gamescore div:last-child {
+        float: left;
+        padding-right: 6px;
+    }
+    .gamescore:after {
+        clear: both;
+    }
+
+/*part style:*/
+.UItopleft {
+    top: 0;
+    left: 0;
+}
+
+    .UItopleft i {
+        color: white;
+        margin-left: 10px;
+        font-size: 40px;
+    }
+    .UItopleft i:last-child {
+        padding-right: 6px;
+    }
+
+.UItimer {
+    color: white;
+    font-size: 30px;
+    letter-spacing: 6px;
+    left: 50vw;
+    top: 0;
+    transform: translate(-50%, 0);
+}
+
+.UItopright {
+
+    top: 0;
+    right: 0;
+}
+
+.UIbottomleft {
+    bottom: 0;
+    left: 0;
+}
+
+.UIbottom {
+    left: 50vw;
+    bottom: 0;
+    transform: translate(-50%, 0);
+}
+
+/*bar:*/
+.bar__container {
+    position: relative;
+    background-color: white;
+    padding: 2px;
+    width: 100%;
+    height: 35%;
+    margin-top: 4px;
+}
+
+.bar__bar{
+    position: relative;
+    display: flex;
+    background-color: deepskyblue;
+    width: 100%;
+    height: 100%;
+}
+
+.bar__label {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    color: black;
+    letter-spacing: 6px;
+    line-height: 10px;
+    z-index: 10;
+}
+
+#bar--ecs {
+    background-color: rgb(0, 255, 94);
+}
+#bar--herkansing {
+    background-color: rgb(0, 190, 255);
+}
