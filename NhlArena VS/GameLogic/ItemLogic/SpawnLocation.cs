@@ -9,14 +9,15 @@ namespace ItemLogic
     {
         private bool _hasItem = false;
         private bool _hasChanged = false;
+        private string _itemType;
 
-        public string itemType { get; }
+        public string itemType { get { return _itemType; } }
         public bool hasItem { get { return _hasItem; } }
         public bool hasChanged { get { return _hasChanged; } }
 
-        double x { get; }
-        double y { get; }
-        double z { get; }
+        public double x { get; }
+        public double y { get; }
+        public double z { get; }
 
         public SpawnLocation(double x, double y, double z, string itemType)
         {
@@ -24,7 +25,12 @@ namespace ItemLogic
             this.y = y;
             this.z = z;
 
-            this.itemType = itemType;
+            this._itemType = itemType;
+        }
+
+        public void changeItem(string itemType)
+        {
+            this._itemType = itemType;
         }
 
         public void setItem()

@@ -129,6 +129,12 @@ namespace Commands
             }
         }
 
+        public void InitializeItem(Item newItem)
+        {
+            NewObjectCommand newDBoost = new NewObjectCommand(newItem);
+            SendCommandsToObservers(newDBoost);
+        }
+
         public IDisposable Subscribe(IObserver<Command> observer)
         {
             if (!observers.Contains(observer))
