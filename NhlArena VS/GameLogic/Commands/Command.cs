@@ -66,11 +66,19 @@ namespace Commands
     /// </summary>
     public class UpdatePlayerStatsCommand : Command
     {
-        public Player targetPlayer { get; }
+        public Guid guid { get; }
+        public int health { get; }
+        public int armour { get; }
+        public int kills { get; }
+        public int deaths { get; }
 
         public UpdatePlayerStatsCommand(Player updatePlayer) : base("UpdatePlayerStatsCommand")
         {
-            this.targetPlayer = targetPlayer;
+            this.guid = updatePlayer.guid;
+            this.health = updatePlayer.health;
+            this.armour = updatePlayer.armour;
+            this.kills = updatePlayer.kills;
+            this.deaths = updatePlayer.deaths;
         }
     }
 
@@ -118,13 +126,19 @@ namespace Commands
         public double x { get; }
         public double y { get; }
         public double z { get; }
+        public double rotationX { get; }
+        public double rotationY { get; }
+        public double rotationZ { get; }
 
-        public UpdatePlayerCommand(Guid playerGuid, double x, double y, double z): base("UpdatePlayerCommand")
+        public UpdatePlayerCommand(Guid playerGuid, double x, double y, double z, double rotationX, double rotationY, double rotationZ): base("UpdatePlayerCommand")
         {
             this.playerGuid = playerGuid;
             this.x = x;
             this.y = y;
             this.z = z;
+            this.rotationX = rotationX;
+            this.rotationY = rotationY;
+            this.rotationZ = rotationZ;
         }
     }
 

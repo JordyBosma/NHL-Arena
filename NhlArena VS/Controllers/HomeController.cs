@@ -84,6 +84,10 @@ namespace NhlArena_VS.Controllers
         {
             return View();
         }
+        public IActionResult TestUI()
+        {
+            return View();
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

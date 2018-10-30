@@ -6,9 +6,26 @@
 
     init() {
         var selfRef = this;
-
-        loadOBJModel("/models/objects/", "NHLArenaMap.obj", "/models/materials/", "NHLArenaMap.mtl", (mesh) => {
+        this.name = "NHLArenaMap";
+        loadOBJModel("/models/objects/NHLArenaMap/", "NHLArenaMap.obj", "/models/materials/NHLArenaMap/", "NHLArenaMap.mtl", (mesh) => {
             mesh.scale.set(1, 1, 1);
+            selfRef.add(mesh);
+        });
+    }
+}
+
+class Player extends THREE.Group {
+    constructor() {
+        super();
+        this.init();
+    }
+
+    init() {
+        var selfRef = this;
+        loadOBJModel("/models/objects/Character/", "CharacterRed.obj", "/models/materials/Character/", "CharacterRed.mtl", (mesh) => {
+            mesh.scale.set(1, 1, 1);
+            mesh.position.y -= 2;
+            mesh.rotation.y = Math.PI;
             selfRef.add(mesh);
         });
     }
@@ -42,9 +59,7 @@ function loadOBJModel(objPath, objName, materialPath, materialName, onload) {
     new THREE.MTLLoader()
         .setPath(materialPath)
         .load(materialName, function (materials) {
-
             materials.preload();
-
             new THREE.OBJLoader()
                 .setPath(objPath)
                 .setMaterials(materials)

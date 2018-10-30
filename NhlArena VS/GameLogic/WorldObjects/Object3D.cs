@@ -44,7 +44,7 @@ namespace WorldObjects
         }
 
         public virtual void Move(double x, double y, double z)
-        {
+        {            
             this._x = x;
             this._y = y;
             this._z = z;

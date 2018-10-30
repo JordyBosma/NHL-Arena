@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TestScene</title>
 
+    <!--UI_need-->
+    <link rel="stylesheet" href="~/lib/materialize/materialize.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="~/css/UI.css" rel="stylesheet" />
+    <link href="~/css/UI_parts.css" rel="stylesheet" />
+    <!---->
+
     <style>
         body {
             margin: 0;
@@ -17,23 +24,112 @@
     </style>
 </head>
 <body>
+    <!--UI-->
+    <!--top:-->
+    <div class="part__container part--top UItopleft">
+        <div class="part__center">
+            <i class="material-icons noselect" onclick="ui.ShowExitMenu(true)">home</i>
+            <i class="material-icons noselect volume" onclick="ui.SwitchSoundOnOff(this)">volume_mute</i>
+            <i class="material-icons noselect" onclick="ui.ShowOptionMenu(true)">info</i>
+        </div>
+        <div class="part__right"></div>
+    </div>
+
+    <div class="part__container part--top UItimer">
+        <div class="part__left"></div>
+        <div class="part__center">
+            <div id="gameTimer" style="">00:00</div>
+        </div>
+        <div class="part__right"></div>
+    </div>
+
+    <div class="part__container part--top UItopright">
+        <div class="part__left"></div>
+        <div class="part__center gamescore">
+            <div id="gameScoreK">K: 00</div>
+            <div id="gameScoreD">D: 00</div>
+        </div>
+    </div>
+
+    <!--bottom:-->
+    <div class="part__container part--bottom UIbottom">
+        <div class="part__left"></div>
+        <div class="part__center" style="width: 350px;">
+            <div class="bar__container">
+                <div class="bar__label">Herkansing:</div>
+                <div id="bar--herkansing" class="bar__bar "></div>
+            </div>
+            <div class="bar__container">
+                <div class="bar__label">Ecs:</div>
+                <div id="bar--ecs" class="bar__bar "></div>
+            </div>
+        </div>
+        <div class="part__right"></div>
+    </div>
+
+    <div class="part__container part--bottom UIbottomleft">
+        <div class="part__center">
+            <label for="toggle-background" style="position:relative;">showcontent</label>
+            <input id="toggle-background" type="checkbox" class="toggleCheckBox">
+
+
+            <button onclick="ui.ShowOptionMenu(true)">true</button>
+            <button onclick="ui.ShowOptionMenu(false)">false</button>
+            <label for="toggle-OptionMenu">showcontent</label>
+        </div>
+        <div class="part__right"></div>
+    </div>
+
+    <!--menus:-->
+    <input id="toggle-OptionMenu" type="checkbox" class="toggleCheckBox menu__checkbox">
+    <div onclick="ui.ShowOptionMenu(false)" class="overlayBackground"></div>
+    <div id="mainMenu" class="card red darken-4 center fallIn" style="width: 300px;">
+        <div class="card-content orange-text text-accent-3">
+            <div class="orange-text text-accent-3 card__option">
+                <i class="material-icons volume" onclick="ui.SwitchSoundOnOff(this)">volume_mute</i>
+                <i class="material-icons" onclick="ui.ShowOptionMenu(false)">clear</i>
+            </div>
+            <span class="card-title">Options:</span>
+            <a class="btn orange menu__option">Leave</a>
+            <a class="btn orange menu__option">Leave</a>
+            <a class="btn orange menu__option" href="/User/Main">Leave</a>
+        </div>
+    </div>
+
+    <input id="toggle-ExitMenu" type="checkbox" class="toggleCheckBox menu__checkbox">
+    <div onclick="ui.ShowExitMenu(false)" class="overlayBackground"></div>
+    <div id="exitMenu" class="card red darken-4 center popIn" style="width: 300px;">
+        <div class="card-content orange-text text-accent-3">
+            <div class="orange-text text-accent-3 card__option">
+                <i class="material-icons" onclick="ui.ShowExitMenu(false)">clear</i>
+            </div>
+            <span class="card-title">Options:</span>
+            <a class="btn orange menu__option" href="/User/Main">Leave</a>
+            <a class="btn orange menu__option" onclick="ui.ShowExitMenu(false)">Cancel</a>
+        </div>
+    </div>
+    <!--/UI-->
 
     <script>
         var Socket;
         var camera, scene, renderer;
         var controls;
         var worldObjects = {};
+        var ui;
         var commandArray = [];
         var playerGuid;
+        var raycaster;
+        var LastNonCollidedPostion = { x: 0, y: 0, z: 0 };
 
         window.onload = function () {
-
+            var commandArray = [];
+            var playerGuid;
 
             var prevTime = performance.now();
             var velocity = new THREE.Vector3();
 
             function init() {
-
+                ui = new UIManager();
                 renderer = new THREE.WebGLRenderer({ antialias: true });
                 renderer.setPixelRatio(window.devicePixelRatio);
                 renderer.setSize(window.innerWidth, window.innerHeight + 5);
@@ -44,11 +140,13 @@
                 camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
 
                 // Create scene
-                scene = new THREE.Scene({ reportSize: 10, fixedStep: 1 / 60 });
+                scene = new THREE.Scene();
 
                 // Create First Person Controls
                 controls = new THREE.FirstPersonControls(camera);
                 scene.add(controls.getObject());
+
+                controls.getObject().position.set(20, 5, -30);
 
                 window.addEventListener('resize', onWindowResize, false);
 
@@ -65,6 +163,8 @@
                 var light2 = new THREE.HemisphereLight(0xDDDDDD, 0x454545, 1);
                 scene.add(light2);
 
+                var player = new Player();
+                scene.add(player);
             }
 
             //socket
@@ -94,6 +194,11 @@
                                 console.log("death");
                                 break;
                             case "UpdatePlayerStatsCommand":
+                                if (command[i].guid == playerGuid) {
+                                    ui.UpdatePlayerArmor(command[i].armour);
+                                    ui.UpdatePlayerHealth(command[i].health);
+                                    ui.UpdateGameScores(command[i].kills, command[i].deaths);
+                                }
                                 break;
                             case "PlayerAmmoPickupCommand":
                                 break;
@@ -103,9 +208,10 @@
                                 if (command[i].obj.type == "Player")
                                 {
                                     if (command[i].obj.guid != playerGuid){
-                                        var player = new Player(command[i].obj.x,0, command[i].obj.z);
+                                        var player = new Player(command[i].obj.x, 0, command[i].obj.z);
                                         scene.add(player);
                                         worldObjects[command[i].obj.guid] = player;
+                                        console.log(command[i]);
                                     }
                                 }
                                 if (command[i].obj.type == "DamageBoost") {
@@ -131,7 +237,7 @@
                                 object.rotation.y = command[i].obj.rotationY;
                                 object.rotation.z = command[i].obj.rotationZ;
 
-                                console.log(command[i].obj.y);
+                                //console.log(command[i].obj.y);
                                 break;
                             case "DeleteObjectCommand":
                                 if (Object.keys(worldObjects).indexOf(command.parameters.guid) < 0) {
@@ -156,9 +262,12 @@
                             playerGuid: playerGuid,
                             x: obj.position.x.toFixed(2),
                             y: obj.position.y.toFixed(2),
-                            z: obj.position.z.toFixed(2)
+                            z: obj.position.z.toFixed(2),
+                            rotationX: (obj.rotation.x % (2 * Math.PI)).toFixed(2),
+                            rotationY: (obj.rotation.y % (2 * Math.PI)).toFixed(2),
+                            rotationZ: (obj.rotation.z % (2 * Math.PI)).toFixed(2)
                         };
-
+                        
                         var cmd = JSON.stringify(cmdarray);
                         //console.log(cmd);
                         //console.log(Socket.readyState);
@@ -168,12 +277,15 @@
                 }
 
             function playerControls() {
+                var canJump = false;
+
+                // Save the current time
+                var time = performance.now();
 
                 // Check for pointerlock in browser
                 if (controls.controlsEnabled) {
 
-                    // Save the current time
-                    var time = performance.now();
+
                     // Create a delta value based on current time
                     var delta = (time - prevTime) / 1000;
                     // Set the velocity.x and velocity.z using the calculated time delta
@@ -182,6 +294,7 @@
 
                     // Calculate "gravity" using delta
                     velocity.y -= 9.8 * 20.0 * delta; // middle number = mass
+
 
                     // Moves the camera (player) forward
                     if (controls.moveForward) {
@@ -203,29 +316,39 @@
                         velocity.x += 200.0 * delta;
                     }
 
-                    // Makes the camera (player) jump
-                    if (controls.jump) {
-                        if (velocity.y > 100) {
-                            velocity.y = 0;
-                        }
-                        velocity.y += 50.0;
-                        controls.jump = false;
-                    }
-
                     // Update the position using the changed delta
                     controls.getObject().translateX(velocity.x * delta);
                     controls.getObject().translateY(velocity.y * delta);
                     controls.getObject().translateZ(velocity.z * delta);
 
                     // Prevent the camera/player from falling out of the 'world'
-                    if (controls.getObject().position.y < 2) {
-                        velocity.y = 0;
-                        controls.getObject().position.y = 2;
+                    var hasCollided = false;
+                    var pos = controls.getObject().position;
+                    var gravRaycaster = new THREE.Raycaster(controls.getObject().position, new THREE.Vector3(0, -1, 0), 0, 2);
+                    raycaster.set(controls.getObject().position, new THREE.Vector3(0, -1, 0));
+
+                    var intersects = gravRaycaster.intersectObjects(scene.children, true);
+
+                    if (intersects.length != 0) {
+                        if (intersects[0].object.name == "Map_Base") {
+                            var YIncrease = 2 - intersects[0].distance;
+                            controls.getObject().position.y += YIncrease;
+                            velocity.y = 0;
+                            canJump = true;
+                        }
+
                     }
 
-                    // Save the time for future delta calculations
-                    prevTime = time;
+                    // Makes the camera (player) jump
+                    if (canJump && controls.jump) {
+                        velocity.y += 40.0;
+                        controls.jump = false;
+                        canJump = false;
+                    }
                 }
+                // Save the time for future delta calculations
+                prevTime = time;
+
             }
 
             function onWindowResize() {
@@ -234,9 +357,52 @@
                 renderer.setSize(window.innerWidth, window.innerHeight);
             }
 
+            function raycasting() {
+                var directionVectors = [
+                    new THREE.Vector3(0, 0, 1),
+                    new THREE.Vector3(1, 0, 1),
+                    new THREE.Vector3(1, 0, 0),
+                    new THREE.Vector3(1, 0, -1),
+                    new THREE.Vector3(0, 0, -1),
+                    new THREE.Vector3(-1, 0, -1),
+                    new THREE.Vector3(-1, 0, 0),
+                    new THREE.Vector3(-1, 0, 1),
+                ];
+                var hasCollided = false;
+                var pos = controls.getObject().position;
+                var raycastOrigin = new THREE.Vector3(pos.x, (pos.y - 1), pos.z);
+
+                raycaster = new THREE.Raycaster(raycastOrigin, directionVectors[0], 0, 0.7);
+
+                //raycaster check wall collisions voor heuphoogte
+                for (var i = 0; i < directionVectors.length; i++) {
+
+                    raycaster.set(raycastOrigin, directionVectors[i]);
+
+                    var intersects = raycaster.intersectObjects(scene.children, true);
+
+                    if (intersects.length != 0) {
+                        if (intersects[0].object.name == "Map_Base") {
+                            controls.getObject().position.set(LastNonCollidedPostion.x, LastNonCollidedPostion.y, LastNonCollidedPostion.z);
+                            hasCollided = true;
+                        }
+
+                    }
+                    else {
+                        hasCollided = false;
+                    }
+                }
+
+                if (!hasCollided) {
+                    LastNonCollidedPostion.x = pos.x;
+                    LastNonCollidedPostion.y = pos.y;
+                    LastNonCollidedPostion.z = pos.z;
+                }
+            }
+
             function animate() {
                 requestAnimationFrame(animate);
-
+                raycasting();
                 playerControls();
 
                 renderer.render(scene, camera);
@@ -246,6 +412,16 @@
         }
 
     </script>
+
+    <!--UI_need-->
+    <script src="~/lib/jQuery v3.3.1.js"></script>
+    <script src="~/lib/materialize/materialize.min.js"></script>
+    <script src="~/js/UIManager.js"></script>
+    <script>
+        //var ui = new UIManager();   //need to be made in init
+    </script>
+    <!---->
+
     <script src="~/lib/threejs/three.min.js"></script>
     <script src="~/lib/threejs/OrbitControls.js"></script>
     <script src="~/lib/threejs/FirstPersonControls.js"></script>
@@ -253,9 +429,6 @@
     <script src="~/lib/threejs/OBJLoader.js"></script>
     <script src="~/js/BasicPlane.js"></script>
     <script src="~/js/ModelLoader.js"></script>
-    <script src="~/js/Player.js"></script>
-
-
 </body>
 </html>
 
