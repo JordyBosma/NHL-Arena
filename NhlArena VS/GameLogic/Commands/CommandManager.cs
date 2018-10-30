@@ -46,12 +46,22 @@ namespace Commands
                             HitHandler(hit);
                             break;
                         case "UpdatePlayerCommand":
-                            UpdatePlayerCommand uPlayer = (UpdatePlayerCommand)c;
-                            PlayerUpdateHandler(uPlayer);
+                            UpdatePlayerCommand uPlayerCmd = (UpdatePlayerCommand)c;
+                            PlayerUpdateHandler(uPlayerCmd);
+                            break;
+                        case "DeleteObjectCommand":
+                            DeleteObjectCommand deleteObjectCmd = (DeleteObjectCommand)c;
+                            PlayerDisconnectHandler(deleteObjectCmd);
                             break;
                     }
                 }
             }
+        }
+
+        public void PlayerDisconnectHandler(DeleteObjectCommand cmd)
+        {
+            game.getWorldObjects().Remove(cmd.obj);
+            SendCommandsToObservers(cmd);
         }
 
         public void HitHandler(HitCommand hit)

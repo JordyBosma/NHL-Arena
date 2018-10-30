@@ -309,15 +309,13 @@
                     controls.getObject().translateZ(velocity.z * delta);
 
                     // Prevent the camera/player from falling out of the 'world'
-                    var hasCollided = false;
-                    var pos = controls.getObject().position;
                     var gravRaycaster = new THREE.Raycaster(controls.getObject().position, new THREE.Vector3(0, -1, 0), 0, 2);
                     raycaster.set(controls.getObject().position, new THREE.Vector3(0, -1, 0));
 
                     var intersects = gravRaycaster.intersectObjects(scene.children, true);
 
                     if (intersects.length != 0) {
-                        if (intersects[0].object.name == "Map_Base") {
+                        if (intersects[0].object.name == "Map_Base") { // als de map geraakt word
                             var YIncrease = 2 - intersects[0].distance;
                             controls.getObject().position.y += YIncrease;
                             velocity.y = 0;
