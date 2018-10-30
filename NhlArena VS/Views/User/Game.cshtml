@@ -110,7 +110,11 @@
                                 }
                                 if (command[i].obj.type == "DamageBoost") {
                                     var damageBoost = new DamageBoost(command[i].obj.x, 1, command[i].obj.z);
+                                    damageBoost.position.x = command[i].obj.x;
+                                    damageBoost.position.y = command[i].obj.y;
+                                    damageBoost.position.z = command[i].obj.z;
                                     scene.add(damageBoost);
+                                    worldObjects[command[i].obj.guid] = damageBoost;
                                 }
                                 break;
                             case "UpdateObjectCommand":
