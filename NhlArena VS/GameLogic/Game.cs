@@ -63,7 +63,7 @@ namespace GameLogic
         public void TickTimer()
         {
             isActive = true;
-
+            spawnLogic.SpawnTimer();
 
             while (isActive)
             {

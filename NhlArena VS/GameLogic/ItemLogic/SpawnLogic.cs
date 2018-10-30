@@ -17,10 +17,10 @@ namespace ItemLogic
 
             spawnList.Add(new SpawnLocation(28, 1, -35, "DamageBoost"));
 
-            SpawnTimer();
+            
         }
 
-        private void SpawnTimer()
+        public void SpawnTimer()
         {
             foreach (SpawnLocation l in spawnList)
             {
@@ -45,7 +45,7 @@ namespace ItemLogic
             {
                 case "DamageBoost":
                     //return 50000;
-                    return 1000;
+                    return 10000;
                 case "SpeedBoost":
                     //return 30000;
                     return 1000;

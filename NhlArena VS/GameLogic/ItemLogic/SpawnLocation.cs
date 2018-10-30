@@ -8,7 +8,7 @@ namespace ItemLogic
     public class SpawnLocation
     {
         private bool _hasItem = false;
-        private bool _hasChanged = false;
+        private bool _hasChanged = true;
         private string _itemType;
 
         public string itemType { get { return _itemType; } }
