@@ -163,6 +163,8 @@
                 var light2 = new THREE.HemisphereLight(0xDDDDDD, 0x454545, 1);
                 scene.add(light2);
 
+                var player = new Player();
+                scene.add(player);
             }
 
             //socket
@@ -247,9 +249,12 @@
                             playerGuid: playerGuid,
                             x: obj.position.x.toFixed(2),
                             y: obj.position.y.toFixed(2),
-                            z: obj.position.z.toFixed(2)
+                            z: obj.position.z.toFixed(2),
+                            rotationX: (obj.rotation.x % (2 * Math.PI)).toFixed(2),
+                            rotationY: (obj.rotation.y % (2 * Math.PI)).toFixed(2),
+                            rotationZ: (obj.rotation.z % (2 * Math.PI)).toFixed(2)
                         };
-
+                        
                         var cmd = JSON.stringify(cmdarray);
                         //console.log(cmd);
                         //console.log(Socket.readyState);
@@ -411,9 +416,6 @@
     <script src="~/lib/threejs/OBJLoader.js"></script>
     <script src="~/js/BasicPlane.js"></script>
     <script src="~/js/ModelLoader.js"></script>
-    <script src="~/js/Player.js"></script>
-
-
 </body>
 </html>
 

@@ -7,13 +7,30 @@
     init() {
         var selfRef = this;
         this.name = "NHLArenaMap";
-        loadOBJModel("/models/objects/", "NHLArenaMap.obj", "/models/materials/", "NHLArenaMap.mtl", (mesh) => {
+        loadOBJModel("/models/objects/NHLArenaMap/", "Ramp.obj", "/models/materials/NHLArenaMap/", "Ramp.mtl", (mesh) => {
             mesh.scale.set(1, 1, 1);
             selfRef.add(mesh);
-            
         });
     }
 }
+
+class Player extends THREE.Group {
+    constructor() {
+        super();
+        this.init();
+    }
+
+    init() {
+        var selfRef = this;
+        loadOBJModel("/models/objects/Character/", "CharacterRed.obj", "/models/materials/Character/", "CharacterRed.mtl", (mesh) => {
+            mesh.scale.set(1, 1, 1);
+            mesh.position.y -= 2;
+            mesh.rotation.y = Math.PI;
+            selfRef.add(mesh);
+        });
+    }
+}
+
 /**
  * Load an OBJ model from the server
  * @param {string} objPath The path to the model (.obj) on the server
