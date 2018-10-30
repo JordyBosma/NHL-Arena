@@ -66,11 +66,19 @@ namespace Commands
     /// </summary>
     public class UpdatePlayerStatsCommand : Command
     {
-        public Player targetPlayer { get; }
+        public Guid guid { get; }
+        public int health { get; }
+        public int armour { get; }
+        public int kills { get; }
+        public int deaths { get; }
 
         public UpdatePlayerStatsCommand(Player updatePlayer) : base("UpdatePlayerStatsCommand")
         {
-            this.targetPlayer = targetPlayer;
+            this.guid = updatePlayer.guid;
+            this.health = updatePlayer.health;
+            this.armour = updatePlayer.armour;
+            this.kills = updatePlayer.kills;
+            this.deaths = updatePlayer.deaths;
         }
     }
 

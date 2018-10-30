@@ -194,6 +194,11 @@
                                 console.log("death");
                                 break;
                             case "UpdatePlayerStatsCommand":
+                                if (command[i].guid == playerGuid) {
+                                    ui.UpdatePlayerArmor(command[i].armour);
+                                    ui.UpdatePlayerHealth(command[i].health);
+                                    ui.UpdateGameScores(command[i].kills, command[i].deaths);
+                                }
                                 break;
                             case "PlayerAmmoPickupCommand":
                                 break;
