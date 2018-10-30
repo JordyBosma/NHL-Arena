@@ -6,18 +6,25 @@ using WorldObjects;
 
 namespace ItemLogic
 {
-    public class SpawnLogic
+    public class SpawnManager : IDisposable
     {
-        private CommandManager manager;
+        private CommandManager cmdManager;
         private List<SpawnLocation> spawnList = new List<SpawnLocation>();
-        
-        public SpawnLogic(CommandManager manager)
+        Timer spawnTimer;
+        List<Timer> spawnLocationTimers = new List<Timer>();
+
+        public SpawnManager(CommandManager manager)
         {
-            this.manager = manager;
+            this.cmdManager = manager;
 
             spawnList.Add(new SpawnLocation(28, 1, -35, "DamageBoost"));
 
-            
+            spawnTimer = new Timer();
+            spawnTimer.Interval = 1000;
+            spawnTimer.Elapsed += (e, v) => {
+                SpawnTimer();
+            };
+            spawnTimer.Start();
         }
 
         public void SpawnTimer()
@@ -30,13 +37,6 @@ namespace ItemLogic
                     SetTimer(l, GenerateInterval(l.itemType));
                 }
             }
-
-            Timer spawnTimer = new Timer(1000);
-            spawnTimer.Elapsed += (e, v) => {
-                SpawnTimer();
-                spawnTimer.Dispose();
-            };
-            spawnTimer.Enabled = true;
         }
 
         private int GenerateInterval(string itemType)
@@ -61,9 +61,11 @@ namespace ItemLogic
             Timer aTimer = new Timer(interval);
             aTimer.Elapsed += (e, v) => {
                 OnTimedEvent(l);
+                spawnLocationTimers.Remove(aTimer);
                 aTimer.Dispose();
             };
             aTimer.Enabled = true;
+            spawnLocationTimers.Add(aTimer);
         }
 
         private void OnTimedEvent(SpawnLocation l)
@@ -74,11 +76,11 @@ namespace ItemLogic
             {
                 case "DamageBoost":
                     Item damageBoost = new Item(l);
-                    manager.InitializeItem(damageBoost);
+                    cmdManager.InitializeItem(damageBoost);
                     break;
                 case "SpeedBoost":
                     Item speedBoost = new Item(l);
-                    manager.InitializeItem(speedBoost);
+                    cmdManager.InitializeItem(speedBoost);
                     break;
                 case "AHA":
                     Random random = new Random();
@@ -91,19 +93,29 @@ namespace ItemLogic
             {
                 l.changeItem(itemType);
                 HealthItem newHItem = new HealthItem(l);
-                manager.InitializeItem(newHItem);
+                cmdManager.InitializeItem(newHItem);
             }
             if (itemType == "ArmourItem")
             {
                 l.changeItem(itemType);
                 ArmourItem newAItem = new ArmourItem(l);
-                manager.InitializeItem(newAItem);
+                cmdManager.InitializeItem(newAItem);
             }
             if (itemType == "AmmoItem")
             {
                 l.changeItem(itemType);
                 AmmoItem newAmmoItem = new AmmoItem(l);
-                manager.InitializeItem(newAmmoItem);
+                cmdManager.InitializeItem(newAmmoItem);
+            }
+        }
+
+        public void Dispose()
+        {
+            spawnTimer.Dispose();
+
+            foreach (Timer t in spawnLocationTimers)
+            {
+                t.Dispose();
             }
         }
     }
