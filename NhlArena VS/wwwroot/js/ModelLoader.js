@@ -6,10 +6,11 @@
 
     init() {
         var selfRef = this;
-
+        this.name = "NHLArenaMap";
         loadOBJModel("/models/objects/", "NHLArenaMap.obj", "/models/materials/", "NHLArenaMap.mtl", (mesh) => {
             mesh.scale.set(1, 1, 1);
             selfRef.add(mesh);
+            
         });
     }
 }
@@ -25,9 +26,7 @@ function loadOBJModel(objPath, objName, materialPath, materialName, onload) {
     new THREE.MTLLoader()
         .setPath(materialPath)
         .load(materialName, function (materials) {
-
             materials.preload();
-
             new THREE.OBJLoader()
                 .setPath(objPath)
                 .setMaterials(materials)

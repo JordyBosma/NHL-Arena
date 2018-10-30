@@ -116,6 +116,10 @@
         var controls;
         var worldObjects = {};
         var ui;
+        var commandArray = [];
+        var playerGuid;
+        var raycaster;
+        var LastNonCollidedPostion = { x: 0, y: 0, z: 0 };
 
         window.onload = function () {
             var commandArray = [];
@@ -142,13 +146,15 @@
                 controls = new THREE.FirstPersonControls(camera);
                 scene.add(controls.getObject());
 
+                controls.getObject().position.set(20, 5, -30);
+
                 window.addEventListener('resize', onWindowResize, false);
 
-                var basicPlane = new BasicPlane();
-                scene.add(basicPlane);
+                //var basicPlane = new BasicPlane();
+                //scene.add(basicPlane);
 
-                //var NHLMap = new NHLArenaMap();
-                //scene.add(NHLMap);
+                var NHLMap = new NHLArenaMap();
+                scene.add(NHLMap);
 
                 var light = new THREE.AmbientLight(0x404040);
                 light.intensity = 2;
@@ -253,12 +259,15 @@
                 }
 
             function playerControls() {
+                var canJump = false;
+
+                // Save the current time
+                var time = performance.now();
 
                 // Check for pointerlock in browser
                 if (controls.controlsEnabled) {
 
-                    // Save the current time
-                    var time = performance.now();
+
                     // Create a delta value based on current time
                     var delta = (time - prevTime) / 1000;
                     // Set the velocity.x and velocity.z using the calculated time delta
@@ -267,6 +276,7 @@
 
                     // Calculate "gravity" using delta
                     velocity.y -= 9.8 * 20.0 * delta; // middle number = mass
+
 
                     // Moves the camera (player) forward
                     if (controls.moveForward) {
@@ -288,29 +298,39 @@
                         velocity.x += 200.0 * delta;
                     }
 
-                    // Makes the camera (player) jump
-                    if (controls.jump) {
-                        if (velocity.y > 100) {
-                            velocity.y = 0;
-                        }
-                        velocity.y += 50.0;
-                        controls.jump = false;
-                    }
-
                     // Update the position using the changed delta
                     controls.getObject().translateX(velocity.x * delta);
                     controls.getObject().translateY(velocity.y * delta);
                     controls.getObject().translateZ(velocity.z * delta);
 
                     // Prevent the camera/player from falling out of the 'world'
-                    if (controls.getObject().position.y < 2) {
-                        velocity.y = 0;
-                        controls.getObject().position.y = 2;
+                    var hasCollided = false;
+                    var pos = controls.getObject().position;
+                    var gravRaycaster = new THREE.Raycaster(controls.getObject().position, new THREE.Vector3(0, -1, 0), 0, 2);
+                    raycaster.set(controls.getObject().position, new THREE.Vector3(0, -1, 0));
+
+                    var intersects = gravRaycaster.intersectObjects(scene.children, true);
+
+                    if (intersects.length != 0) {
+                        if (intersects[0].object.name == "Map_Base") {
+                            var YIncrease = 2 - intersects[0].distance;
+                            controls.getObject().position.y += YIncrease;
+                            velocity.y = 0;
+                            canJump = true;
+                        }
+
                     }
 
-                    // Save the time for future delta calculations
-                    prevTime = time;
+                    // Makes the camera (player) jump
+                    if (canJump && controls.jump) {
+                        velocity.y += 40.0;
+                        controls.jump = false;
+                        canJump = false;
+                    }
                 }
+                // Save the time for future delta calculations
+                prevTime = time;
+
             }
 
             function onWindowResize() {
@@ -319,9 +339,52 @@
                 renderer.setSize(window.innerWidth, window.innerHeight);
             }
 
+            function raycasting() {
+                var directionVectors = [
+                    new THREE.Vector3(0, 0, 1),
+                    new THREE.Vector3(1, 0, 1),
+                    new THREE.Vector3(1, 0, 0),
+                    new THREE.Vector3(1, 0, -1),
+                    new THREE.Vector3(0, 0, -1),
+                    new THREE.Vector3(-1, 0, -1),
+                    new THREE.Vector3(-1, 0, 0),
+                    new THREE.Vector3(-1, 0, 1),
+                ];
+                var hasCollided = false;
+                var pos = controls.getObject().position;
+                var raycastOrigin = new THREE.Vector3(pos.x, (pos.y - 1), pos.z);
+
+                raycaster = new THREE.Raycaster(raycastOrigin, directionVectors[0], 0, 0.7);
+
+                //raycaster check wall collisions voor heuphoogte
+                for (var i = 0; i < directionVectors.length; i++) {
+
+                    raycaster.set(raycastOrigin, directionVectors[i]);
+
+                    var intersects = raycaster.intersectObjects(scene.children, true);
+
+                    if (intersects.length != 0) {
+                        if (intersects[0].object.name == "Map_Base") {
+                            controls.getObject().position.set(LastNonCollidedPostion.x, LastNonCollidedPostion.y, LastNonCollidedPostion.z);
+                            hasCollided = true;
+                        }
+
+                    }
+                    else {
+                        hasCollided = false;
+                    }
+                }
+
+                if (!hasCollided) {
+                    LastNonCollidedPostion.x = pos.x;
+                    LastNonCollidedPostion.y = pos.y;
+                    LastNonCollidedPostion.z = pos.z;
+                }
+            }
+
             function animate() {
                 requestAnimationFrame(animate);
-
+                raycasting();
                 playerControls();
 
                 renderer.render(scene, camera);
