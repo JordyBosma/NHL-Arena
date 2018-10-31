@@ -61,6 +61,9 @@ namespace Commands
         public void PlayerDisconnectHandler(DeleteObjectCommand cmd)
         {
             game.getWorldObjects().Remove(cmd.obj);
+            Player p = (Player)cmd.obj;
+            Unsubscriber<Command> unsubscriber = new Unsubscriber<Command>(observers, p.GetClient());
+            unsubscriber.Dispose();
             SendCommandsToObservers(cmd);
         }
 
