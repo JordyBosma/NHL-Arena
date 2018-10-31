@@ -39,12 +39,12 @@ class WeaponModel extends THREE.Group {
 
     init() {
         var selfRef = this;
-        var material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        var material = new THREE.MeshLambertMaterial({ color: 0xff0000, wireframe: true });
         var box = new THREE.Mesh(
-            new THREE.BoxGeometry(1.8, 0.5, 1),
+            new THREE.SphereGeometry(1),
             material
         );
-        box.scale.set(0.5, 0.5, 0.5);
+        box.scale.set(0.1, 0.1, 0.1);
         selfRef.add(box);
     }
 }

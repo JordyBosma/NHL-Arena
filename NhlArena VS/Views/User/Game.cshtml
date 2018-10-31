@@ -120,9 +120,10 @@
         var playerGuid;
         var raycaster;
         var LastNonCollidedPostion = { x: 0, y: 0, z: 0 };
+        var projectileArray = [];
+        var appel;
 
         window.onload = function () {
-            var commandArray = [];
             var playerGuid;
 
             var prevTime = performance.now();
@@ -163,14 +164,8 @@
                 var light2 = new THREE.HemisphereLight(0xDDDDDD, 0x454545, 1);
                 scene.add(light2);
 
-                var player = new Player();
-                scene.add(player);
-
-                var laptop = new WeaponModel();
-                laptop.position.set(0, 0.5, 1);
-                scene.add(laptop);
-
-                controls.getObject().add(laptop);
+                appel = new WeaponModel();
+                scene.add(appel);
             }
 
             //socket
@@ -243,7 +238,7 @@
                                 }
                                 var object = worldObjects[command[i].obj.guid];
                                 scene.remove(object);
-                                delete worldObjects[command[i].obj.guid];                                
+                                delete worldObjects[command[i].obj.guid];
                                 break;
                         }
                     }
@@ -265,7 +260,7 @@
                             rotationY: (obj.rotation.y % (2 * Math.PI)).toFixed(2),
                             rotationZ: (obj.rotation.z % (2 * Math.PI)).toFixed(2)
                         };
-                        
+
                         var cmd = JSON.stringify(cmdarray);
                         //console.log(cmd);
                         //console.log(Socket.readyState);
@@ -273,6 +268,55 @@
                         //console.log(Socket.readyState);
                     }
                 }
+
+            document.addEventListener('click', WeaponControls);
+
+            function WeaponControls() {
+                scene.add(appel);
+                camera.add(appel);
+                appel.position.set(0.5, -0.5, -0.8);
+                appel.alive = true;
+                appel.velocity = new THREE.Vector3(
+                    -Math.sin(controls.getObject().rotation.y),
+                    0,
+                    Math.sin(controls.getObject().rotation.y)
+                );
+
+                
+                projectileArray.push(appel);
+
+            }
+
+            function checkUpdateTest() {
+                for (var i = 0; i < projectileArray.length; i++) {
+                    if (projectileArray[i] === undefined)
+                        continue;
+                    if (projectileArray[i].alive == false)
+                        continue;
+
+                    projectileArray[i].position.add(projectileArray[i].velocity);
+                }
+            }
+            @*function WeaponControls() {
+                appel.position.set(0.5, -0.5, -0.8);
+                appel.alive = true;
+                appel.velocity = new THREE.Vector3(
+                    Math.sin(camera.rotation.y),
+                    0,
+                    Math.sin(camera.rotation.y)
+                );
+
+                projectileArray.push(appel);
+
+                for (var index = 0; index < projectileArray.length; index++) {
+                    if (projectileArray[index].alive == false) {
+                        projectileArray.splice(index, 1);
+                        continue;
+                    };
+                    projectileArray[index].position.add(projectileArray[index].velocity);
+                }
+                camera.add(appel);
+            }*@
 
             function playerControls() {
                 var canJump = false;
@@ -282,7 +326,6 @@
 
                 // Check for pointerlock in browser
                 if (controls.controlsEnabled) {
-
 
                     // Create a delta value based on current time
                     var delta = (time - prevTime) / 1000;
@@ -296,10 +339,9 @@
                         deltaYVelocity = 10;
                     }
                     velocity.y -= deltaYVelocity;
-                    
-                    //console.log(velocity.y);
-                    console.log(deltaYVelocity);
 
+                    //console.log(velocity.y);
+                    //console.log(deltaYVelocity);
 
                     // Moves the camera (player) forward
                     if (controls.moveForward) {
@@ -407,6 +449,7 @@
                 requestAnimationFrame(animate);
                 raycasting();
                 playerControls();
+                checkUpdateTest();
 
                 renderer.render(scene, camera);
             }
@@ -421,7 +464,7 @@
     <script src="~/lib/materialize/materialize.min.js"></script>
     <script src="~/js/UIManager.js"></script>
     <script>
-        //var ui = new UIManager();   //need to be made in init
+                                                        //var ui = new UIManager();   //need to be made in init
     </script>
     <!---->
 
