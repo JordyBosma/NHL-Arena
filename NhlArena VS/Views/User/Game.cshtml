@@ -32,16 +32,16 @@
         <div class="card-content orange-text text-accent-3">
             <span class="card-title">Scoreboard:</span>
             <!--<div class="red darken-4" style="margin: 10px; padding: 0 10px 0 10px; display: block;"></div>-->
-            <table id="Scoreboard__Content">
+            <table>
                 <thead>
                     <tr class="orange-text text-accent-3">
                         <th class="" style="width: 4%"></th>
                         <th class="" style="width: auto">Username:</th>
                         <th class="" style="width: 15%">Kills</th>
-                        <th class="" style="width: 25%">Deadths</th>
+                        <th class="" style="width: 25%">Deaths</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="Scoreboard__Content">
 
                 </tbody>
             </table>
@@ -240,12 +240,14 @@
                             case "NewObjectCommand":
                                 if (command[i].obj.type == "Player")
                                 {
+                                    console.log(command[i]);
+                                    ui.AddScoreboardScore(command[i].obj);
                                     if (command[i].obj.guid != playerGuid){
                                         var player = new Player(command[i].obj.x, 0, command[i].obj.z);
                                         scene.add(player);
                                         worldObjects[command[i].obj.guid] = player;
                                         console.log(command[i]);
-                                        ui.AddScoreboardScore(command[i].obj);
+                                        
                                     }
                                 }
                                 break;
@@ -272,8 +274,8 @@
                                 if (command[i].obj.type == "Player") {
                                     ui.RemoveScoreboardScore(command[i].obj.guid);
                                 }
-                                var object = worldObjects[command[i].obj.guid];
-                                scene.remove(object);
+                                var obj = worldObjects[command[i].obj.guid];
+                                scene.remove(obj);
                                 delete worldObjects[command[i].obj.guid];
                                 break;
                         }

@@ -106,7 +106,7 @@ namespace GameLogic
                 GameEndingCommand cmd = new GameEndingCommand();
                 commandManager.SendGameEndingCommand(cmd);
             }
-            if (timeLeft == -30)
+            if (timeLeft == -100)
             {
                 this.Dispose();
             }

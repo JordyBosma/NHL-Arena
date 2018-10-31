@@ -11,7 +11,7 @@
         //this.UpdatePlayerArmor(70);
         //this.UpdatePlayerHealth(60);
         this.scores = document.getElementById("Scoreboard__Content");
-        console.log(scores);
+                                                                                                console.log(this.scores);
     }
 
     UpdateGameScores(K, D) {
@@ -57,7 +57,7 @@
     }
 
     AddScoreboardScore(score) {
-        var row = scores.insertRow(0);
+        var row = this.scores.insertRow(0);
         row.id = score.guid;
         var cell1 = row.insertCell(0);//index
         cell1.innerHTML = "1.";
@@ -66,14 +66,15 @@
         row.insertCell(2);//kills
         row.insertCell(3);//deaths
         this.UpdateScoreboardScore(score);
+                                                                                            console.log(row);
     }
 
     RemoveScoreboardScore(guid) {
-        var row = this.scores.getElementById(guid);
+        var row = this.scores.getElementById(guid);         //<-------???
         if (row != null) {
-            for (var i = 0; i < scores.rows.length; i++) {
-                if (scores.rows[i] == row) {
-                    scores.deleteRow(i);
+            for (var i = 0; i < this.scores.rows.length; i++) {
+                if (this.scores.rows[i] == row) {
+                    this.scores.deleteRow(i);
                     break;
                 }
             }
