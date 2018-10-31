@@ -90,5 +90,9 @@ namespace WorldObjects
             base.Rotate(rotationX, rotationY, rotationZ);
         }
 
+        public Client GetClient()
+        {
+            return playerClient;
+        }
     }
 }

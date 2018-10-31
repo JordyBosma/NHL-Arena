@@ -9,15 +9,23 @@ using Commands;
 
 namespace GameLogic
 {
-    public class Game
+    public class Game: IDisposable
     {
         private bool isActive = false;
         public Guid gameId { get; }
-        CommandManager commandManager;
+        CommandManager commandManager; //handles commands
 
-        private List<Object3D> worldObjects = new List<Object3D>();
+        Thread gameThread;// thread for the ticktimer
+
+        private List<Object3D> worldObjects = new List<Object3D>(); //all of the movable world objects
+
+
         public string gameName { get; }
 
+        /// <summary>
+        /// initialise the first game with the initial player
+        /// </summary>
+        /// <param name="initialClient">the first player</param>
         public Game(Client initialClient)
         {
             gameId = Guid.NewGuid();
@@ -34,10 +42,15 @@ namespace GameLogic
 
             commandManager.InitializePlayer(initialPlayer);
 
-            Thread gameThread = new Thread(TickTimer);
+            gameThread = new Thread(TickTimer);
             gameThread.Start();
         }
 
+        /// <summary>
+        /// adds a new player to the game
+        /// </summary>
+        /// <param name="newClient">the new player</param>
+        /// <returns></returns>
         public bool AddPlayer(Client newClient)
         {
             if (worldObjects.Count() < 7)
@@ -57,6 +70,9 @@ namespace GameLogic
             }
         }
 
+        /// <summary>
+        /// the timer that triggers the sending of commands to the clients
+        /// </summary>
         public void TickTimer()
         {
             isActive = true;
@@ -88,9 +104,23 @@ namespace GameLogic
             return count;
         }
 
+
         public int GetGameTimeLeft()
         {
             return 200;
+		}
+		
+        /// <summary>
+        /// stops all timers and async threads
+        /// </summary>
+        public void Dispose()
+        {
+            gameThread.Abort();
+            //dispose spawnmanager hier !!!!!
+
+
+            //DEZE ALS ALLERLAATST!!!
+            GameManager.RemoveGame(this);
         }
     }
 }
