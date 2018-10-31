@@ -11,14 +11,13 @@ namespace GameLogic
 {
     public class Game: IDisposable
     {
-        private bool isActive = false;
         public Guid gameId { get; }
         CommandManager commandManager; //handles commands
 
         Thread gameThread;// thread for the ticktimer
 
         private List<Object3D> worldObjects = new List<Object3D>(); //all of the movable world objects
-
+        private bool isActive = true;
 
         public string gameName { get; }
 
@@ -74,9 +73,7 @@ namespace GameLogic
         /// the timer that triggers the sending of commands to the clients
         /// </summary>
         public void TickTimer()
-        {
-            isActive = true;
-
+        { 
             while (isActive)
             {
                 Thread.Sleep(1000 / 60);
@@ -109,7 +106,8 @@ namespace GameLogic
         /// </summary>
         public void Dispose()
         {
-            gameThread.Abort();
+            commandManager.DisconnectAllClients();
+            isActive = false;
             //dispose spawnmanager hier !!!!!
 
 

@@ -64,6 +64,10 @@ namespace Commands
             Player p = (Player)cmd.obj;
             Unsubscriber<Command> unsubscriber = new Unsubscriber<Command>(observers, p.GetClient());
             unsubscriber.Dispose();
+            if(game.GetPlayerCount() == 0)
+            {
+                game.Dispose();
+            }
             SendCommandsToObservers(cmd);
         }
 
@@ -140,6 +144,13 @@ namespace Commands
                 NewObjectCommand cmd3 = new NewObjectCommand(obj);
                 observers[observers.Count() - 1].OnNext(cmd3);
             }
+        }
+
+        public void DisconnectAllClients()
+        {
+            DisconnectCommand cmd = new DisconnectCommand();
+            SendCommandsToObservers(cmd);
+            SendCommandQueue();
         }
 
         public IDisposable Subscribe(IObserver<Command> observer)

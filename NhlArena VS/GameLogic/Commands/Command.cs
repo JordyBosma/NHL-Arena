@@ -31,6 +31,20 @@ namespace Commands
     }
 
     /// <summary>
+    /// This is only a trigger for the client.cs, DO NOT SEND THROUGH SOCKET!!!!
+    /// DO NOT SEND THROUGH SOCKET!!!!
+    /// DO NOT SEND THROUGH SOCKET!!!!
+    /// DO NOT SEND THROUGH SOCKET!!!!
+    /// </summary>
+    public class DisconnectCommand : Command
+    {
+        public DisconnectCommand() : base("")
+        {
+
+        }
+    }
+
+    /// <summary>
     /// gemaakte hits van een spele op andere spelers
     /// </summary>
     public class HitCommand : Command
