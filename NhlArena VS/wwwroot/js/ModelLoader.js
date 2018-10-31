@@ -31,6 +31,24 @@ class Player extends THREE.Group {
     }
 }
 
+class WeaponModel extends THREE.Group {
+    constructor() {
+        super();
+        this.init();
+    }
+
+    init() {
+        var selfRef = this;
+        var material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        var box = new THREE.Mesh(
+            new THREE.BoxGeometry(1.8, 0.5, 1),
+            material
+        );
+        box.scale.set(0.5, 0.5, 0.5);
+        selfRef.add(box);
+    }
+}
+
 /**
  * Load an OBJ model from the server
  * @param {string} objPath The path to the model (.obj) on the server

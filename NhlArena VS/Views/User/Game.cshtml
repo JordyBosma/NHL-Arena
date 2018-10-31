@@ -165,6 +165,12 @@
 
                 var player = new Player();
                 scene.add(player);
+
+                var laptop = new WeaponModel();
+                laptop.position.set(0, 0.5, 1);
+                scene.add(laptop);
+
+                controls.getObject().add(laptop);
             }
 
             //socket
