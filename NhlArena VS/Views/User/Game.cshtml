@@ -177,7 +177,7 @@
                     console.log(error);
                     window.location.replace("http://" + window.location.hostname + ":" + window.location.port + "/User/Main");
                 };
-                Socket.onclose = CloseEvent =>
+                Socket.onclosed = CloseEvent =>
                 {
                     console.log("socket closed");
                     console.log(CloseEvent);

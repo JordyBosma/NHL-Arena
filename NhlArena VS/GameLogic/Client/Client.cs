@@ -16,7 +16,7 @@ namespace Clients
         private Player player;
         public string username { get; }
         private ClientSendManager sendManager { get; }
-        private ClientReceiveManager receiveManager { get; }        
+        private ClientReceiveManager receiveManager { get; }
 
         public Client(WebSocket socket, string username) : base(socket)
         {
@@ -43,7 +43,8 @@ namespace Clients
             this.player = player;
         }
 
-        public override async Task StartReceiving() {
+        public override async Task StartReceiving()
+        {
             var buffer = new byte[1024 * 4];
 
             Console.WriteLine("ClientView connection started");
@@ -56,10 +57,13 @@ namespace Clients
                 WebSocketState state = socket.State;
                 result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                 SendCommandsToObservers(receiveManager.ReceiveString(Encoding.UTF8.GetString(buffer)));
-
+                for (int i = 0; i < buffer.Length; i++)
+                {
+                    buffer[i] = 0;
+                }
             }
 
-            if(socket.State != WebSocketState.Open)
+            if (socket.State != WebSocketState.Open)
             {
                 List<Command> cmdList = new List<Command>();
                 cmdList.Add(new DeleteObjectCommand(player));
@@ -98,9 +102,9 @@ namespace Clients
             {
                 SendCommands();
             }
-            else if(value is DisconnectCommand)
+            else if (value is DisconnectCommand)
             {
-                await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "socket was disconnected by commandmanager",CancellationToken.None);
+                await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "socket was disconnected by commandmanager", CancellationToken.None);
                 socket.Dispose();
             }
             else
@@ -108,6 +112,6 @@ namespace Clients
                 sendManager.AddCommand(value);
             }
         }
-        
+
     }
 }

@@ -1,8 +1,113 @@
-newmtl Map_Base_Shader
+newmtl Bar_Shader
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Bar_txt.png
+Ni 1.00
+newmtl Bench_Shader
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Bench_txt.png
+Ni 1.00
+newmtl Board_Shader
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Board_txt.png
+Ni 1.00
+newmtl Coffeemachine_Shader
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Coffeemachine_txt.png
+Ni 1.00
+Ks 0.50 0.50 0.50
+Ns 18.00
+newmtl Collider_Shader
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Tr 1.00 1.00 1.00
+d 0.00 0.00 0.00
+newmtl Crate_Shader
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Crate_txt.png
+Ni 1.00
+newmtl Firedoor_Shader
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Firedoor_txt.png
+Ni 1.00
+newmtl Floor_Shader
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Floor_txt.png
+Ni 1.00
+newmtl Marble_Shader
 illum 4
 Kd 0.50 0.50 0.50
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Bar_txt.png
+Ni 1.00
+Ks 0.50 0.50 0.50
+Ns 18.00
+newmtl Pillar_Shader
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Tunnel_txt.png
+Ni 1.00
+Ks 0.50 0.50 0.50
+Ns 18.00
+newmtl Placeholder_Shader
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl Shelf_Shader
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Shelf_txt.png
+Ni 1.00
+newmtl Toiletdoor_Shader
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Door2_txt.png
+Ni 1.00
+newmtl Tunnel_Shader
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Tunnel_txt.png
+Ni 1.00
+newmtl Wall_Shader
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Walls_txt.png
 Ni 1.00
 newmtl initialShadingGroup
 illum 4
@@ -10,3 +115,12 @@ Kd 0.50 0.50 0.50
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 Ni 1.00
+newmtl phong1SG
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Door1_txt.png
+Ni 1.00
+Ks 0.50 0.50 0.50
+Ns 18.00
