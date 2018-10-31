@@ -90,5 +90,10 @@ namespace GameLogic
         {
             return activeGames;
         }
+
+        public static void RemoveGame(Game game)
+        {
+            activeGames.Remove(game);
+        }
     }
 }
