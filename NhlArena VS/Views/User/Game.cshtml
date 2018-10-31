@@ -199,11 +199,13 @@
                 };
                 Socket.onerror = error => {
                     console.log(error);
+                    window.location.replace("http://" + window.location.hostname + ":" + window.location.port + "/User/Main");
                 };
                 Socket.onclose = CloseEvent =>
                 {
                     console.log("socket closed");
                     console.log(CloseEvent);
+                    window.location.replace("http://" + window.location.hostname + ":" + window.location.port + "/User/Main");
                 };
                 Socket.onmessage = function (event)
                 {
@@ -327,7 +329,7 @@
                     velocity.y -= deltaYVelocity;
 
                     //console.log(velocity.y);
-                    console.log(deltaYVelocity);
+                    //console.log(deltaYVelocity);
 
 
                     // Moves the camera (player) forward
@@ -362,12 +364,15 @@
                     var intersects = gravRaycaster.intersectObjects(scene.children, true);
 
                     if (intersects.length != 0) {
-                        if (intersects[0].object.name == "Map_Base") { // als de map geraakt word
-                            var YIncrease = 2 - intersects[0].distance;
-                            controls.getObject().position.y += YIncrease;
-                            velocity.y = 0;
-                            canJump = true;
+                        for (var i = 0; i < intersects.length; i++) {
+                            if (intersects[i].object.name == "Map_Base") { // als de map geraakt word
+                                var YIncrease = 2 - intersects[i].distance;
+                                controls.getObject().position.y += YIncrease;
+                                velocity.y = 0;
+                                canJump = true;
+                            }
                         }
+                        
 
                     }
 
@@ -413,16 +418,18 @@
 
                     var intersects = raycaster.intersectObjects(scene.children, true);
 
-                    if (intersects.length != 0) {
-                        if (intersects[0].object.name == "Map_Base") {
-                            controls.getObject().position.set(LastNonCollidedPostion.x, LastNonCollidedPostion.y, LastNonCollidedPostion.z);
-                            hasCollided = true;
+                    for (var j = 0; j < intersects.length; j++) {
+                        if (intersects.length != 0) {
+                            if (intersects[0].object.name == "Map_Base") {
+                                controls.getObject().position.set(LastNonCollidedPostion.x, LastNonCollidedPostion.y, LastNonCollidedPostion.z);
+                                hasCollided = true;
+                            }
                         }
-
+                        else {
+                            hasCollided = false;
+                        }
                     }
-                    else {
-                        hasCollided = false;
-                    }
+                    
                 }
 
                 if (!hasCollided) {

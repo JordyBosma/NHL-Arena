@@ -92,11 +92,16 @@ namespace Clients
         /// receive commands from commandmanager
         /// </summary>
         /// <param name="value"></param>
-        public override void OnNext(Command value)
+        public override async void OnNext(Command value)
         {
             if (value is SendCommand)
             {
                 SendCommands();
+            }
+            else if(value is DisconnectCommand)
+            {
+                await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "socket was disconnected by commandmanager",CancellationToken.None);
+                socket.Dispose();
             }
             else
             {
