@@ -87,5 +87,10 @@ namespace GameLogic
 
             return count;
         }
+
+        public int GetGameTimeLeft()
+        {
+            return 200;
+        }
     }
 }

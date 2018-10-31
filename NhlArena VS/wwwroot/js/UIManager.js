@@ -6,8 +6,8 @@
         this.timeLeft = 0;  //in seconds
         this.isRunning = false;
         this.runTimer;
-        this.StartTimer(360);
-        this.UpdateGameScores(8, 14);
+        //this.StartTimer(360);
+        //this.UpdateGameScores(8, 14);
         this.UpdatePlayerArmor(70);
         this.UpdatePlayerHealth(60);
     }

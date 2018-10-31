@@ -118,6 +118,9 @@ namespace Commands
             InitializePlayerCommand cmd = new InitializePlayerCommand(newPlayer.guid);
             observers[observers.Count - 1].OnNext(cmd);
 
+            GameTimeLeftCommand cmd_tl = new GameTimeLeftCommand(game.GetGameTimeLeft());
+            observers[observers.Count - 1].OnNext(cmd_tl);
+
             NewObjectCommand cmd2 = new NewObjectCommand(newPlayer);
             SendCommandsToObservers(cmd2);            
 
