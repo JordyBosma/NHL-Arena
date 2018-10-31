@@ -8,8 +8,10 @@
         this.runTimer;
         //this.StartTimer(360);
         //this.UpdateGameScores(8, 14);
-        this.UpdatePlayerArmor(70);
-        this.UpdatePlayerHealth(60);
+        //this.UpdatePlayerArmor(70);
+        //this.UpdatePlayerHealth(60);
+        this.scores = document.getElementById("Scoreboard__Content");
+        console.log(scores);
     }
 
     UpdateGameScores(K, D) {
@@ -39,6 +41,45 @@
         document.getElementById("toggle-ExitMenu").checked = b;
     }
 
+    ShowScoreboard(b) {
+        document.getElementById("toggle-Scoreboard").checked = b;
+    }
+
+    EndScene() {
+        this.ShowScoreboard(true);
+        document.getElementById("toggle-Scoreboard").classList.add("endBgr");
+    }
+    
+    UpdateScoreboardScore(score) {
+        /*score.guid;
+        score.kills;
+        score.deaths;*/
+    }
+
+    AddScoreboardScore(score) {
+        var row = scores.insertRow(0);
+        row.id = score.guid;
+        var cell1 = row.insertCell(0);//index
+        cell1.innerHTML = "1.";
+        var cell2 = row.insertCell(1);//username
+        cell2.innerHTML = score.username;
+        row.insertCell(2);//kills
+        row.insertCell(3);//deaths
+        this.UpdateScoreboardScore(score);
+    }
+
+    RemoveScoreboardScore(guid) {
+        var row = this.scores.getElementById(guid);
+        if (row != null) {
+            for (var i = 0; i < scores.rows.length; i++) {
+                if (scores.rows[i] == row) {
+                    scores.deleteRow(i);
+                    break;
+                }
+            }
+        }
+    }
+
     SwitchSoundOnOff(clicked) {
         var newInnerText;
         if (clicked.innerText === "volume_up") {
@@ -52,6 +93,20 @@
         for (var i = 0; i < soundSwitchButtons.length; i++) {
             soundSwitchButtons[i].innerText = newInnerText;
         }
+    }
+
+    UpdateTimerDisplay(timeLeft) {
+        var displayTimeMin = Math.floor(timeLeft / 60);
+        displayTimeMin = displayTimeMin.toString();
+        if (displayTimeMin.length < 2) {
+            displayTimeMin = '0' + displayTimeMin;
+        }
+        var displayTimeSec = String(timeLeft % 60);
+        if (displayTimeSec.length < 2) {
+            displayTimeSec = '0' + displayTimeSec;
+        }
+        var displayTime = displayTimeMin + ':' + displayTimeSec;
+        document.getElementById('gameTimer').innerText = displayTime;
     }
 
     StartTimer(time) {
@@ -92,15 +147,5 @@
         }
     }
 
-    /*
-    Show(x, b) {
-        if (b) {
-            x.classList.remove("hiddenEffect");
-            x.classList.add("showEffect");
-        } else {
-            x.classList.remove("showEffect");
-            x.classList.add("hiddenEffect");
-        }
-        
-    }*/
+    
 }

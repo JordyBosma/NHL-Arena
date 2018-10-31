@@ -130,6 +130,13 @@ namespace Commands
         }
     }
 
+    public class GameEndingCommand : Command
+    {
+        public GameEndingCommand() : base("GameEndingCommand")
+        {
+        }
+    }
+
     public class UpdatePlayerCommand : Command
     {
         public Guid playerGuid { get; }

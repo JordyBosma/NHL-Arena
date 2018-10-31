@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Timers;
 using Clients;
 using WorldObjects;
 using Commands;
+using Timer = System.Timers.Timer;
 
 namespace GameLogic
 {
@@ -16,6 +18,8 @@ namespace GameLogic
         CommandManager commandManager; //handles commands
 
         Thread gameThread;// thread for the ticktimer
+        Timer gameTimer;// timer for time left of the game
+        private int timeLeft = 20; //time left of the game in seconds
 
         private List<Object3D> worldObjects = new List<Object3D>(); //all of the movable world objects
 
@@ -44,6 +48,12 @@ namespace GameLogic
 
             gameThread = new Thread(TickTimer);
             gameThread.Start();
+
+            gameTimer = new Timer();
+            gameTimer.Interval = 1000;
+            gameTimer.AutoReset = true;
+            gameTimer.Elapsed += (v, e) => GameTimerElapsed();
+            gameTimer.Start();
         }
 
         /// <summary>
@@ -84,6 +94,27 @@ namespace GameLogic
             }
         }
 
+        /// <summary>
+        /// the game timer that updates the time left for connected clients and triggers the dispose of the game
+        /// </summary>
+        public void GameTimerElapsed()
+        {
+            timeLeft--;
+            if (timeLeft >= 0) { 
+                GameTimeLeftCommand cmd = new GameTimeLeftCommand(timeLeft);
+                commandManager.SendGameTimeLeftCommand(cmd);
+            }
+            if (timeLeft == 0)
+            {
+                GameEndingCommand cmd = new GameEndingCommand();
+                commandManager.SendGameEndingCommand(cmd);
+            }
+            if (timeLeft == -30)
+            {
+                this.Dispose();
+            }
+        }
+
         public List<Object3D> getWorldObjects()
         {
             return worldObjects;
@@ -116,6 +147,7 @@ namespace GameLogic
         public void Dispose()
         {
             gameThread.Abort();
+            gameTimer.Dispose();
             //dispose spawnmanager hier !!!!!
 
 

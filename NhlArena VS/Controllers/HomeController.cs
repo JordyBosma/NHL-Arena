@@ -80,10 +80,6 @@ namespace NhlArena_VS.Controllers
             return View();
         }
         
-        public IActionResult TestScene()
-        {
-            return View();
-        }
         public IActionResult TestUI()
         {
             return View();
