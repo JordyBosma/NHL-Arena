@@ -70,6 +70,7 @@ namespace Clients
             Console.WriteLine("ClientView has disconnected");
 
             await socket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
+            socket.Dispose();
         }
 
         public override async void SendCommands()
@@ -102,5 +103,6 @@ namespace Clients
                 sendManager.AddCommand(value);
             }
         }
+        
     }
 }

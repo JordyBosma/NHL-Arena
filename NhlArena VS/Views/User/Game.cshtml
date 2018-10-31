@@ -234,16 +234,16 @@
                                 object.rotation.x = command[i].obj.rotationX;
                                 object.rotation.y = command[i].obj.rotationY;
                                 object.rotation.z = command[i].obj.rotationZ;
-
-                                //console.log(command[i].obj.y);
+                                //console.log(command[i]);
                                 break;
                             case "DeleteObjectCommand":
-                                if (Object.keys(worldObjects).indexOf(command.parameters.guid) < 0) {
+                                console.log(command[i]);
+                                if (Object.keys(worldObjects).indexOf(command[i].obj.guid) < 0) {
                                     break;
                                 }
                                 var object = worldObjects[command[i].obj.guid];
-                                scene.remove(object)
-                                delete worldObjects[command[i].obj.guid]
+                                scene.remove(object);
+                                delete worldObjects[command[i].obj.guid];                                
                                 break;
                         }
                     }
@@ -291,7 +291,14 @@
                     velocity.z -= velocity.z * 10.0 * delta;
 
                     // Calculate "gravity" using delta
-                    velocity.y -= 9.8 * 20.0 * delta; // middle number = mass
+                    var deltaYVelocity = 9.8 * 20.0 * delta; // middle number = mass
+                    if (deltaYVelocity > 10) {
+                        deltaYVelocity = 10;
+                    }
+                    velocity.y -= deltaYVelocity;
+                    
+                    //console.log(velocity.y);
+                    console.log(deltaYVelocity);
 
 
                     // Moves the camera (player) forward
@@ -320,15 +327,13 @@
                     controls.getObject().translateZ(velocity.z * delta);
 
                     // Prevent the camera/player from falling out of the 'world'
-                    var hasCollided = false;
-                    var pos = controls.getObject().position;
                     var gravRaycaster = new THREE.Raycaster(controls.getObject().position, new THREE.Vector3(0, -1, 0), 0, 2);
                     raycaster.set(controls.getObject().position, new THREE.Vector3(0, -1, 0));
 
                     var intersects = gravRaycaster.intersectObjects(scene.children, true);
 
                     if (intersects.length != 0) {
-                        if (intersects[0].object.name == "Map_Base") {
+                        if (intersects[0].object.name == "Map_Base") { // als de map geraakt word
                             var YIncrease = 2 - intersects[0].distance;
                             controls.getObject().position.y += YIncrease;
                             velocity.y = 0;
