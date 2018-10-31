@@ -124,7 +124,6 @@
         window.onload = function () {
             var commandArray = [];
             var playerGuid;
-            var player;
 
             var prevTime = performance.now();
             var velocity = new THREE.Vector3();
@@ -162,12 +161,7 @@
                 scene.add(light);
 
                 var light2 = new THREE.HemisphereLight(0xDDDDDD, 0x454545, 1);
-                scene.add(light2);
-
-                player = new Player();
-                scene.add(player);
-
-                
+                scene.add(light2);                
             }
 
             //socket
@@ -226,6 +220,42 @@
                                     damageBoost.position.z = command[i].obj.z;
                                     scene.add(damageBoost);
                                     worldObjects[command[i].obj.guid] = damageBoost;
+                                }
+                                if (command[i].obj.type == "SpeedBoost") {
+
+                                    var speedBoost = new SpeedBoost(command[i].obj.x, 1, command[i].obj.z);
+                                    speedBoost.position.x = command[i].obj.x;
+                                    speedBoost.position.y = command[i].obj.y;
+                                    speedBoost.position.z = command[i].obj.z;
+                                    scene.add(speedBoost);
+                                    worldObjects[command[i].obj.guid] = speedBoost;
+                                }
+                                if (command[i].obj.type == "HealthItem") {
+
+                                    var healthItem = new HealthItem(command[i].obj.x, 1, command[i].obj.z);
+                                    healthItem.position.x = command[i].obj.x;
+                                    healthItem.position.y = command[i].obj.y;
+                                    healthItem.position.z = command[i].obj.z;
+                                    scene.add(healthItem);
+                                    worldObjects[command[i].obj.guid] = healthItem;
+                                }
+                                if (command[i].obj.type == "ArmourItem") {
+
+                                    var armourItem = new ArmourItem(command[i].obj.x, 1, command[i].obj.z);
+                                    armourItem.position.x = command[i].obj.x;
+                                    armourItem.position.y = command[i].obj.y;
+                                    armourItem.position.z = command[i].obj.z;
+                                    scene.add(armourItem);
+                                    worldObjects[command[i].obj.guid] = armourItem;
+                                }
+                                if (command[i].obj.type == "AmmoItem") {
+
+                                    var ammoItem = new AmmoItem(command[i].obj.x, 1, command[i].obj.z);
+                                    ammoItem.position.x = command[i].obj.x;
+                                    ammoItem.position.y = command[i].obj.y;
+                                    ammoItem.position.z = command[i].obj.z;
+                                    scene.add(ammoItem);
+                                    worldObjects[command[i].obj.guid] = ammoItem;
                                 }
                                 break;
                             case "UpdateObjectCommand":

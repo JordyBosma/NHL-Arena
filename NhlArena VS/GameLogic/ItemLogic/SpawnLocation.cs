@@ -28,9 +28,9 @@ namespace ItemLogic
             this._itemType = itemType;
         }
 
-        public void changeItem(string itemType)
+        public void changeItem(string newItemType)
         {
-            this._itemType = itemType;
+            this._itemType = newItemType;
         }
 
         public void setItem()

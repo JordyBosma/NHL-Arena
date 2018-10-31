@@ -1,6 +1,7 @@
 ﻿using Commands;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Timers;
 using WorldObjects;
 
@@ -12,12 +13,20 @@ namespace ItemLogic
         private List<SpawnLocation> spawnList = new List<SpawnLocation>();
         Timer spawnTimer;
         List<Timer> spawnLocationTimers = new List<Timer>();
+        List<Timer> removedLocationTimers = new List<Timer>();
 
         public SpawnManager(CommandManager manager)
         {
             this.cmdManager = manager;
 
-            spawnList.Add(new SpawnLocation(28, 1, -35, "DamageBoost"));
+            spawnList.Add(new SpawnLocation(26.4, -3.5, -37, "DamageBoost"));
+            spawnList.Add(new SpawnLocation(-33.4, 10, -83, "AHA"));
+            spawnList.Add(new SpawnLocation(51.8, 0, -57.5, "AHA"));
+            spawnList.Add(new SpawnLocation(33, 12, -10, "SpeedBoost"));
+            spawnList.Add(new SpawnLocation(-31.4, 0, 27.9, "SpeedBoost"));
+            spawnList.Add(new SpawnLocation(20, 0, 36, "AHA"));
+            spawnList.Add(new SpawnLocation(-46.4, 0, 57, "AHA"));
+            spawnList.Add(new SpawnLocation(-51, 0, -13.4, "AHA"));
 
             spawnTimer = new Timer();
             spawnTimer.Interval = 1000;
@@ -27,10 +36,11 @@ namespace ItemLogic
             spawnTimer.Start();
         }
 
-        public void SpawnTimer()
+        public async void SpawnTimer()
         {
             foreach (SpawnLocation l in spawnList)
             {
+                await Task.Delay(50);
                 if (l.hasItem == false && l.hasChanged == true)
                 {
                     l.setChanged();
@@ -59,11 +69,13 @@ namespace ItemLogic
         private void SetTimer(SpawnLocation l, int interval)
         {
             Timer aTimer = new Timer(interval);
-            aTimer.Elapsed += (e, v) => {
+            aTimer.Elapsed += (e, v) => 
+            {
                 OnTimedEvent(l);
                 spawnLocationTimers.Remove(aTimer);
                 aTimer.Dispose();
             };
+            aTimer.AutoReset = false;
             aTimer.Enabled = true;
             spawnLocationTimers.Add(aTimer);
         }
