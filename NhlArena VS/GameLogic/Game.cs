@@ -18,7 +18,7 @@ namespace GameLogic
 
         Thread gameThread;// thread for the ticktimer
         Timer gameTimer;// timer for time left of the game
-        private int timeLeft = 20; //time left of the game in seconds
+        private int timeLeft = 60; //time left of the game in seconds
 
         private List<Object3D> worldObjects = new List<Object3D>(); //all of the movable world objects
         private bool isActive = true;
@@ -106,7 +106,7 @@ namespace GameLogic
                 GameEndingCommand cmd = new GameEndingCommand();
                 commandManager.SendGameEndingCommand(cmd);
             }
-            if (timeLeft == -100)
+            if (timeLeft == -300)
             {
                 this.Dispose();
             }
