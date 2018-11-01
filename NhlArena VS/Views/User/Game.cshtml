@@ -25,6 +25,30 @@
 </head>
 <body>
     <!--UI-->
+
+    <input id="toggle-Scoreboard" type="checkbox" class="toggleCheckBox menu__checkbox">
+    <div class="endBackground"></div>
+    <div id="Scoreboard" class="card red darken-4 center popIn" style="width: 60vw;">
+        <div class="card-content orange-text text-accent-3">
+            <span class="card-title">Scoreboard:</span>
+            <!--<div class="red darken-4" style="margin: 10px; padding: 0 10px 0 10px; display: block;"></div>-->
+            <table>
+                <thead>
+                    <tr class="orange-text text-accent-3">
+                        <th class="" style="width: 4%"></th>
+                        <th class="" style="width: auto">Username:</th>
+                        <th class="" style="width: 15%">Kills</th>
+                        <th class="" style="width: 25%">Deaths</th>
+                    </tr>
+                </thead>
+                <tbody id="Scoreboard__Content">
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
     <!--top:-->
     <div class="part__container part--top UItopleft">
         <div class="part__center">
@@ -194,6 +218,12 @@
                                 playerGuid = command[i].playerGuid
                                 window.history.pushState("", "", '/User/Game/' + command[i].gameGuid)
                                 break;
+                            case "GameTimeLeftCommand":
+                                ui.UpdateTimerDisplay(command[i].gameTimeLeft);
+                                break;
+                            case "GameEndingCommand":
+                                ui.EndScene();
+                                break;
                             case "DeathCommand":
                                 console.log("death");
                                 break;
@@ -203,6 +233,7 @@
                                     ui.UpdatePlayerHealth(command[i].health);
                                     ui.UpdateGameScores(command[i].kills, command[i].deaths);
                                 }
+                                ui.UpdateScoreboardScore(command[i]);
                                 break;
                             case "PlayerAmmoPickupCommand":
                                 break;
@@ -211,11 +242,14 @@
                             case "NewObjectCommand":
                                 if (command[i].obj.type == "Player")
                                 {
+                                    console.log(command[i]);
+                                    ui.AddScoreboardScore(command[i].obj);
                                     if (command[i].obj.guid != playerGuid){
                                         var player = new Player(command[i].obj.x, 0, command[i].obj.z);
                                         scene.add(player);
                                         worldObjects[command[i].obj.guid] = player;
                                         console.log(command[i]);
+                                        
                                     }
                                 }
                                 break;
@@ -239,9 +273,12 @@
                                 if (Object.keys(worldObjects).indexOf(command[i].obj.guid) < 0) {
                                     break;
                                 }
-                                var object = worldObjects[command[i].obj.guid];
-                                scene.remove(object);
-                                delete worldObjects[command[i].obj.guid];                                
+                                if (command[i].obj.type == "Player") {
+                                    ui.RemoveScoreboardScore(command[i].obj.guid);
+                                }
+                                var obj = worldObjects[command[i].obj.guid];
+                                scene.remove(obj);
+                                delete worldObjects[command[i].obj.guid];
                                 break;
                         }
                     }
@@ -263,7 +300,7 @@
                             rotationY: (obj.rotation.y % (2 * Math.PI)).toFixed(2),
                             rotationZ: (obj.rotation.z % (2 * Math.PI)).toFixed(2)
                         };
-                        
+
                         var cmd = JSON.stringify(cmdarray);
                         //console.log(cmd);
                         //console.log(Socket.readyState);
@@ -294,7 +331,7 @@
                         deltaYVelocity = 10;
                     }
                     velocity.y -= deltaYVelocity;
-                    
+
                     //console.log(velocity.y);
                     //console.log(deltaYVelocity);
 
@@ -424,7 +461,7 @@
     <script src="~/lib/materialize/materialize.min.js"></script>
     <script src="~/js/UIManager.js"></script>
     <script>
-        //var ui = new UIManager();   //need to be made in init
+                                //var ui = new UIManager();   //need to be made in init
     </script>
     <!---->
 

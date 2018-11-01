@@ -132,11 +132,8 @@ namespace Commands
 
         public void InitializePlayer(Player newPlayer)
         {
-            InitializePlayerCommand cmd = new InitializePlayerCommand(newPlayer.guid, game.gameId);
-            observers[observers.Count - 1].OnNext(cmd);
-
-            NewObjectCommand cmd2 = new NewObjectCommand(newPlayer);
-            SendCommandsToObservers(cmd2);            
+            InitializePlayerCommand cmd = new InitializePlayerCommand(newPlayer.guid);
+            observers[observers.Count - 1].OnNext(cmd);         
 
             List<Object3D> worldObjects = game.getWorldObjects();
             foreach(Object3D obj in worldObjects)
@@ -160,6 +157,16 @@ namespace Commands
                 observers.Add(observer);
             }
             return new Unsubscriber<Command>(observers, observer);
+        }
+
+        public void SendGameTimeLeftCommand(GameTimeLeftCommand cmd)
+        {
+            SendCommandsToObservers(cmd);
+        }
+        
+        public void SendGameEndingCommand(GameEndingCommand cmd)
+        {
+            SendCommandsToObservers(cmd);
         }
 
         /// <summary>

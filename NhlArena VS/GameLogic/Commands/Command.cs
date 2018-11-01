@@ -136,6 +136,23 @@ namespace Commands
         }
     }
 
+    public class GameTimeLeftCommand : Command
+    {
+        public int gameTimeLeft { get; }
+
+        public GameTimeLeftCommand(int gameTimeLeft) : base("GameTimeLeftCommand")
+        {
+            this.gameTimeLeft = gameTimeLeft;
+        }
+    }
+
+    public class GameEndingCommand : Command
+    {
+        public GameEndingCommand() : base("GameEndingCommand")
+        {
+        }
+    }
+
     public class UpdatePlayerCommand : Command
     {
         public Guid playerGuid { get; }
