@@ -39,6 +39,11 @@ namespace WorldObjects
             playerClient.SetPlayer(this);
         }
 
+        /// <summary>
+        /// handle damage done to the player. an chekc if the player dies
+        /// </summary>
+        /// <param name="damage"></param>
+        /// <returns>true is the player dies</returns>
         public bool DoDamage(int damage)
         {
             int armourDamageMultiplier = 2;
@@ -71,11 +76,20 @@ namespace WorldObjects
             return false;
         }
 
+        /// <summary>
+        /// add a kill to the players score
+        /// </summary>
         public void addKill()
         {
             _kills++;
         }
 
+        /// <summary>
+        /// move the player to a ne set of coordinates
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="z"></param>
         public override void Move(double x, double y, double z)
         {
             if (this.x == x && this.y == y && this.z == z) isMoving = false;
@@ -85,11 +99,21 @@ namespace WorldObjects
             base.Move(x, y, z);
         }
 
+        /// <summary>
+        /// rotate the player object along its different axis.
+        /// </summary>
+        /// <param name="rotationX"></param>
+        /// <param name="rotationY"></param>
+        /// <param name="rotationZ"></param>
         public override void Rotate(double rotationX, double rotationY, double rotationZ)
         {
             base.Rotate(rotationX, rotationY, rotationZ);
         }
 
+        /// <summary>
+        /// returns the client connected to the player
+        /// </summary>
+        /// <returns></returns>
         public Client GetClient()
         {
             return playerClient;

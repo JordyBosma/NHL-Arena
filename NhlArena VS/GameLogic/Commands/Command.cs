@@ -127,10 +127,12 @@ namespace Commands
     public class InitializePlayerCommand : Command
     {
         public Guid playerGuid { get; }
+        public Guid gameGuid { get; }
 
-        public InitializePlayerCommand(Guid playerGuid) : base("InitializePlayerCommand")
+        public InitializePlayerCommand(Guid playerGuid, Guid gameGuid) : base("InitializePlayerCommand")
         {
             this.playerGuid = playerGuid;
+            this.gameGuid = gameGuid;
         }
     }
 

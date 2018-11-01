@@ -132,7 +132,7 @@ namespace Commands
 
         public void InitializePlayer(Player newPlayer)
         {
-            InitializePlayerCommand cmd = new InitializePlayerCommand(newPlayer.guid);
+            InitializePlayerCommand cmd = new InitializePlayerCommand(newPlayer.guid, game.gameId);
             observers[observers.Count - 1].OnNext(cmd);
 
             NewObjectCommand cmd2 = new NewObjectCommand(newPlayer);

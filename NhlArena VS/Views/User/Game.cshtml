@@ -124,6 +124,7 @@
         window.onload = function () {
             var commandArray = [];
             var playerGuid;
+            var gameGuid;
 
             var prevTime = performance.now();
             var velocity = new THREE.Vector3();
@@ -191,6 +192,7 @@
                         switch (command[i].commandType) {
                             case "InitializePlayerCommand":
                                 playerGuid = command[i].playerGuid
+                                window.history.pushState("", "", '/User/Game/' + command[i].gameGuid)
                                 break;
                             case "DeathCommand":
                                 console.log("death");
