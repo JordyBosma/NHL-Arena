@@ -121,7 +121,7 @@
         var raycaster;
         var LastNonCollidedPostion = { x: 0, y: 0, z: 0 };
         var projectiles = [];
-        var canShoot = 0;
+        var firingTimer = 0;
 
         window.onload = function () {
             var playerGuid;
@@ -164,6 +164,9 @@
                 var light2 = new THREE.HemisphereLight(0xDDDDDD, 0x454545, 1);
                 scene.add(light2);
 
+                var player = new Player();
+                player.position.set(20, 5, -30)
+                scene.add(player);
             }
 
             //socket
@@ -270,7 +273,7 @@
             document.addEventListener('click', WeaponFire);
 
             function WeaponFire() {
-                if (canShoot <= 0) {
+                if (firingTimer <= 0) {
                     //Get direction and origin vectors
                     var direction = new THREE.Vector3();
                     camera.getWorldDirection(direction);
@@ -295,24 +298,35 @@
 
                     //Add apple projectile to projectiles array
                     projectiles.push(appel);
-                    canShoot = 25;
+                    firingTimer = 25;
                 }
             }
 
+            /**
+             * Updates the position and velocity of the projectiles shot by the player*/
             function UpdateProjectiles() {
                 for (var i = 0; i < projectiles.length; i++) {
                     if (projectiles[i] === undefined) continue;
                     if (projectiles[i].alive) {
-                        projectiles[i].projectile.position.x += 1 * projectiles[i].direction.x;
-                        projectiles[i].projectile.position.y += 1 * projectiles[i].direction.y;
-                        projectiles[i].projectile.position.z += 1 * projectiles[i].direction.z;
+                        projectiles[i].projectile.position.x += 0.5 * projectiles[i].direction.x;
+                        projectiles[i].projectile.position.y += 0.5 * projectiles[i].direction.y;
+                        projectiles[i].projectile.position.z += 0.5 * projectiles[i].direction.z;
+
+                        var gravRaycaster = new THREE.Raycaster(projectiles[i].projectile.position, projectiles[i].direction, 0, 2);
+
+                        var intersects = gravRaycaster.intersectObjects(scene.children, true);
+                        if (intersects.length != 0) {
+                            //if (intersects[0].object.name = "Character") {
+                                console.log(intersects);
+                            //}
+                        }
                     }
                     else if (projectiles[i].alive == false) {
                         projectiles.splice(i, 1);
                         continue;
                     }
                 }
-                if (canShoot > 0) canShoot -= 1;
+                if (firingTimer > 0) firingTimer -= 1;
             }
 
             function playerControls() {
@@ -365,14 +379,13 @@
                     controls.getObject().translateY(velocity.y * delta);
                     controls.getObject().translateZ(velocity.z * delta);
 
-                    // Prevent the camera/player from falling out of the 'world'
+                    // Prevent the camera/player from falling out of the map
                     var gravRaycaster = new THREE.Raycaster(controls.getObject().position, new THREE.Vector3(0, -1, 0), 0, 2);
-                    raycaster.set(controls.getObject().position, new THREE.Vector3(0, -1, 0));
 
                     var intersects = gravRaycaster.intersectObjects(scene.children, true);
 
                     if (intersects.length != 0) {
-                        if (intersects[0].object.name == "Map_Base") { // als de map geraakt word
+                        if (intersects[0].object.name == "Map_Base") { // Checks if map gets hit
                             var YIncrease = 2 - intersects[0].distance;
                             controls.getObject().position.y += YIncrease;
                             velocity.y = 0;
@@ -460,7 +473,7 @@
     <script src="~/lib/materialize/materialize.min.js"></script>
     <script src="~/js/UIManager.js"></script>
     <script>
-                                                        //var ui = new UIManager();   //need to be made in init
+                                                                        //var ui = new UIManager();   //need to be made in init
     </script>
     <!---->
 
