@@ -37,11 +37,45 @@ class DamageBoost extends THREE.Group {
         this.init();
     }
 
+    UpdateTime() {
+        if (this.materialShader) {
+
+            this.materialShader.uniforms.time.value = performance.now() / 1000;
+
+        }
+    }
+
     init() {
         var selfRef = this;
 
+
         loadOBJModel("/models/objects/", "Crate_Milk.obj", "/models/materials/", "Crate_Milk.mtl", (mesh) => {
-            mesh.scale.set(1, 1, 1);
+            console.log(mesh);
+            mesh.children[0].material.onBeforeCompile = function (shader) {
+
+                console.log(shader);
+
+                shader.uniforms.time = { value: 0 };
+
+                shader.vertexShader = 'uniform float time;\n' + shader.vertexShader;
+                shader.vertexShader = shader.vertexShader.replace(
+                    '#include <begin_vertex>',
+                    [
+                        //'vec3 translationVector = vec3(0,-1,0);',
+
+                        'float theta = time * 2.0;',
+                        'float c = cos( theta );',
+                        'float s = sin( theta );',
+                        
+                        'mat3 m = mat3( c, 0, s, 0, 1, 0, -s, 0, c );',
+                        'vec3 transformed = vec3( position ) * m;',
+                        'vNormal = vNormal * m;'
+                        
+                    ].join('\n')
+                );
+                selfRef.materialShader = shader;
+            };
+            mesh.scale.set(0.8, 0.8, 0.8);
             selfRef.add(mesh);
         });
     }

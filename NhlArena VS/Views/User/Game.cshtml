@@ -435,10 +435,20 @@
                 }
             }
 
+            function updateItems() {
+                for (var i = 0; i < scene.children.length; i++) {
+                    if (scene.children[i] instanceof DamageBoost) {
+                        scene.children[i].UpdateTime();
+                    }
+                }
+
+            }
+
             function animate() {
                 requestAnimationFrame(animate);
                 raycasting();
                 playerControls();
+                updateItems();
 
                 renderer.render(scene, camera);
             }
