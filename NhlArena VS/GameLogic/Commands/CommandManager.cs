@@ -53,6 +53,9 @@ namespace Commands
                             DeleteObjectCommand deleteObjectCmd = (DeleteObjectCommand)c;
                             PlayerDisconnectHandler(deleteObjectCmd);
                             break;
+                        case "FireCommand":
+                            SendCommandsToObservers(c);
+                            break;
                     }
                 }
             }
@@ -71,6 +74,10 @@ namespace Commands
             SendCommandsToObservers(cmd);
         }
 
+        /// <summary>
+        /// handlees hit messages from clients and determines if one scored a kill or died
+        /// </summary>
+        /// <param name="hit">a hitcommand containing detail about a hit</param>
         public void HitHandler(HitCommand hit)
         {
             List<Object3D> worldObjects = game.getWorldObjects();
@@ -110,6 +117,10 @@ namespace Commands
             }
         }
 
+        /// <summary>
+        /// handle updateplayer commands from clients
+        /// </summary>
+        /// <param name="uPlayer">a command message contiaing details about hte player/client</param>
         public void PlayerUpdateHandler(UpdatePlayerCommand uPlayer)
         {
             List<Object3D> worldObjects = game.getWorldObjects();
@@ -130,6 +141,10 @@ namespace Commands
             }
         }
 
+        /// <summary>
+        /// initialize the first player
+        /// </summary>
+        /// <param name="newPlayer"></param>
         public void InitializePlayer(Player newPlayer)
         {
             InitializePlayerCommand cmd = new InitializePlayerCommand(newPlayer.guid, game.gameId);
@@ -146,6 +161,9 @@ namespace Commands
             }
         }
 
+        /// <summary>
+        /// disconnect all of the clients in current game
+        /// </summary>
         public void DisconnectAllClients()
         {
             DisconnectCommand cmd = new DisconnectCommand();
@@ -174,6 +192,9 @@ namespace Commands
             }
         }
 
+        /// <summary>
+        /// send triggermsg sending commands to all clients
+        /// </summary>
         public void SendCommandQueue()
         {
             SendCommand send = new SendCommand();

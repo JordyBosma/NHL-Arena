@@ -192,7 +192,7 @@
                         switch (command[i].commandType) {
                             case "InitializePlayerCommand":
                                 playerGuid = command[i].playerGuid
-                                window.history.pushState("", "", '/User/Game/' + command[i].gameGuid)
+                                window.history.pushState("", "", '/User/Game/' + command[i].gameGuid);
                                 break;
                             case "DeathCommand":
                                 console.log("death");
@@ -205,8 +205,10 @@
                                 }
                                 break;
                             case "PlayerAmmoPickupCommand":
+                                console.log(command[i]);
                                 break;
                             case "ErrorCommand":
+                                console.log(command[i]);
                                 break;
                             case "NewObjectCommand":
                                 if (command[i].obj.type == "Player")

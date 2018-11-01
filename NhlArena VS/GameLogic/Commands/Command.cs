@@ -61,6 +61,22 @@ namespace Commands
         }
     }
 
+    public class FireCommand : Command
+    {
+        public Guid originPlayer { get; }
+        public double[] directionVector { get; }
+        public double[] originPosition { get; }
+        public double velocity { get; }
+
+        public FireCommand(Guid originPlayer, double[] directionVector, double[] originPosition, double velocity) : base("FireCommand")
+        {
+            this.originPlayer = originPlayer;
+            this.directionVector = directionVector;
+            this.originPosition = originPosition;
+            this.velocity = velocity;
+        }
+    }
+
     /// <summary>
     /// player death van server naar client
     /// update positie naar deathpos
