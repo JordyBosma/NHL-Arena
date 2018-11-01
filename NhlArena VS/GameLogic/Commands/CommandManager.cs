@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GameLogic;
+using ItemLogic;
 using WorldObjects;
 
 namespace Commands
@@ -11,6 +12,7 @@ namespace Commands
     {
         private Game game;
         private List<IObserver<Command>> observers = new List<IObserver<Command>>();
+        private List<SpawnLocation> spawnList;
 
         public CommandManager(Game game)
         {
@@ -105,9 +107,27 @@ namespace Commands
                     {
                         obj.Move(uPlayer.x, uPlayer.y, uPlayer.z);
                         obj.Rotate(uPlayer.rotationX, uPlayer.rotationY, uPlayer.rotationZ);
-                        //checkPickUp
                         UpdateObjectCommand cmd = new UpdateObjectCommand(obj);
                         SendCommandsToObservers(cmd);
+
+                        foreach (SpawnLocation s in spawnList)
+                        {
+                            if (s.item != null)
+                            {
+                                if (uPlayer.x > (s.item.x - 0.4) && uPlayer.x < (s.item.x + 0.4))
+                                {
+                                    DeleteObjectCommand cmd2 = new DeleteObjectCommand(s.item);
+                                    SendCommandsToObservers(cmd2);
+                                }
+
+
+
+                                //if (Enumerable.Range(s.item.x - 1, s.item.x + 1))
+                                //{
+
+                                //}
+                            }
+                        }
                     }
                 }
             }
@@ -119,14 +139,19 @@ namespace Commands
             observers[observers.Count - 1].OnNext(cmd);
 
             NewObjectCommand cmd2 = new NewObjectCommand(newPlayer);
-            SendCommandsToObservers(cmd2);            
+            SendCommandsToObservers(cmd2);
 
             List<Object3D> worldObjects = game.getWorldObjects();
-            foreach(Object3D obj in worldObjects)
+            foreach (Object3D obj in worldObjects)
             {
                 NewObjectCommand cmd3 = new NewObjectCommand(obj);
                 observers[observers.Count() - 1].OnNext(cmd3);
             }
+        }
+
+        public void InitializeSpawnList(List<SpawnLocation> spawnList)
+        {
+            this.spawnList = spawnList;
         }
 
         public void InitializeItem(Item newItem)

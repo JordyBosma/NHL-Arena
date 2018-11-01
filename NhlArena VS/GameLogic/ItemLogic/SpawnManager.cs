@@ -11,9 +11,9 @@ namespace ItemLogic
     {
         private CommandManager cmdManager;
         private List<SpawnLocation> spawnList = new List<SpawnLocation>();
-        Timer spawnTimer;
-        List<Timer> spawnLocationTimers = new List<Timer>();
-        List<Timer> removedLocationTimers = new List<Timer>();
+        private Timer spawnTimer;
+        private List<Timer> spawnLocationTimers = new List<Timer>();
+        private List<Timer> removedLocationTimers = new List<Timer>();
 
         public SpawnManager(CommandManager manager)
         {
@@ -27,6 +27,7 @@ namespace ItemLogic
             spawnList.Add(new SpawnLocation(20, 0, 36, "AHA"));
             spawnList.Add(new SpawnLocation(-46.4, 0, 57, "AHA"));
             spawnList.Add(new SpawnLocation(-51, 0, -13.4, "AHA"));
+            cmdManager.InitializeSpawnList(spawnList);
 
             spawnTimer = new Timer();
             spawnTimer.Interval = 1000;
@@ -41,7 +42,7 @@ namespace ItemLogic
             foreach (SpawnLocation l in spawnList)
             {
                 await Task.Delay(50);
-                if (l.hasItem == false && l.hasChanged == true)
+                if (l.item == null && l.hasChanged == true)
                 {
                     l.setChanged();
                     SetTimer(l, GenerateInterval(l.itemType));
@@ -88,10 +89,12 @@ namespace ItemLogic
             {
                 case "DamageBoost":
                     Item damageBoost = new Item(l);
+                    l.addItem(damageBoost);
                     cmdManager.InitializeItem(damageBoost);
                     break;
                 case "SpeedBoost":
                     Item speedBoost = new Item(l);
+                    l.addItem(speedBoost);
                     cmdManager.InitializeItem(speedBoost);
                     break;
                 case "AHA":
@@ -105,18 +108,21 @@ namespace ItemLogic
             {
                 l.changeItem(itemType);
                 HealthItem newHItem = new HealthItem(l);
+                l.addItem(newHItem);
                 cmdManager.InitializeItem(newHItem);
             }
             if (itemType == "ArmourItem")
             {
                 l.changeItem(itemType);
                 ArmourItem newAItem = new ArmourItem(l);
+                l.addItem(newAItem);
                 cmdManager.InitializeItem(newAItem);
             }
             if (itemType == "AmmoItem")
             {
                 l.changeItem(itemType);
                 AmmoItem newAmmoItem = new AmmoItem(l);
+                l.addItem(newAmmoItem);
                 cmdManager.InitializeItem(newAmmoItem);
             }
         }

@@ -275,6 +275,7 @@
                                 //console.log(command[i].obj.y);
                                 break;
                             case "DeleteObjectCommand":
+                                console.log("del command")
                                 if (Object.keys(worldObjects).indexOf(command.parameters.guid) < 0) {
                                     break;
                                 }
