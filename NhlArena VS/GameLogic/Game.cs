@@ -3,22 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Timers;
 using Clients;
 using WorldObjects;
 using Commands;
+using Timer = System.Timers.Timer;
 
 namespace GameLogic
 {
     public class Game: IDisposable
     {
-        private bool isActive = false;
         public Guid gameId { get; }
         CommandManager commandManager; //handles commands
 
         Thread gameThread;// thread for the ticktimer
+        Timer gameTimer;// timer for time left of the game
+        private int timeLeft = 300; //time left of the game in seconds
 
         private List<Object3D> worldObjects = new List<Object3D>(); //all of the movable world objects
-
+        private bool isActive = true;
 
         public string gameName { get; }
 
@@ -44,6 +47,12 @@ namespace GameLogic
 
             gameThread = new Thread(TickTimer);
             gameThread.Start();
+
+            gameTimer = new Timer();
+            gameTimer.Interval = 1000;
+            gameTimer.AutoReset = true;
+            gameTimer.Elapsed += (v, e) => GameTimerElapsed();
+            gameTimer.Start();
         }
 
         /// <summary>
@@ -74,13 +83,32 @@ namespace GameLogic
         /// the timer that triggers the sending of commands to the clients
         /// </summary>
         public void TickTimer()
-        {
-            isActive = true;
-
+        { 
             while (isActive)
             {
                 Thread.Sleep(1000 / 60);
                 commandManager.SendCommandQueue();
+            }
+        }
+
+        /// <summary>
+        /// the game timer that updates the time left for connected clients and triggers the dispose of the game
+        /// </summary>
+        public void GameTimerElapsed()
+        {
+            timeLeft--;
+            if (timeLeft >= 0) { 
+                GameTimeLeftCommand cmd = new GameTimeLeftCommand(timeLeft);
+                commandManager.SendGameTimeLeftCommand(cmd);
+            }
+            if (timeLeft == 0)
+            {
+                GameEndingCommand cmd = new GameEndingCommand();
+                commandManager.SendGameEndingCommand(cmd);
+            }
+            if (timeLeft == -25)
+            {
+                this.Dispose();
             }
         }
 
@@ -104,12 +132,21 @@ namespace GameLogic
             return count;
         }
 
+
+        public int GetGameTimeLeft()
+        {
+            return 200;
+		}
+		
         /// <summary>
         /// stops all timers and async threads
         /// </summary>
         public void Dispose()
         {
-            gameThread.Abort();
+
+            gameTimer.Dispose();
+            commandManager.DisconnectAllClients();
+            isActive = false;
             //dispose spawnmanager hier !!!!!
 
 

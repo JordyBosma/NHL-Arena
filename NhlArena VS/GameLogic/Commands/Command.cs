@@ -31,6 +31,20 @@ namespace Commands
     }
 
     /// <summary>
+    /// This is only a trigger for the client.cs, DO NOT SEND THROUGH SOCKET!!!!
+    /// DO NOT SEND THROUGH SOCKET!!!!
+    /// DO NOT SEND THROUGH SOCKET!!!!
+    /// DO NOT SEND THROUGH SOCKET!!!!
+    /// </summary>
+    public class DisconnectCommand : Command
+    {
+        public DisconnectCommand() : base("")
+        {
+
+        }
+    }
+
+    /// <summary>
     /// gemaakte hits van een spele op andere spelers
     /// </summary>
     public class HitCommand : Command
@@ -44,6 +58,22 @@ namespace Commands
             this.shootingPlayerGuid = shootingPlayerGuid;
             this.hitPlayerGuid = hitPlayerGuid;
             this.damage = damage;
+        }
+    }
+
+    public class FireCommand : Command
+    {
+        public Guid originPlayer { get; }
+        public double[] directionVector { get; }
+        public double[] originPosition { get; }
+        public double velocity { get; }
+
+        public FireCommand(Guid originPlayer, double[] directionVector, double[] originPosition, double velocity) : base("FireCommand")
+        {
+            this.originPlayer = originPlayer;
+            this.directionVector = directionVector;
+            this.originPosition = originPosition;
+            this.velocity = velocity;
         }
     }
 
@@ -113,10 +143,29 @@ namespace Commands
     public class InitializePlayerCommand : Command
     {
         public Guid playerGuid { get; }
+        public Guid gameGuid { get; }
 
-        public InitializePlayerCommand(Guid playerGuid) : base("InitializePlayerCommand")
+        public InitializePlayerCommand(Guid playerGuid, Guid gameGuid) : base("InitializePlayerCommand")
         {
             this.playerGuid = playerGuid;
+            this.gameGuid = gameGuid;
+        }
+    }
+
+    public class GameTimeLeftCommand : Command
+    {
+        public int gameTimeLeft { get; }
+
+        public GameTimeLeftCommand(int gameTimeLeft) : base("GameTimeLeftCommand")
+        {
+            this.gameTimeLeft = gameTimeLeft;
+        }
+    }
+
+    public class GameEndingCommand : Command
+    {
+        public GameEndingCommand() : base("GameEndingCommand")
+        {
         }
     }
 

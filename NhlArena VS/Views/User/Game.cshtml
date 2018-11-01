@@ -25,6 +25,28 @@
 </head>
 <body>
     <!--UI-->
+
+    <input id="toggle-Scoreboard" type="checkbox" class="toggleCheckBox menu__checkbox">
+    <div class="endBackground"></div>
+    <div id="Scoreboard" class="card red darken-4 center popIn" style="width: 60vw;">
+        <div class="card-content orange-text text-accent-3">
+            <span class="card-title">Scoreboard:</span>
+            <!--<div class="red darken-4" style="margin: 10px; padding: 0 10px 0 10px; display: block;"></div>-->
+            <table>
+                <thead>
+                    <tr class="orange-text text-accent-3">
+                        <th class="" style="width: 4%"></th>
+                        <th class="" style="width: auto">Username:</th>
+                        <th class="" style="width: 15%">Kills</th>
+                        <th class="" style="width: 25%">Deaths</th>
+                    </tr>
+                </thead>
+                <tbody id="Scoreboard__Content"></tbody>
+            </table>
+
+        </div>
+    </div>
+
     <!--top:-->
     <div class="part__container part--top UItopleft">
         <div class="part__center">
@@ -125,6 +147,7 @@
 
         window.onload = function () {
             var playerGuid;
+            var gameGuid;
 
             var prevTime = performance.now();
             var velocity = new THREE.Vector3();
@@ -177,11 +200,13 @@
                 };
                 Socket.onerror = error => {
                     console.log(error);
+                    window.location.replace("http://" + window.location.hostname + ":" + window.location.port + "/User/Main");
                 };
-                Socket.onclose = CloseEvent =>
+                Socket.onclosed = CloseEvent =>
                 {
                     console.log("socket closed");
                     console.log(CloseEvent);
+                    window.location.replace("http://" + window.location.hostname + ":" + window.location.port + "/User/Main");
                 };
                 Socket.onmessage = function (event)
                 {
@@ -191,6 +216,13 @@
                         switch (command[i].commandType) {
                             case "InitializePlayerCommand":
                                 playerGuid = command[i].playerGuid
+                                window.history.pushState("", "", '/User/Game/' + command[i].gameGuid);
+                                break;
+                            case "GameTimeLeftCommand":
+                                ui.UpdateTimerDisplay(command[i].gameTimeLeft);
+                                break;
+                            case "GameEndingCommand":
+                                ui.EndScene();
                                 break;
                             case "DeathCommand":
                                 console.log("death");
@@ -201,19 +233,25 @@
                                     ui.UpdatePlayerHealth(command[i].health);
                                     ui.UpdateGameScores(command[i].kills, command[i].deaths);
                                 }
+                                ui.UpdateScoreboardScore(command[i]);
                                 break;
                             case "PlayerAmmoPickupCommand":
+                                console.log(command[i]);
                                 break;
                             case "ErrorCommand":
+                                console.log(command[i]);
                                 break;
                             case "NewObjectCommand":
                                 if (command[i].obj.type == "Player")
                                 {
+                                    console.log(command[i]);
+                                    ui.AddScoreboardScore(command[i].obj);
                                     if (command[i].obj.guid != playerGuid){
                                         var player = new Player(command[i].obj.x, 0, command[i].obj.z);
                                         scene.add(player);
                                         worldObjects[command[i].obj.guid] = player;
                                         console.log(command[i]);
+
                                     }
                                 }
                                 break;
@@ -237,8 +275,12 @@
                                 if (Object.keys(worldObjects).indexOf(command[i].obj.guid) < 0) {
                                     break;
                                 }
-                                var object = worldObjects[command[i].obj.guid];
-                                scene.remove(object);
+                                if (command[i].obj.type == "Player") {
+                                    ui.RemoveScoreboardScore(command[i].obj.guid);
+                                }
+                                var obj = worldObjects[command[i].obj.guid];
+                                scene.remove(obj);
+
                                 delete worldObjects[command[i].obj.guid];
                                 break;
                         }
@@ -385,13 +427,14 @@
                     var intersects = gravRaycaster.intersectObjects(scene.children, true);
 
                     if (intersects.length != 0) {
-                        if (intersects[0].object.name == "Map_Base") { // Checks if map gets hit
-                            var YIncrease = 2 - intersects[0].distance;
-                            controls.getObject().position.y += YIncrease;
-                            velocity.y = 0;
-                            canJump = true;
+                        for (var i = 0; i < intersects.length; i++) {
+                            if (intersects[i].object.name == "Map_Base") { // als de map geraakt word
+                                var YIncrease = 2 - intersects[i].distance;
+                                controls.getObject().position.y += YIncrease;
+                                velocity.y = 0;
+                                canJump = true;
+                            }
                         }
-
                     }
 
                     // Makes the camera (player) jump
@@ -436,16 +479,18 @@
 
                     var intersects = raycaster.intersectObjects(scene.children, true);
 
-                    if (intersects.length != 0) {
-                        if (intersects[0].object.name == "Map_Base") {
-                            controls.getObject().position.set(LastNonCollidedPostion.x, LastNonCollidedPostion.y, LastNonCollidedPostion.z);
-                            hasCollided = true;
+                    for (var j = 0; j < intersects.length; j++) {
+                        if (intersects.length != 0) {
+                            if (intersects[0].object.name == "Map_Base") {
+                                controls.getObject().position.set(LastNonCollidedPostion.x, LastNonCollidedPostion.y, LastNonCollidedPostion.z);
+                                hasCollided = true;
+                            }
                         }
+                        else {
+                            hasCollided = false;
+                        }
+                    }
 
-                    }
-                    else {
-                        hasCollided = false;
-                    }
                 }
 
                 if (!hasCollided) {
@@ -473,7 +518,7 @@
     <script src="~/lib/materialize/materialize.min.js"></script>
     <script src="~/js/UIManager.js"></script>
     <script>
-                                                                        //var ui = new UIManager();   //need to be made in init
+                                        //var ui = new UIManager();   //need to be made in init
     </script>
     <!---->
 
