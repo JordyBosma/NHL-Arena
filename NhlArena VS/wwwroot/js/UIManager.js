@@ -53,7 +53,7 @@
         /*score.guid;
         score.kills;
         score.deaths;*/
-        var row = this.scores.getElementById(score.guid);
+        var row = document.getElementById(score.guid);
         if (row != null) {
             row.cells[2].innerHTML = score.kills;
             row.cells[3].innerHTML = score.deaths;
@@ -65,7 +65,7 @@
     }
 
     AddScoreboardScore(score) {
-        if (this.scores.getElementById(score.guid) == null) {
+        if (document.getElementById(score.guid) == null) {
             var row = this.scores.insertRow(0);
             row.id = score.guid;
             var cell1 = row.insertCell(0);//index
@@ -87,7 +87,7 @@
     }
 
     RemoveScoreboardScore(guid) {
-        var row = this.scores.getElementById(guid);
+        var row = document.getElementById(guid);
         if (row != null) {
             for (var i = 0; i < this.scores.rows.length; i++) {
                 if (this.scores.rows[i] == row) {
