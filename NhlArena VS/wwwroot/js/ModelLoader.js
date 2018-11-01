@@ -31,7 +31,7 @@ class Player extends THREE.Group {
     }
 }
 
-class WeaponModel extends THREE.Group {
+class Projectile extends THREE.Group {
     constructor() {
         super();
         this.init();

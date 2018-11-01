@@ -120,8 +120,7 @@
         var playerGuid;
         var raycaster;
         var LastNonCollidedPostion = { x: 0, y: 0, z: 0 };
-        var projectileArray = [];
-        var appel;
+        var projectiles = [];
 
         window.onload = function () {
             var playerGuid;
@@ -164,8 +163,6 @@
                 var light2 = new THREE.HemisphereLight(0xDDDDDD, 0x454545, 1);
                 scene.add(light2);
 
-                appel = new WeaponModel();
-                scene.add(appel);
             }
 
             //socket
@@ -267,56 +264,51 @@
                         Socket.send(cmd);
                         //console.log(Socket.readyState);
                     }
-                }
-
-            document.addEventListener('click', WeaponControls);
-
-            function WeaponControls() {
-                scene.add(appel);
-                camera.add(appel);
-                appel.position.set(0.5, -0.5, -0.8);
-                appel.alive = true;
-                appel.velocity = new THREE.Vector3(
-                    -Math.sin(controls.getObject().rotation.y),
-                    0,
-                    Math.sin(controls.getObject().rotation.y)
-                );
-
-                
-                projectileArray.push(appel);
-
             }
 
-            function checkUpdateTest() {
-                for (var i = 0; i < projectileArray.length; i++) {
-                    if (projectileArray[i] === undefined)
-                        continue;
-                    if (projectileArray[i].alive == false)
-                        continue;
+            document.addEventListener('click', WeaponFire);
 
-                    projectileArray[i].position.add(projectileArray[i].velocity);
+            function WeaponFire() {
+                //Get direction and origin vectors
+                var direction = new THREE.Vector3();
+                camera.getWorldDirection(direction);
+                var objPos = new THREE.Vector3(controls.getObject().position.x, controls.getObject().position.y -0.5, controls.getObject().position.z - 1);
+
+                //Make new projectile and set position to player position
+                var projectile = new Projectile();
+                projectile.position.set(objPos.x, objPos.y, objPos.z);
+                scene.add(projectile);
+
+                //Make new apple projectile and make it alive
+                var appel = {
+                    projectile: projectile,
+                    direction: direction,
+                    alive: true
+                };
+
+                setTimeout(function () {
+                    appel.alive = false;
+                    scene.remove(appel);
+                }, 2000);
+
+                //Add apple projectile to projectiles array
+                projectiles.push(appel);
+            }
+
+            function UpdateProjectiles() {
+                for (var i = 0; i < projectiles.length; i++) {
+                    if (projectiles[i] === undefined) continue;
+                    if (projectiles[i].alive) {
+                        projectiles[i].projectile.position.x += 1 * projectiles[i].direction.x;
+                        projectiles[i].projectile.position.y += 1 * projectiles[i].direction.y;
+                        projectiles[i].projectile.position.z += 1 * projectiles[i].direction.z;
+                    }
+                    else if (projectiles[i].alive == false) {
+                        projectiles.splice(i, 1);
+                        continue;
+                    }
                 }
             }
-            @*function WeaponControls() {
-                appel.position.set(0.5, -0.5, -0.8);
-                appel.alive = true;
-                appel.velocity = new THREE.Vector3(
-                    Math.sin(camera.rotation.y),
-                    0,
-                    Math.sin(camera.rotation.y)
-                );
-
-                projectileArray.push(appel);
-
-                for (var index = 0; index < projectileArray.length; index++) {
-                    if (projectileArray[index].alive == false) {
-                        projectileArray.splice(index, 1);
-                        continue;
-                    };
-                    projectileArray[index].position.add(projectileArray[index].velocity);
-                }
-                camera.add(appel);
-            }*@
 
             function playerControls() {
                 var canJump = false;
@@ -449,8 +441,7 @@
                 requestAnimationFrame(animate);
                 raycasting();
                 playerControls();
-                checkUpdateTest();
-
+                UpdateProjectiles();
                 renderer.render(scene, camera);
             }
             init();
