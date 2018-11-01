@@ -188,7 +188,7 @@
                 scene.add(light2);
 
                 var player = new Player();
-                player.position.set(20, 5, -35)
+                player.position.set(25, 5, -35)
                 scene.add(player);
             }
 
@@ -323,7 +323,7 @@
 
                     //Make new projectile and set position to player position
                     var projectile = new Projectile();
-                    projectile.position.set(objPos.x, objPos.y -0.5, objPos.z -0.5);
+                    projectile.position.set(objPos.x, objPos.y, objPos.z);
                     scene.add(projectile);
 
                     //Make new apple projectile and make it alive
@@ -335,7 +335,7 @@
 
                     setTimeout(function () {
                         appel.alive = false;
-                        scene.remove(appel);
+                        scene.remove(appel.projectile);
                     }, 2000);
 
                     //Add apple projectile to projectiles array
@@ -354,12 +354,16 @@
                         projectiles[i].projectile.position.y += 0.5 * projectiles[i].direction.y;
                         projectiles[i].projectile.position.z += 0.5 * projectiles[i].direction.z;
 
-                        var projectileRaycaster = new THREE.Raycaster(projectiles[i].projectile.position, projectiles[i].direction, 0, 2);
+                        var projectileRaycaster = new THREE.Raycaster(projectiles[i].projectile.position, projectiles[i].direction, 0, 0.5);
 
                         var intersects2 = projectileRaycaster.intersectObjects(scene.children, true);
                         if (intersects2.length != 0) {
+                            projectiles[i].alive = false;
+                            for (var z = 0; z < intersects2.length; z++) {
+                                console.log(intersects2[z]);
+                            }
                             //if (intersects2[0].object.name = "Character") {
-                                console.log(intersects2);
+                                //console.log(intersects2);
                                 //projectiles[i].alive = false;
                                 //scene.remove(projectiles[i]);
                             //}
@@ -435,9 +439,15 @@
                                 controls.getObject().position.y += YIncrease;
                                 velocity.y = 0;
                                 canJump = true;
+                                //console.log(intersects[i]);
                             }
-                            if (intersects[i].object.name == "Character") { //
+                            if (intersects[i].object.name = "Character") {
                                 console.log(intersects[i]);
+                                var YIncrease = 2 - intersects[i].distance;
+                                controls.getObject().position.y += YIncrease;
+                                velocity.y = 0;
+                                canJump = true;
+                                //console.log(intersects[i]);
                             }
                         }
                     }
