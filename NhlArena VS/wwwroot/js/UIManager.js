@@ -11,6 +11,26 @@
         //this.UpdatePlayerArmor(70);
         //this.UpdatePlayerHealth(60);
         this.scores = document.getElementById("Scoreboard__Content");
+        this.endScene = false;
+
+        var scope = this;
+        this.tabbedTab = false;
+        document.addEventListener('keydown', function (event) {     //https://css-tricks.com/snippets/javascript/javascript-keycodes/
+            if (event.keyCode == 69) {  //tab - 9  e - 69
+                if (!scope.tabbedTab) {
+                    scope.ShowScoreboard(true);
+                }
+            }
+        });
+        document.addEventListener('keyup', function (event) {
+            if (event.keyCode == 69) {  //tab e
+                if (!scope.endScene) {
+                    scope.tabbedTab = false;
+                    scope.ShowScoreboard(false);
+                }
+                
+            }
+        });
     }
 
     UpdateGameScores(K, D) {
@@ -45,6 +65,7 @@
     }
 
     EndScene() {
+        this.endScene = true;
         this.ShowScoreboard(true);
         document.getElementById("toggle-Scoreboard").classList.add("endBgr");
     }
@@ -115,7 +136,7 @@
             }
         }
         for (var j = 0; j < rows.length; j++) {
-            rows[j].getElementsByTagName("TD")[0].innerHTML = string(j+1) + ".";
+            rows[j].getElementsByTagName("TD")[0].innerHTML = String(j+1) + ".";
         }
     }
 
@@ -198,6 +219,4 @@
             console.log("stop");
         }
     }
-
-    
 }
