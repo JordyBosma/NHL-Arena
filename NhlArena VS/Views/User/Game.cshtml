@@ -121,6 +121,7 @@
         var raycaster;
         var LastNonCollidedPostion = { x: 0, y: 0, z: 0 };
         var projectiles = [];
+        var canShoot = 0;
 
         window.onload = function () {
             var playerGuid;
@@ -269,30 +270,33 @@
             document.addEventListener('click', WeaponFire);
 
             function WeaponFire() {
-                //Get direction and origin vectors
-                var direction = new THREE.Vector3();
-                camera.getWorldDirection(direction);
-                var objPos = new THREE.Vector3(controls.getObject().position.x, controls.getObject().position.y -0.5, controls.getObject().position.z - 1);
+                if (canShoot <= 0) {
+                    //Get direction and origin vectors
+                    var direction = new THREE.Vector3();
+                    camera.getWorldDirection(direction);
+                    var objPos = new THREE.Vector3(controls.getObject().position.x, controls.getObject().position.y, controls.getObject().position.z);
 
-                //Make new projectile and set position to player position
-                var projectile = new Projectile();
-                projectile.position.set(objPos.x, objPos.y, objPos.z);
-                scene.add(projectile);
+                    //Make new projectile and set position to player position
+                    var projectile = new Projectile();
+                    projectile.position.set(objPos.x, objPos.y, objPos.z);
+                    scene.add(projectile);
 
-                //Make new apple projectile and make it alive
-                var appel = {
-                    projectile: projectile,
-                    direction: direction,
-                    alive: true
-                };
+                    //Make new apple projectile and make it alive
+                    var appel = {
+                        projectile: projectile,
+                        direction: direction,
+                        alive: true
+                    };
 
-                setTimeout(function () {
-                    appel.alive = false;
-                    scene.remove(appel);
-                }, 2000);
+                    setTimeout(function () {
+                        appel.alive = false;
+                        scene.remove(appel);
+                    }, 2000);
 
-                //Add apple projectile to projectiles array
-                projectiles.push(appel);
+                    //Add apple projectile to projectiles array
+                    projectiles.push(appel);
+                    canShoot = 25;
+                }
             }
 
             function UpdateProjectiles() {
@@ -308,6 +312,7 @@
                         continue;
                     }
                 }
+                if (canShoot > 0) canShoot -= 1;
             }
 
             function playerControls() {
