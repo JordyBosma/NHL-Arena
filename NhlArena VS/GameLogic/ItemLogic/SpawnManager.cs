@@ -9,6 +9,8 @@ namespace ItemLogic
 {
     public class SpawnManager : IDisposable
     {
+        private bool initialSpawn = true;
+        private int initalSpawnCount = 0;
         private CommandManager cmdManager;
         private List<SpawnLocation> spawnList = new List<SpawnLocation>();
         private Timer spawnTimer;
@@ -22,7 +24,7 @@ namespace ItemLogic
             spawnList.Add(new SpawnLocation(26.4, -3.5, -37, "DamageBoost"));
             spawnList.Add(new SpawnLocation(-33.4, 10, -83, "AHA"));
             spawnList.Add(new SpawnLocation(51.8, 0, -57.5, "AHA"));
-            spawnList.Add(new SpawnLocation(33, 12, -10, "SpeedBoost"));
+            spawnList.Add(new SpawnLocation(-13.4, 10, -7.1, "SpeedBoost"));
             spawnList.Add(new SpawnLocation(-31.4, 0, 27.9, "SpeedBoost"));
             spawnList.Add(new SpawnLocation(20, 0, 36, "AHA"));
             spawnList.Add(new SpawnLocation(-46.4, 0, 57, "AHA"));
@@ -56,13 +58,21 @@ namespace ItemLogic
             {
                 case "DamageBoost":
                     //return 50000;
-                    return 10000;
+                    return 50000;
                 case "SpeedBoost":
                     //return 30000;
-                    return 1000;
+                    return 30000;
                 case "AHA":
-                    //return 30000;
-                    return 1000;
+                    if(initialSpawn == true)
+                    {
+                        initalSpawnCount++;
+                        if (initalSpawnCount == 5)
+                        {
+                            initialSpawn = false;
+                        }
+                        return 10000;
+                    }
+                    return 30000;
             }
             return 1000;
         }
@@ -74,7 +84,7 @@ namespace ItemLogic
             {
                 OnTimedEvent(l);
                 spawnLocationTimers.Remove(aTimer);
-                aTimer.Dispose();
+                //aTimer.Dispose();
             };
             aTimer.AutoReset = false;
             aTimer.Enabled = true;
@@ -110,6 +120,7 @@ namespace ItemLogic
                 HealthItem newHItem = new HealthItem(l);
                 l.addItem(newHItem);
                 cmdManager.InitializeItem(newHItem);
+                l.changeItem("AHA");
             }
             if (itemType == "ArmourItem")
             {
@@ -117,6 +128,7 @@ namespace ItemLogic
                 ArmourItem newAItem = new ArmourItem(l);
                 l.addItem(newAItem);
                 cmdManager.InitializeItem(newAItem);
+                l.changeItem("AHA");
             }
             if (itemType == "AmmoItem")
             {
@@ -124,6 +136,7 @@ namespace ItemLogic
                 AmmoItem newAmmoItem = new AmmoItem(l);
                 l.addItem(newAmmoItem);
                 cmdManager.InitializeItem(newAmmoItem);
+                l.changeItem("AHA");
             }
         }
 

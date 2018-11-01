@@ -48,14 +48,38 @@ namespace Commands
                             HitHandler(hit);
                             break;
                         case "UpdatePlayerCommand":
-                            UpdatePlayerCommand uPlayer = (UpdatePlayerCommand)c;
-                            PlayerUpdateHandler(uPlayer);
+                            UpdatePlayerCommand uPlayerCmd = (UpdatePlayerCommand)c;
+                            PlayerUpdateHandler(uPlayerCmd);
+                            break;
+                        case "DeleteObjectCommand":
+                            DeleteObjectCommand deleteObjectCmd = (DeleteObjectCommand)c;
+                            PlayerDisconnectHandler(deleteObjectCmd);
+                            break;
+                        case "FireCommand":
+                            SendCommandsToObservers(c);
                             break;
                     }
                 }
             }
         }
 
+        public void PlayerDisconnectHandler(DeleteObjectCommand cmd)
+        {
+            game.getWorldObjects().Remove(cmd.obj);
+            Player p = (Player)cmd.obj;
+            Unsubscriber<Command> unsubscriber = new Unsubscriber<Command>(observers, p.GetClient());
+            unsubscriber.Dispose();
+            if(game.GetPlayerCount() == 0)
+            {
+                game.Dispose();
+            }
+            SendCommandsToObservers(cmd);
+        }
+
+        /// <summary>
+        /// handlees hit messages from clients and determines if one scored a kill or died
+        /// </summary>
+        /// <param name="hit">a hitcommand containing detail about a hit</param>
         public void HitHandler(HitCommand hit)
         {
             List<Object3D> worldObjects = game.getWorldObjects();
@@ -95,6 +119,10 @@ namespace Commands
             }
         }
 
+        /// <summary>
+        /// handle updateplayer commands from clients
+        /// </summary>
+        /// <param name="uPlayer">a command message contiaing details about hte player/client</param>
         public void PlayerUpdateHandler(UpdatePlayerCommand uPlayer)
         {
             List<Object3D> worldObjects = game.getWorldObjects();
@@ -114,18 +142,13 @@ namespace Commands
                         {
                             if (s.item != null)
                             {
-                                if (uPlayer.x > (s.item.x - 0.4) && uPlayer.x < (s.item.x + 0.4))
+                                if (uPlayer.x > (s.item.x - 0.4) && uPlayer.x < (s.item.x + 0.4) && uPlayer.y > (s.item.y + 1.6) && uPlayer.y < (s.item.y + 2.4) && uPlayer.z > (s.item.z - 0.4) && uPlayer.z < (s.item.z + 0.4))
                                 {
                                     DeleteObjectCommand cmd2 = new DeleteObjectCommand(s.item);
                                     SendCommandsToObservers(cmd2);
+                                    s.dellItem();
+                                    // player ammo pickup command!!!!
                                 }
-
-
-
-                                //if (Enumerable.Range(s.item.x - 1, s.item.x + 1))
-                                //{
-
-                                //}
                             }
                         }
                     }
@@ -133,9 +156,13 @@ namespace Commands
             }
         }
 
+        /// <summary>
+        /// initialize the first player
+        /// </summary>
+        /// <param name="newPlayer"></param>
         public void InitializePlayer(Player newPlayer)
         {
-            InitializePlayerCommand cmd = new InitializePlayerCommand(newPlayer.guid);
+            InitializePlayerCommand cmd = new InitializePlayerCommand(newPlayer.guid, game.gameId);
             observers[observers.Count - 1].OnNext(cmd);
 
             NewObjectCommand cmd2 = new NewObjectCommand(newPlayer);
@@ -160,6 +187,16 @@ namespace Commands
             SendCommandsToObservers(newDBoost);
         }
 
+        /// <summary>
+        /// disconnect all of the clients in current game
+        /// </summary>
+        public void DisconnectAllClients()
+        {
+            DisconnectCommand cmd = new DisconnectCommand();
+            SendCommandsToObservers(cmd);
+            SendCommandQueue();
+        }
+
         public IDisposable Subscribe(IObserver<Command> observer)
         {
             if (!observers.Contains(observer))
@@ -167,6 +204,16 @@ namespace Commands
                 observers.Add(observer);
             }
             return new Unsubscriber<Command>(observers, observer);
+        }
+
+        public void SendGameTimeLeftCommand(GameTimeLeftCommand cmd)
+        {
+            SendCommandsToObservers(cmd);
+        }
+        
+        public void SendGameEndingCommand(GameEndingCommand cmd)
+        {
+            SendCommandsToObservers(cmd);
         }
 
         /// <summary>
@@ -181,6 +228,9 @@ namespace Commands
             }
         }
 
+        /// <summary>
+        /// send triggermsg sending commands to all clients
+        /// </summary>
         public void SendCommandQueue()
         {
             SendCommand send = new SendCommand();

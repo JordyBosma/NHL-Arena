@@ -6,10 +6,11 @@
         this.timeLeft = 0;  //in seconds
         this.isRunning = false;
         this.runTimer;
-        this.StartTimer(360);
-        this.UpdateGameScores(8, 14);
-        this.UpdatePlayerArmor(70);
-        this.UpdatePlayerHealth(60);
+        //this.StartTimer(360);
+        //this.UpdateGameScores(8, 14);
+        //this.UpdatePlayerArmor(70);
+        //this.UpdatePlayerHealth(60);
+        this.scores = document.getElementById("Scoreboard__Content");
     }
 
     UpdateGameScores(K, D) {
@@ -39,6 +40,65 @@
         document.getElementById("toggle-ExitMenu").checked = b;
     }
 
+    ShowScoreboard(b) {
+        document.getElementById("toggle-Scoreboard").checked = b;
+    }
+
+    EndScene() {
+        this.ShowScoreboard(true);
+        document.getElementById("toggle-Scoreboard").classList.add("endBgr");
+    }
+    
+    UpdateScoreboardScore(score) {
+        /*score.guid;
+        score.kills;
+        score.deaths;*/
+        var row = document.getElementById(score.guid);
+        if (row != null) {
+            row.cells[2].innerHTML = score.kills;
+            row.cells[3].innerHTML = score.deaths;
+            console.log("update soreboard:");
+            console.log({ updscore: score });
+            this.OrderScoreboardScore();
+        }
+        
+    }
+
+    AddScoreboardScore(score) {
+        if (document.getElementById(score.guid) == null) {
+            var row = this.scores.insertRow(0);
+            row.id = score.guid;
+            var cell1 = row.insertCell(0);//index
+            cell1.innerHTML = "1.";
+            var cell2 = row.insertCell(1);//username
+            cell2.innerHTML = score.username;
+            var cell3 = row.insertCell(2);//kills
+            cell3.innerHTML = score.kills;
+            var cell4 = row.insertCell(3);//deaths
+            cell4.innerHTML = score.deaths;
+            console.log("add soreboard:");
+            console.log({ addscore: score });
+            this.OrderScoreboardScore(score);
+        }
+    }
+
+    OrderScoreboardScore() {
+
+    }
+
+    RemoveScoreboardScore(guid) {
+        var row = document.getElementById(guid);
+        if (row != null) {
+            for (var i = 0; i < this.scores.rows.length; i++) {
+                if (this.scores.rows[i] == row) {
+                    this.scores.deleteRow(i);
+                    break;
+                }
+            }
+            this.OrderScoreboardScore();
+        }
+    }
+
     SwitchSoundOnOff(clicked) {
         var newInnerText;
         if (clicked.innerText === "volume_up") {
@@ -52,6 +112,20 @@
         for (var i = 0; i < soundSwitchButtons.length; i++) {
             soundSwitchButtons[i].innerText = newInnerText;
         }
+    }
+
+    UpdateTimerDisplay(timeLeft) {
+        var displayTimeMin = Math.floor(timeLeft / 60);
+        displayTimeMin = displayTimeMin.toString();
+        if (displayTimeMin.length < 2) {
+            displayTimeMin = '0' + displayTimeMin;
+        }
+        var displayTimeSec = String(timeLeft % 60);
+        if (displayTimeSec.length < 2) {
+            displayTimeSec = '0' + displayTimeSec;
+        }
+        var displayTime = displayTimeMin + ':' + displayTimeSec;
+        document.getElementById('gameTimer').innerText = displayTime;
     }
 
     StartTimer(time) {
@@ -92,15 +166,5 @@
         }
     }
 
-    /*
-    Show(x, b) {
-        if (b) {
-            x.classList.remove("hiddenEffect");
-            x.classList.add("showEffect");
-        } else {
-            x.classList.remove("showEffect");
-            x.classList.add("hiddenEffect");
-        }
-        
-    }*/
+    
 }
