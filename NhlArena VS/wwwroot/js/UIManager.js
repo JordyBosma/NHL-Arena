@@ -54,27 +54,32 @@
         score.kills;
         score.deaths;*/
         var row = this.scores.getElementById(score.guid);
-        row.cells[2].innerHTML = score.kills;
-        row.cells[3].innerHTML = score.deaths;
-        this.OrderScoreboardScore();
-        //console.log("update soreboard:");
-        //console.log({ updscore: score });
+        if (row != null) {
+            row.cells[2].innerHTML = score.kills;
+            row.cells[3].innerHTML = score.deaths;
+            console.log("update soreboard:");
+            console.log({ updscore: score });
+            this.OrderScoreboardScore();
+        }
+        
     }
 
     AddScoreboardScore(score) {
-        var row = this.scores.insertRow(0);
-        row.id = score.guid;
-        var cell1 = row.insertCell(0);//index
-        cell1.innerHTML = "1.";
-        var cell2 = row.insertCell(1);//username
-        cell2.innerHTML = score.username;
-        var cell3 = row.insertCell(2);//kills
-        cell3.innerHTML = score.kills;
-        var cell4 = row.insertCell(3);//deaths
-        cell4.innerHTML = score.deaths;
-        this.OrderScoreboardScore(score);
-        //console.log("add soreboard:");
-        //console.log({ addscore: score });
+        if (this.scores.getElementById(score.guid) == null) {
+            var row = this.scores.insertRow(0);
+            row.id = score.guid;
+            var cell1 = row.insertCell(0);//index
+            cell1.innerHTML = "1.";
+            var cell2 = row.insertCell(1);//username
+            cell2.innerHTML = score.username;
+            var cell3 = row.insertCell(2);//kills
+            cell3.innerHTML = score.kills;
+            var cell4 = row.insertCell(3);//deaths
+            cell4.innerHTML = score.deaths;
+            console.log("add soreboard:");
+            console.log({ addscore: score });
+            this.OrderScoreboardScore(score);
+        }
     }
 
     OrderScoreboardScore() {
@@ -82,7 +87,7 @@
     }
 
     RemoveScoreboardScore(guid) {
-        var row = this.scores.getElementById(guid);         //<-------???
+        var row = this.scores.getElementById(guid);
         if (row != null) {
             for (var i = 0; i < this.scores.rows.length; i++) {
                 if (this.scores.rows[i] == row) {
@@ -90,6 +95,7 @@
                     break;
                 }
             }
+            this.OrderScoreboardScore();
         }
     }
 
