@@ -11,6 +11,52 @@
         //this.UpdatePlayerArmor(70);
         //this.UpdatePlayerHealth(60);
         this.scores = document.getElementById("Scoreboard__Content");
+        this.endScene = false;
+
+        var scope = this;
+        this.tabbedTab = false;
+        this.activeMenu = 0;
+        document.addEventListener('keydown', function (event) {     //https://css-tricks.com/snippets/javascript/javascript-keycodes/
+            if (event.keyCode == 69) {  // e
+                if (!scope.tabbedTab) {
+                    scope.ShowScoreboard(true);
+                }
+            }
+            if (event.keyCode == 85) {  // u - sound
+                scope.SwitchSoundOnOff(true);
+            }
+            if (event.keyCode == 89) {  // y - exit
+                if (scope.activeMenu == event.keyCode) {
+                    scope.activeMenu = 0;
+                    scope.ShowExitMenu(false);
+                } else {
+                    scope.activeMenu = event.keyCode;
+                    scope.HideMenus();
+                    scope.ShowExitMenu(true);
+                }                
+            }
+            if (event.keyCode == 73) {  // i - options
+                if (scope.activeMenu == event.keyCode) {
+                    scope.activeMenu = 0;
+                    scope.ShowOptionMenu(false);
+                } else {
+                    scope.activeMenu = event.keyCode;
+                    scope.HideMenus();
+                    scope.ShowOptionMenu(true);
+                }   
+            }
+        });
+        document.addEventListener('keyup', function (event) {
+            if (event.keyCode == 69) {  //tab e
+                if (!scope.endScene) {
+                    scope.tabbedTab = false;
+                    scope.ShowScoreboard(false);
+                }
+            }
+            if (event.keyCode == 85) {  // u - sound
+                scope.SwitchSoundOnOff(false);
+            }
+        });
     }
 
     UpdateGameScores(K, D) {
@@ -32,6 +78,11 @@
         document.getElementById("bar--ecs").style.width = val + "%";
     }
 
+    HideMenus() {
+        this.ShowExitMenu(false);
+        this.ShowOptionMenu(false);
+    }
+
     ShowOptionMenu(b) {
         document.getElementById("toggle-OptionMenu").checked = b;
     }
@@ -45,6 +96,7 @@
     }
 
     EndScene() {
+        this.endScene = true;
         this.ShowScoreboard(true);
         document.getElementById("toggle-Scoreboard").classList.add("endBgr");
     }
@@ -82,8 +134,41 @@
         }
     }
 
-    OrderScoreboardScore() {
-
+    OrderScoreboardScore() {            //https://www.w3schools.com/howto/howto_js_sort_table.asp
+        var rows, switching, i, x, y, shouldSwitch;
+        switching = true;
+        /*Make a loop that will continue until
+        no switching has been done:*/
+        while (switching) {
+            //start by saying: no switching is done:
+            switching = false;
+            rows = this.scores.rows;
+            /*Loop through all table rows (except the
+            first, which contains table headers):*/
+            for (i = 1; i < (rows.length - 1); i++) {
+                //start by saying there should be no switching:
+                shouldSwitch = false;
+                /*Get the two elements you want to compare,
+                one from current row and one from the next:*/
+                x = rows[i].getElementsByTagName("TD")[2];
+                y = rows[i + 1].getElementsByTagName("TD")[2];
+                //check if the two rows should switch place:
+                if (Number(x.innerHTML) > Number(y.innerHTML)) {
+                    //if so, mark as a switch and break the loop:
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+            if (shouldSwitch) {
+                /*If a switch has been marked, make the switch
+                and mark that a switch has been done:*/
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+            }
+        }
+        for (var j = 0; j < rows.length; j++) {
+            rows[j].getElementsByTagName("TD")[0].innerHTML = String(j+1) + ".";
+        }
     }
 
     RemoveScoreboardScore(guid) {
@@ -165,6 +250,4 @@
             console.log("stop");
         }
     }
-
-    
 }
