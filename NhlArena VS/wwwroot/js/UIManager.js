@@ -285,6 +285,9 @@
     */
     //powerup
     StartPowerUp(name, length) {
+        if (this.powerUpTimer != null) {
+            this.powerUpTimer.StopTimer();
+        }
         this.powerUpTimer = new displayTimer(length, "powerUpTimer", this.StopPowerUp);
         //setTimeout(this.StopPowerUp(), length * 1000);
         document.getElementById("powerUpIcon").style.color = "rgb(0, 160, 255)";
