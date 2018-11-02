@@ -148,17 +148,20 @@
     <!--/UI-->
 
     <script>
-        var Socket;
-        var camera, scene, renderer;
-        var controls;
-        var worldObjects = {};
-        var ui;
-        var commandArray = [];
-        var playerGuid;
-        var raycaster;
-        var LastNonCollidedPostion = { x: 0, y: 0, z: 0 };
-        var projectiles = [];
-        var firingTimer = 0;
+        var Socket; //the socket used to connect to the server
+        var camera, scene, renderer; //stuff for three js
+        var controls; //first person movement controls
+        var worldObjects = {}; //list with active/mobile worldobjects
+        var ui;  //the hud and scoreboard stuff
+        var commandArray = []; //command queue to be send to the sever
+        var playerGuid; //guid of the player
+        var raycaster; //used for collision checking
+        var LastNonCollidedPostion = { x: 0, y: 0, z: 0 };  //used for collision checking
+        var projectiles = []; //list of current projectiles
+        var firingTimer = 0; //used to check if a player can fire accoriding to their firerate
+        var currentWeapon; // current weapon
+        var lastScrollY; // last y coordinat of the scroll wheel to check if we scroll up or down
+
 
         window.onload = function () {
             var playerGuid;
@@ -166,6 +169,7 @@
 
             var prevTime = performance.now();
             var velocity = new THREE.Vector3();
+            currentWeapon = GetDefaultWeapon();
 
             function init() {
                 ui = new UIManager();
@@ -341,6 +345,19 @@
 
                         commandArray = [];
                     }
+            }         
+
+            window.onscroll = function(e) {
+                requestAnimationFrame(function(){
+                    if (window.scrollY > lastScrollY) {
+                        currentWeapon = GetNextWeapon();
+                    }
+                    else if (window.scrollY < lastScrollY) {
+                        currentWeapon = GetPreviousWeapon();
+                    }
+                    lastScrollY = window.scrollY;
+                })
+                
             }
 
             document.addEventListener('click', WeaponFire);
@@ -388,7 +405,7 @@
                         var projectileRaycaster = new THREE.Raycaster(projectiles[i].projectile.position, projectiles[i].direction, 0, 0.5);
 
                         var intersects = projectileRaycaster.intersectObjects(scene.children, true);
-                        if (intersects.length != 0) {         
+                        if (intersects.length != 0) {
                             //check all intersects
                             for (var z = 0; z < intersects.length; z++) {
                                 console.log(intersects[z]);
@@ -402,7 +419,7 @@
                                     };
                                     commandArray.push(hitCommand);
                                 }
-                            }      
+                            }
                             //intersect means something was hit so remove projectile
                             projectiles[i].alive = false;
                             scene.remove(projectiles[i].projectile);
@@ -545,6 +562,8 @@
                 }
             }
 
+            
+
             function animate() {
                 requestAnimationFrame(animate);
                 raycasting();
@@ -570,6 +589,7 @@
     <script src="~/lib/threejs/OBJLoader.js"></script>
     <script src="~/js/BasicPlane.js"></script>
     <script src="~/js/ModelLoader.js"></script>
+    <script src="~/js/WeaponHandler.js"></script>
 </body>
 </html>
 
