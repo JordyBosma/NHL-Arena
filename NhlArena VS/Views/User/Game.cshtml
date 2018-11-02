@@ -249,6 +249,9 @@
                                 }
                                 ui.UpdateScoreboardScore(command[i]);
                                 break;
+                            case "FireCommand":
+                                break;
+
                             case "PlayerAmmoPickupCommand":
                                 console.log(command[i]);
                                 break;
@@ -387,7 +390,7 @@
                             }      
                             //intersect means something was hit so remove projectile
                             projectiles[i].alive = false;
-                            scene.remove(projectiles[i]);
+                            scene.remove(projectiles[i].projectile);
                         }
                     }
                     if (projectiles[i].alive == false) {
