@@ -7,7 +7,7 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.FirstPersonControls = function (camera, scene) {
+THREE.FirstPersonControls = function (camera) {
     var scope = this;
 
     camera.rotation.set(0, 0, 0);

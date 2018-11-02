@@ -1,0 +1,7 @@
+newmtl Aplle_fullSG
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+map_Kd apple_diffuse.tga
+Ni 1.00

@@ -69,7 +69,7 @@ namespace Commands
             Player p = (Player)cmd.obj;
             Unsubscriber<Command> unsubscriber = new Unsubscriber<Command>(observers, p.GetClient());
             unsubscriber.Dispose();
-            if(game.GetPlayerCount() == 0)
+            if (game.GetPlayerCount() == 0)
             {
                 game.Dispose();
             }
@@ -90,17 +90,16 @@ namespace Commands
             {
                 if (obj is Player)
                 {
-                    if (obj.guid == hit.hitPlayerGuid || obj.guid == hit.hitPlayerGuid)
+
+                    if (obj.guid == hit.hitPlayerGuid)
                     {
-                        if (obj.guid == hit.hitPlayerGuid)
-                        {
-                            hitPlayer = (Player)obj;
-                        }
-                        else
-                        {
-                            shootingPlayer = (Player)obj;
-                        }
+                        hitPlayer = (Player)obj;
                     }
+                    else if (obj.guid == hit.shootingPlayerGuid)
+                    {
+                        shootingPlayer = (Player)obj;
+                    }
+
                 }
             }
 
@@ -114,7 +113,7 @@ namespace Commands
             }
             else
             {
-                UpdatePlayerStatsCommand cmd = new UpdatePlayerStatsCommand(shootingPlayer);
+                UpdatePlayerStatsCommand cmd = new UpdatePlayerStatsCommand(hitPlayer);
                 SendCommandsToObservers(cmd);
             }
         }
@@ -211,7 +210,7 @@ namespace Commands
         {
             SendCommandsToObservers(cmd);
         }
-        
+
         public void SendGameEndingCommand(GameEndingCommand cmd)
         {
             SendCommandsToObservers(cmd);

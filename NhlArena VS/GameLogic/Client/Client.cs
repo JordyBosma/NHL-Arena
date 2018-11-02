@@ -104,7 +104,7 @@ namespace Clients
             }
             else if (value is DisconnectCommand)
             {
-                await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "socket was disconnected by commandmanager", CancellationToken.None);
+                socket.Abort();                
                 socket.Dispose();
             }
             else
