@@ -40,13 +40,15 @@ namespace Clients
                 for (int i = 0; i < json.Count; i++)
                 {
                     Random rnd = new Random();
+
                     switch (json[i].commandType.Value)
                     {
                         case "HitCommand":
                             cmdlist.Add(new HitCommand(new Guid(json[i].shootingPlayerGuid.Value), new Guid(json[i].hitPlayerGuid.Value), (int)json[i].damage.Value));
                             break;
                         case "FireCommand":
-                            cmdlist.Add(new FireCommand(new Guid(json[i].originPlayer.Value), json[i].directionVector, json[i].originPosition, json[i].velocity.Value));
+                            cmdlist.Add(new FireCommand(new Guid(json[i].originPlayer.Value), new double[]{ json[i].directionVector[0], json[i].directionVector[1], json[i].directionVector[2] },
+                                new double[] { json[i].originPosition[0], json[i].originPosition[1], json[i].originPosition[2] }, json[i].velocity.Value));
                             break;
                         case "UpdatePlayerCommand":
                             cmdlist.Add(new UpdatePlayerCommand(new Guid(json[i].playerGuid.Value), 
