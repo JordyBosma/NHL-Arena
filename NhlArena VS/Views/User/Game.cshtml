@@ -158,13 +158,14 @@
         var raycaster;
         var LastNonCollidedPostion = { x: 0, y: 0, z: 0 };
         var projectiles = [];
-        var firingTimer = 0;
+        var firingTimer;
 
         window.onload = function () {
             var playerGuid;
             var gameGuid;
 
             var prevTime = performance.now();
+            firingTimer = performance.now();
             var velocity = new THREE.Vector3();
 
             function init() {
@@ -266,7 +267,10 @@
                                 ui.UpdateScoreboardScore(command[i]);
                                 break;
                             case "FireCommand":
-
+                                if (command[i].originPlayer != playerGuid) {
+                                    AddProjectiles(command[i].originPosition,
+                                        command[i].directionVector, command[i].velocity);
+                                }
                                 break;
                             case "PlayerAmmoPickupCommand":
                                 console.log(command[i]);
@@ -347,7 +351,7 @@
             document.addEventListener('click', WeaponFire);
 
             function WeaponFire() {
-                if (firingTimer <= 0) {
+                if (performance.now() > firingTimer) {
                     //Get direction and origin vectors
                     var direction = new THREE.Vector3();
                     camera.getWorldDirection(direction);
@@ -358,22 +362,51 @@
                     projectile.position.set(objPos.x, objPos.y, objPos.z);
                     scene.add(projectile);
 
-                    //Make new apple projectile and make it alive
-                    var appel = {
+                    //Make new projectile and make it alive
+                    var projectileObj = {
                         projectile: projectile,
                         direction: direction,
-                        alive: true
+                        alive: true,
+                        velocity: 0.5,
+                        isOwn: true
                     };
 
-                    setTimeout(function () {
-                        appel.alive = false;
-                        scene.remove(appel.projectile);
-                    }, 2000);
+                    //create a firecommand and add it to the send queue
+                    var fireCommand = {
+                        commandType: "FireCommand",
+                        originPlayer: playerGuid,
+                        directionVector: [direction.x, direction.y, direction.z],
+                        originPosition: [objPos.x, objPos.y, objPos.z],
+                        velocity: 0.5
+                    };
+
+                    commandArray.push(fireCommand);
 
                     //Add apple projectile to projectiles array
-                    projectiles.push(appel);
-                    firingTimer = 25;
+                    projectiles.push(projectileObj);
+                    firingTimer = performance.now() + 500;
                 }
+            }
+
+            function AddProjectiles(originPosition, directionVector, velocity) {
+                //Get direction vector
+                var direction = new THREE.Vector3(directionVector[0], directionVector[1], directionVector[2]);
+
+                //Make new projectile and set position to player position
+                var projectile = new Projectile();
+                projectile.position.set(originPosition[0], originPosition[1], originPosition[2]);
+                scene.add(projectile);
+
+                //Make new projectile and make it alive
+                var projectileObj = {
+                    projectile: projectile,
+                    direction: direction,
+                    alive: true,
+                    velocity: velocity,
+                    isOwn: false
+                };
+
+                projectiles.push(projectileObj)
             }
 
             /**
@@ -382,9 +415,9 @@
                 for (var i = 0; i < projectiles.length; i++) {
                     if (projectiles[i] === undefined) continue;
                     if (projectiles[i].alive) {
-                        projectiles[i].projectile.position.x += 0.5 * projectiles[i].direction.x;
-                        projectiles[i].projectile.position.y += 0.5 * projectiles[i].direction.y;
-                        projectiles[i].projectile.position.z += 0.5 * projectiles[i].direction.z;
+                        projectiles[i].projectile.position.x += projectiles[i].velocity * projectiles[i].direction.x;
+                        projectiles[i].projectile.position.y += projectiles[i].velocity * projectiles[i].direction.y;
+                        projectiles[i].projectile.position.z += projectiles[i].velocity * projectiles[i].direction.z;
 
                         var projectileRaycaster = new THREE.Raycaster(projectiles[i].projectile.position, projectiles[i].direction, 0, 0.5);
 
@@ -393,7 +426,7 @@
                             //check all intersects
                             for (var z = 0; z < intersects.length; z++) {
                                 console.log(intersects[z]);
-                                if (intersects[z].object.name == "Character") {
+                                if (intersects[z].object.name == "Character" && projectiles[i].isOwn) {
                                     //create a hitcommand and add it to the send queue
                                     var hitCommand = {
                                         commandType :"HitCommand",
@@ -417,7 +450,7 @@
                 if (firingTimer > 0) firingTimer -= 1;
             }
 
-            function playerControls() {
+            function PlayerControls() {
                 var canJump = false;
 
                 // Save the current time
@@ -502,7 +535,7 @@
                 renderer.setSize(window.innerWidth, window.innerHeight);
             }
 
-            function raycasting() {
+            function Raycasting() {
                 var directionVectors = [
                     new THREE.Vector3(0, 0, 1),
                     new THREE.Vector3(1, 0, 1),
@@ -548,8 +581,8 @@
 
             function animate() {
                 requestAnimationFrame(animate);
-                raycasting();
-                playerControls();
+                Raycasting();
+                PlayerControls();
                 UpdateProjectiles();
                 renderer.render(scene, camera);
             }
