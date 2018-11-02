@@ -187,6 +187,7 @@
                 var light2 = new THREE.HemisphereLight(0xDDDDDD, 0x454545, 1);
                 scene.add(light2);
 
+                // Player for testing purposes
                 var player = new Player(25, 5, -35, "1234");
                 //player.position.set()
                 scene.add(player);
@@ -250,8 +251,8 @@
                                 ui.UpdateScoreboardScore(command[i]);
                                 break;
                             case "FireCommand":
-                                break;
 
+                                break;
                             case "PlayerAmmoPickupCommand":
                                 console.log(command[i]);
                                 break;
