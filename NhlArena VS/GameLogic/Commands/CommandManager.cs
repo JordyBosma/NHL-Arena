@@ -13,6 +13,7 @@ namespace Commands
         private Game game;
         private List<IObserver<Command>> observers = new List<IObserver<Command>>();
         private List<SpawnLocation> spawnList;
+        private PlayerSpawnLocationList playerSpawnList;
 
         public CommandManager(Game game)
         {
@@ -106,7 +107,8 @@ namespace Commands
             if (hitPlayer.DoDamage(hit.damage))
             {
                 shootingPlayer.addKill();
-                DeathCommand cmd = new DeathCommand(hitPlayer);
+                PlayerSpawnLocation respawnLocation = playerSpawnList.GetSpawnLocation();
+                DeathCommand cmd = new DeathCommand(hitPlayer, respawnLocation);
                 UpdatePlayerStatsCommand cmd2 = new UpdatePlayerStatsCommand(shootingPlayer);
                 SendCommandsToObservers(cmd);
                 SendCommandsToObservers(cmd2);
@@ -139,15 +141,31 @@ namespace Commands
 
                         foreach (SpawnLocation s in spawnList)
                         {
+
+
                             if (s.item != null)
                             {
-                                if (uPlayer.x > (s.item.x - 0.4) && uPlayer.x < (s.item.x + 0.4) && uPlayer.y > (s.item.y + 1.6) && uPlayer.y < (s.item.y + 2.4) && uPlayer.z > (s.item.z - 0.4) && uPlayer.z < (s.item.z + 0.4))
+                                if (s.item.type != "DamageBoost")
                                 {
-                                    DeleteObjectCommand cmd2 = new DeleteObjectCommand(s.item);
-                                    PlayerPickupCommand cmd3 = new PlayerPickupCommand(s.item, (Player)obj);
-                                    SendCommandsToObservers(cmd2);
-                                    SendCommandsToObservers(cmd3);
-                                    s.dellItem();
+                                    if (uPlayer.x > (s.item.x - 0.6) && uPlayer.x < (s.item.x + 0.6) && uPlayer.y > (s.item.y + 1.4) && uPlayer.y < (s.item.y + 2.6) && uPlayer.z > (s.item.z - 0.6) && uPlayer.z < (s.item.z + 0.6))
+                                    {
+                                        DeleteObjectCommand cmd2 = new DeleteObjectCommand(s.item);
+                                        PlayerPickupCommand cmd3 = new PlayerPickupCommand(s.item, (Player)obj);
+                                        SendCommandsToObservers(cmd2);
+                                        SendCommandsToObservers(cmd3);
+                                        s.dellItem();
+                                    }
+                                }
+                                else
+                                {
+                                    if (uPlayer.x > (s.item.x - 1.45) && uPlayer.x < (s.item.x + 1.45) && uPlayer.y > (s.item.y + 0.75) && uPlayer.y < (s.item.y + 3.25) && uPlayer.z > (s.item.z - 1.45) && uPlayer.z < (s.item.z + 1.45))
+                                    {
+                                        DeleteObjectCommand cmd4 = new DeleteObjectCommand(s.item);
+                                        PlayerPickupCommand cmd5 = new PlayerPickupCommand(s.item, (Player)obj);
+                                        SendCommandsToObservers(cmd4);
+                                        SendCommandsToObservers(cmd5);
+                                        s.dellItem();
+                                    }
                                 }
                             }
                         }
@@ -176,9 +194,10 @@ namespace Commands
             }
         }
 
-        public void InitializeSpawnList(List<SpawnLocation> spawnList)
+        public void InitializeSpawnList(List<SpawnLocation> spawnList, PlayerSpawnLocationList playerSpawnList)
         {
             this.spawnList = spawnList;
+            this.playerSpawnList = playerSpawnList;
         }
 
         public void InitializeItem(Item newItem)

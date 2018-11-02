@@ -67,8 +67,7 @@ class DamageBoost extends THREE.Group {
     init() {
         var selfRef = this;
 
-
-        loadOBJModel("/models/objects/", "Crate_Milk.obj", "/models/materials/", "Crate_Milk.mtl", (mesh) => {
+        loadOBJModel("/models/objects/Pickups/", "Pickup_Damage.obj", "/models/materials/Pickups/", "Pickup_Damage.mtl", (mesh) => {
             //console.log(mesh);
             mesh.children[0].material.onBeforeCompile = function (shader) {
 
@@ -92,7 +91,7 @@ class DamageBoost extends THREE.Group {
                 );
                 selfRef.materialShader = shader;
             };
-            mesh.scale.set(0.8, 0.8, 0.8);
+            mesh.scale.set(2.5, 2.5, 2.5);
             selfRef.add(mesh);
         });
     }
@@ -114,7 +113,7 @@ class SpeedBoost extends THREE.Group {
     init() {
         var selfRef = this;
 
-        loadOBJModel("/models/objects/", "Crate_Milk.obj", "/models/materials/", "Crate_Milk.mtl", (mesh) => {
+        loadOBJModel("/models/objects/Pickups/", "Pickup_Speed.obj", "/models/materials/Pickups/", "Pickup_Speed.mtl", (mesh) => {
             mesh.children[0].material.onBeforeCompile = function (shader) {
 
                 console.log(shader);
@@ -159,7 +158,7 @@ class AmmoItem extends THREE.Group {
     init() {
         var selfRef = this;
 
-        loadOBJModel("/models/objects/", "Crate_Milk.obj", "/models/materials/", "Crate_Milk.mtl", (mesh) => {
+        loadOBJModel("/models/objects/Pickups/", "Pickup_Ammo.obj", "/models/materials/Pickups/", "Pickup_Ammo.mtl", (mesh) => {
             mesh.children[0].material.onBeforeCompile = function (shader) {
 
                 console.log(shader);
@@ -204,7 +203,7 @@ class HealthItem extends THREE.Group {
     init() {
         var selfRef = this;
 
-        loadOBJModel("/models/objects/", "Crate_Milk.obj", "/models/materials/", "Crate_Milk.mtl", (mesh) => {
+        loadOBJModel("/models/objects/Pickups/", "Pickup_Health.obj", "/models/materials/Pickups/", "Pickup_Health.mtl", (mesh) => {
             mesh.children[0].material.onBeforeCompile = function (shader) {
 
                 console.log(shader);
@@ -249,7 +248,7 @@ class ArmourItem extends THREE.Group {
     init() {
         var selfRef = this;
 
-        loadOBJModel("/models/objects/", "Crate_Milk.obj", "/models/materials/", "Crate_Milk.mtl", (mesh) => {
+        loadOBJModel("/models/objects/Pickups/", "Pickup_Shield.obj", "/models/materials/Pickups/", "Pickup_Shield.mtl", (mesh) => {
             mesh.children[0].material.onBeforeCompile = function (shader) {
 
                 console.log(shader);

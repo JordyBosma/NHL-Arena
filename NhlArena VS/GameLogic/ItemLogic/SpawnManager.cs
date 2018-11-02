@@ -13,6 +13,7 @@ namespace ItemLogic
         private int initalSpawnCount = 0;
         private CommandManager cmdManager;
         private List<SpawnLocation> spawnList = new List<SpawnLocation>();
+        private PlayerSpawnLocationList playerSpawnList = new PlayerSpawnLocationList();
         private Timer spawnTimer;
         private List<Timer> spawnLocationTimers = new List<Timer>();
         private List<Timer> removedLocationTimers = new List<Timer>();
@@ -22,14 +23,21 @@ namespace ItemLogic
             this.cmdManager = manager;
 
             spawnList.Add(new SpawnLocation(26.4, -3.5, -37, "DamageBoost"));
-            spawnList.Add(new SpawnLocation(-33.4, 10, -83, "AHA"));
+            spawnList.Add(new SpawnLocation(-32.4, 10, -82, "AHA"));
             spawnList.Add(new SpawnLocation(51.8, 0, -57.5, "AHA"));
             spawnList.Add(new SpawnLocation(-13.4, 10, -7.1, "SpeedBoost"));
             spawnList.Add(new SpawnLocation(-31.4, 0, 27.9, "SpeedBoost"));
             spawnList.Add(new SpawnLocation(20, 0, 36, "AHA"));
             spawnList.Add(new SpawnLocation(-46.4, 0, 57, "AHA"));
             spawnList.Add(new SpawnLocation(-51, 0, -13.4, "AHA"));
-            cmdManager.InitializeSpawnList(spawnList);
+
+            playerSpawnList.AddLocation(-37, 1, 9.55, -1.60);
+            playerSpawnList.AddLocation(-10.15, 1, 50.95, 0.00);
+            playerSpawnList.AddLocation(-46, 1, -47.25, -1.50);
+            playerSpawnList.AddLocation(31.75, 11, -11.30, -6.25);
+            playerSpawnList.AddLocation(30, 11, -10.75, -6.25);
+            playerSpawnList.AddLocation(30, 11, -76, 1.70);
+            cmdManager.InitializeSpawnList(spawnList, playerSpawnList);
 
             spawnTimer = new Timer();
             spawnTimer.Interval = 1000;
@@ -57,10 +65,8 @@ namespace ItemLogic
             switch (itemType)
             {
                 case "DamageBoost":
-                    //return 50000;
                     return 50000;
                 case "SpeedBoost":
-                    //return 30000;
                     return 30000;
                 case "AHA":
                     if(initialSpawn == true)
@@ -70,9 +76,9 @@ namespace ItemLogic
                         {
                             initialSpawn = false;
                         }
-                        return 10000;
+                        return 5000;
                     }
-                    return 30000;
+                    return 15000;
             }
             return 1000;
         }

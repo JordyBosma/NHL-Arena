@@ -51,4 +51,37 @@ namespace ItemLogic
             _hasChanged = false;
         }
     }
+
+    public class PlayerSpawnLocationList
+    {
+        private List<PlayerSpawnLocation> locations = new List<PlayerSpawnLocation>();
+        private int listItemCount = 0;
+        
+        public PlayerSpawnLocationList()
+        {
+
+        }
+
+        public void AddLocation(double x, double y, double z, double rotationY)
+        {
+            locations.Add(new PlayerSpawnLocation(x, y, z, rotationY));
+            listItemCount++;
+        }
+        
+        public PlayerSpawnLocation GetSpawnLocation()
+        {
+            Random rnd = new Random();
+            return locations[rnd.Next(listItemCount)];
+        }
+    }
+
+    public class PlayerSpawnLocation : Object3D
+    {
+        private List<PlayerSpawnLocation> locations = new List<PlayerSpawnLocation>();
+
+        public PlayerSpawnLocation(double x, double y, double z, double rotationY) : base(x, y, z, 0, rotationY, 0, "PlayerSpawnLocation")
+        {
+
+        }
+    }
 }

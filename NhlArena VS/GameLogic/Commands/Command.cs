@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ItemLogic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -84,10 +85,12 @@ namespace Commands
     public class DeathCommand : Command
     {
         public Player deadPlayer { get; }
+        public PlayerSpawnLocation spawnLocation { get; }
 
-        public DeathCommand(Player deadPlayer) : base("DeathCommand")
+        public DeathCommand(Player deadPlayer, PlayerSpawnLocation spawnLocation) : base("DeathCommand")
         {
             this.deadPlayer = deadPlayer;
+            this.spawnLocation = spawnLocation;
         }
     }
 
@@ -179,7 +182,7 @@ namespace Commands
         public double rotationY { get; }
         public double rotationZ { get; }
 
-        public UpdatePlayerCommand(Guid playerGuid, double x, double y, double z, double rotationX, double rotationY, double rotationZ): base("UpdatePlayerCommand")
+        public UpdatePlayerCommand(Guid playerGuid, double x, double y, double z, double rotationX, double rotationY, double rotationZ) : base("UpdatePlayerCommand")
         {
             this.playerGuid = playerGuid;
             this.x = x;
