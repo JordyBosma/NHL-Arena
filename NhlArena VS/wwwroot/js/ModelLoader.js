@@ -15,12 +15,12 @@
 }
 
 class Player extends THREE.Group {
-    constructor() {
+    constructor(x,y,z,guid) {
         super();
-        this.init();
+        this.init(x,y,z,guid);
     }
 
-    init() {
+    init(x,y,z,guid) {
         var selfRef = this;
         loadOBJModel("/models/objects/Character/", "CharacterRed.obj", "/models/materials/Character/", "CharacterRed.mtl", (mesh) => {
             mesh.scale.set(1, 1, 1);
@@ -28,6 +28,8 @@ class Player extends THREE.Group {
             mesh.rotation.y = Math.PI;
             selfRef.add(mesh);
         });
+        selfRef.position.set(x, y, z);
+        this.playerGuid = guid;
     }
 }
 

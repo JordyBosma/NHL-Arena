@@ -187,17 +187,17 @@
                 var light2 = new THREE.HemisphereLight(0xDDDDDD, 0x454545, 1);
                 scene.add(light2);
 
-                var player = new Player();
-                player.position.set(25, 5, -35)
+                var player = new Player(25, 5, -35, "1234");
+                //player.position.set()
                 scene.add(player);
 
                 //background music
-                //myAudio = new Audio('/sound/DOOT.mp3');
-                //myAudio.addEventListener('ended', function () {
-                //    this.currentTime = 0;
-                //    this.play();
-                //}, false);
-                //myAudio.play();
+                myAudio = new Audio('/sound/DOOT.mp3');
+                myAudio.addEventListener('ended', function () {
+                    this.currentTime = 0;
+                    this.play();
+                }, false);
+                myAudio.play();
             }
 
             //socket
@@ -224,7 +224,7 @@
                         switch (command[i].commandType) {
                             case "InitializePlayerCommand":
                                 playerGuid = command[i].playerGuid
-                                window.history.pushState("", "", '/User/Game/' + command[i].gameGuid);
+                                //window.history.pushState("", "", '/User/Game/' + command[i].gameGuid);
                                 break;
                             case "GameTimeLeftCommand":
                                 ui.UpdateTimerDisplay(command[i].gameTimeLeft);
@@ -234,6 +234,9 @@
                                 break;
                             case "DeathCommand":
                                 console.log("death");
+                                if (command[i].deadPlayer == playerGuid) {
+                                    controls.getObject().position.set(20, 5, -30);
+                                }
                                 break;
                             case "UpdatePlayerStatsCommand":
                                 if (command[i].guid == playerGuid) {
@@ -254,12 +257,11 @@
                                 {
                                     console.log(command[i]);
                                     ui.AddScoreboardScore(command[i].obj);
-                                    if (command[i].obj.guid != playerGuid){
-                                        var player = new Player(command[i].obj.x, 0, command[i].obj.z);
+                                    if (command[i].obj.guid != playerGuid) {
+                                        var player = new Player(command[i].obj.x, command[i].obj.y, command[i].obj.z, command[i].obj.guid);
                                         scene.add(player);
                                         worldObjects[command[i].obj.guid] = player;
                                         console.log(command[i]);
-
                                     }
                                 }
                                 break;
@@ -299,9 +301,7 @@
 
                         var obj = new controls.getObject();
 
-                        var cmdarray = [];
-
-                        cmdarray[0] = updatePlayerCommand = {
+                        commandArray.push(updatePlayerCommand = {
                             commandType: "UpdatePlayerCommand",
                             playerGuid: playerGuid,
                             x: obj.position.x.toFixed(2),
@@ -310,13 +310,15 @@
                             rotationX: (obj.rotation.x % (2 * Math.PI)).toFixed(2),
                             rotationY: (obj.rotation.y % (2 * Math.PI)).toFixed(2),
                             rotationZ: (obj.rotation.z % (2 * Math.PI)).toFixed(2)
-                        };
+                        });
 
-                        var cmd = JSON.stringify(cmdarray);
+                        var cmd = JSON.stringify(commandArray);
                         //console.log(cmd);
                         //console.log(Socket.readyState);
                         Socket.send(cmd);
                         //console.log(Socket.readyState);
+
+                        commandArray = [];
                     }
             }
 
@@ -364,19 +366,27 @@
 
                         var projectileRaycaster = new THREE.Raycaster(projectiles[i].projectile.position, projectiles[i].direction, 0, 0.5);
 
-                        var intersects2 = projectileRaycaster.intersectObjects(scene.children, true);
-                        if (intersects2.length != 0) {                            
-                            for (var z = 0; z < intersects2.length; z++) {
-                                console.log(intersects2[z]);
-                            }
-                            if (intersects2[0].object.name == "Character") {
-                                console.log(intersects2);
-                            }
+                        var intersects = projectileRaycaster.intersectObjects(scene.children, true);
+                        if (intersects.length != 0) {         
+                            //check all intersects
+                            for (var z = 0; z < intersects.length; z++) {
+                                console.log(intersects[z]);
+                                if (intersects[z].object.name == "Character") {
+                                    //create a hitcommand and add it to the send queue
+                                    var hitCommand = {
+                                        shootingPlayerGuid: playerGuid,
+                                        hitPlayerGuid: intersects[z].object.parent.parent.playerGuid,
+                                        damage: 10
+                                    };
+                                    commandArray.push(hitCommand);
+                                }
+                            }      
+                            //intersect means something was hit so remove projectile
                             projectiles[i].alive = false;
                             scene.remove(projectiles[i]);
                         }
                     }
-                    else if (projectiles[i].alive == false) {
+                    if (projectiles[i].alive == false) {
                         projectiles.splice(i, 1);
                         continue;
                     }
@@ -495,7 +505,7 @@
 
                     for (var j = 0; j < intersects.length; j++) {
                         if (intersects.length != 0) {
-                            if (intersects[0].object.name == "Map_Base") {
+                            if (intersects[j].object.name == "Map_Base") {
                                 controls.getObject().position.set(LastNonCollidedPostion.x, LastNonCollidedPostion.y, LastNonCollidedPostion.z);
                                 hasCollided = true;
                             }
