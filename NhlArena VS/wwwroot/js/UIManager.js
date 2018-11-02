@@ -1,6 +1,7 @@
 ﻿class UIManager {
     constructor(x) {
         this.volume = true;
+        this.audio;
         this.openMenu = "";
 
         this.timeLeft = 0;  //in seconds
@@ -23,7 +24,7 @@
                 }
             }
             if (event.keyCode == 85) {  // u - sound
-                scope.SwitchSoundOnOff(true);
+                scope.SwitchSoundOnOff();
             }
             if (event.keyCode == 89) {  // y - exit
                 if (scope.activeMenu == event.keyCode) {
@@ -52,9 +53,6 @@
                     scope.tabbedTab = false;
                     scope.ShowScoreboard(false);
                 }
-            }
-            if (event.keyCode == 85) {  // u - sound
-                scope.SwitchSoundOnOff(false);
             }
         });
     }
@@ -186,14 +184,21 @@
         }
     }
 
-    SwitchSoundOnOff(clicked) {
+    SwitchSoundOnOff() {
         var newInnerText;
-        if (clicked.innerText === "volume_up") {
+        if (this.volume) {
             this.volume = false;
             newInnerText = "volume_mute";
         } else {
             this.volume = true;
             newInnerText = "volume_up";
+        }
+        if (this.audio != null) {
+            if (this.volume) {
+                this.audio.play();
+            } else {
+                this.audio.pause();
+            }
         }
         var soundSwitchButtons = document.getElementsByClassName("volume");
         for (var i = 0; i < soundSwitchButtons.length; i++) {
@@ -251,5 +256,10 @@
             clearInterval(this.runTimer);
             console.log("stop");
         }
+    }
+
+    SetAudio(src) {
+        this.audio = src; 
+        console.log(src);
     }
 }

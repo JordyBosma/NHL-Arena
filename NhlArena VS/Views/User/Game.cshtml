@@ -55,7 +55,7 @@
                 <label class="icon__label">Y</label>
                 <i class="icon__i material-icons noselect">home</i>
             </div>
-            <div class="icon" onclick="ui.SwitchSoundOnOff(this)">
+            <div class="icon" onclick="ui.SwitchSoundOnOff()">
                 <label class="icon__label">U</label>
                 <i class="icon material-icons noselect volume">volume_mute</i>
             </div>
@@ -103,27 +103,13 @@
         <div class="part__right"></div>
     </div>
 
-    <!--
-        <div class="part__container part--bottom UIbottomleft">
-            <div class="part__center">
-                <label for="toggle-background" style="position:relative;">showcontent</label>
-                <input id="toggle-background" type="checkbox" class="toggleCheckBox">
-
-
-                <button onclick="ui.ShowOptionMenu(true)">true</button>
-                <button onclick="ui.ShowOptionMenu(false)">false</button>
-                <label for="toggle-OptionMenu">showcontent</label>
-            </div>
-            <div class="part__right"></div>
-        </div>
-    -->
     <!--menus:-->
     <input id="toggle-OptionMenu" type="checkbox" class="toggleCheckBox menu__checkbox">
     <div onclick="ui.ShowOptionMenu(false)" class="overlayBackground"></div>
     <div id="mainMenu" class="card red darken-4 center fallIn" style="width: 300px;">
         <div class="card-content orange-text text-accent-3">
             <div class="orange-text text-accent-3 card__option">
-                <i class="material-icons volume" onclick="ui.SwitchSoundOnOff(this)">volume_mute</i>
+                <i class="material-icons volume" onclick="ui.SwitchSoundOnOff()">volume_mute</i>
                 <i class="material-icons" onclick="ui.ShowOptionMenu(false)">clear</i>
             </div>
             <span class="card-title">Options:</span>
@@ -140,7 +126,7 @@
             <div class="orange-text text-accent-3 card__option">
                 <i class="material-icons" onclick="ui.ShowExitMenu(false)">clear</i>
             </div>
-            <span class="card-title">Options:</span>
+            <span class="card-title">Leave?</span>
             <a class="btn orange menu__option" href="/User/Main">Leave</a>
             <a class="btn orange menu__option" onclick="ui.ShowExitMenu(false)">Cancel</a>
         </div>
@@ -213,6 +199,7 @@
                     this.play();
                 }, false);
                 myAudio.play();
+                ui.SetAudio(myAudio);
             }
 
             //socket
