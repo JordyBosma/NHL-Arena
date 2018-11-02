@@ -22,13 +22,19 @@ namespace WorldObjects
         public AmmoItem(SpawnLocation l) : base(l)
         {
             Random random = new Random();
-            string[] itemOptions = new string[] { "Apple" };
-            string weaponType = itemOptions[random.Next(1)];
+            string[] itemOptions = new string[] { "Apple", "Apple", "Laptop" };
+            string weaponType = itemOptions[random.Next(3)];
 
             if (weaponType == "Apple")
             {
                 this.weaponType = weaponType;
-                this.itemValue = 50;
+                this.itemValue = 20;
+            }
+
+            if (weaponType == "Laptop")
+            {
+                this.weaponType = weaponType;
+                this.itemValue = 5;
             }
         }
     }

@@ -145,9 +145,10 @@ namespace Commands
                                 if (uPlayer.x > (s.item.x - 0.4) && uPlayer.x < (s.item.x + 0.4) && uPlayer.y > (s.item.y + 1.6) && uPlayer.y < (s.item.y + 2.4) && uPlayer.z > (s.item.z - 0.4) && uPlayer.z < (s.item.z + 0.4))
                                 {
                                     DeleteObjectCommand cmd2 = new DeleteObjectCommand(s.item);
+                                    PlayerPickupCommand cmd3 = new PlayerPickupCommand(s.item, (Player)obj);
                                     SendCommandsToObservers(cmd2);
+                                    SendCommandsToObservers(cmd3);
                                     s.dellItem();
-                                    // player ammo pickup command!!!!
                                 }
                             }
                         }

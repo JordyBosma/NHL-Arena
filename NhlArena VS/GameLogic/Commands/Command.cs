@@ -115,14 +115,14 @@ namespace Commands
     /// <summary>
     /// pak ammo op command vanaf server naar client
     /// </summary>
-    public class PlayerAmmoPickupCommand : Command
+    public class PlayerPickupCommand : Command
     {
-        public string ammoType { get; }
+        public Item item { get; }
         public Player targetPlayer;
 
-        public PlayerAmmoPickupCommand(string ammoType, Player targetPlayer) : base("PlayerAmmoPickupCommand")
+        public PlayerPickupCommand(Item item, Player targetPlayer) : base("PlayerAmmoPickupCommand")
         {
-            this.ammoType = ammoType;
+            this.item = item;
             this.targetPlayer = targetPlayer;
         }
     }

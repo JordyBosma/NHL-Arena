@@ -60,8 +60,6 @@ class DamageBoost extends THREE.Group {
                 shader.vertexShader = shader.vertexShader.replace(
                     '#include <begin_vertex>',
                     [
-                        //'vec3 translationVector = vec3(0,-1,0);',
-
                         'float theta = time * 2.0;',
                         'float c = cos( theta );',
                         'float s = sin( theta );',
@@ -86,6 +84,13 @@ class SpeedBoost extends THREE.Group {
         this.init();
     }
 
+    UpdateTime() {
+        if (this.materialShader) {
+
+            this.materialShader.uniforms.time.value = performance.now() / 1000;
+        }
+    }
+
     init() {
         var selfRef = this;
 
@@ -100,8 +105,6 @@ class SpeedBoost extends THREE.Group {
                 shader.vertexShader = shader.vertexShader.replace(
                     '#include <begin_vertex>',
                     [
-                        //'vec3 translationVector = vec3(0,-1,0);',
-
                         'float theta = time * 2.0;',
                         'float c = cos( theta );',
                         'float s = sin( theta );',
@@ -126,6 +129,13 @@ class AmmoItem extends THREE.Group {
         this.init();
     }
 
+    UpdateTime() {
+        if (this.materialShader) {
+
+            this.materialShader.uniforms.time.value = performance.now() / 1000;
+        }
+    }
+
     init() {
         var selfRef = this;
 
@@ -140,8 +150,6 @@ class AmmoItem extends THREE.Group {
                 shader.vertexShader = shader.vertexShader.replace(
                     '#include <begin_vertex>',
                     [
-                        //'vec3 translationVector = vec3(0,-1,0);',
-
                         'float theta = time * 2.0;',
                         'float c = cos( theta );',
                         'float s = sin( theta );',
@@ -166,6 +174,13 @@ class HealthItem extends THREE.Group {
         this.init();
     }
 
+    UpdateTime() {
+        if (this.materialShader) {
+
+            this.materialShader.uniforms.time.value = performance.now() / 1000;
+        }
+    }
+
     init() {
         var selfRef = this;
 
@@ -180,8 +195,6 @@ class HealthItem extends THREE.Group {
                 shader.vertexShader = shader.vertexShader.replace(
                     '#include <begin_vertex>',
                     [
-                        //'vec3 translationVector = vec3(0,-1,0);',
-
                         'float theta = time * 2.0;',
                         'float c = cos( theta );',
                         'float s = sin( theta );',
@@ -206,6 +219,13 @@ class ArmourItem extends THREE.Group {
         this.init();
     }
 
+    UpdateTime() {
+        if (this.materialShader) {
+
+            this.materialShader.uniforms.time.value = performance.now() / 1000;
+        }
+    }
+
     init() {
         var selfRef = this;
 
@@ -220,8 +240,6 @@ class ArmourItem extends THREE.Group {
                 shader.vertexShader = shader.vertexShader.replace(
                     '#include <begin_vertex>',
                     [
-                        //'vec3 translationVector = vec3(0,-1,0);',
-
                         'float theta = time * 2.0;',
                         'float c = cos( theta );',
                         'float s = sin( theta );',

@@ -232,8 +232,9 @@
                                 }
                                 ui.UpdateScoreboardScore(command[i]);
                                 break;
-                            case "PlayerAmmoPickupCommand":
+                            case "PlayerPickupCommand":
                                 console.log(command[i]);
+                                //parse to weaponhandler
                                 break;
                             case "ErrorCommand":
                                 console.log(command[i]);
@@ -493,8 +494,19 @@
                     if (scene.children[i] instanceof DamageBoost) {
                         scene.children[i].UpdateTime();
                     }
+                    if (scene.children[i] instanceof SpeedBoost) {
+                        scene.children[i].UpdateTime();
+                    }
+                    if (scene.children[i] instanceof AmmoItem) {
+                        scene.children[i].UpdateTime();
+                    }
+                    if (scene.children[i] instanceof HealthItem) {
+                        scene.children[i].UpdateTime();
+                    }
+                    if (scene.children[i] instanceof ArmourItem) {
+                        scene.children[i].UpdateTime();
+                    }
                 }
-
             }
 
             function animate() {
