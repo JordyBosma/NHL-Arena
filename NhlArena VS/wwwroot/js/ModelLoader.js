@@ -51,6 +51,232 @@ class Projectile extends THREE.Group {
     }
 }
 
+class DamageBoost extends THREE.Group {
+    constructor() {
+        super();
+        this.init();
+    }
+
+    UpdateTime() {
+        if (this.materialShader) {
+
+            this.materialShader.uniforms.time.value = performance.now() / 1000;
+        }
+    }
+
+    init() {
+        var selfRef = this;
+
+        loadOBJModel("/models/objects/Pickups/", "Pickup_Damage.obj", "/models/materials/Pickups/", "Pickup_Damage.mtl", (mesh) => {
+            //console.log(mesh);
+            mesh.children[0].material.onBeforeCompile = function (shader) {
+
+                console.log(shader);
+
+                shader.uniforms.time = { value: 0 };
+
+                shader.vertexShader = 'uniform float time;\n' + shader.vertexShader;
+                shader.vertexShader = shader.vertexShader.replace(
+                    '#include <begin_vertex>',
+                    [
+                        'float theta = time * 2.0;',
+                        'float c = cos( theta );',
+                        'float s = sin( theta );',
+                        
+                        'mat3 m = mat3( c, 0, s, 0, 1, 0, -s, 0, c );',
+                        'vec3 transformed = vec3( position ) * m;',
+                        'vNormal = vNormal * m;'
+                        
+                    ].join('\n')
+                );
+                selfRef.materialShader = shader;
+            };
+            mesh.scale.set(2.5, 2.5, 2.5);
+            selfRef.add(mesh);
+        });
+    }
+}
+
+class SpeedBoost extends THREE.Group {
+    constructor() {
+        super();
+        this.init();
+    }
+
+    UpdateTime() {
+        if (this.materialShader) {
+
+            this.materialShader.uniforms.time.value = performance.now() / 1000;
+        }
+    }
+
+    init() {
+        var selfRef = this;
+
+        loadOBJModel("/models/objects/Pickups/", "Pickup_Speed.obj", "/models/materials/Pickups/", "Pickup_Speed.mtl", (mesh) => {
+            mesh.children[0].material.onBeforeCompile = function (shader) {
+
+                console.log(shader);
+
+                shader.uniforms.time = { value: 0 };
+
+                shader.vertexShader = 'uniform float time;\n' + shader.vertexShader;
+                shader.vertexShader = shader.vertexShader.replace(
+                    '#include <begin_vertex>',
+                    [
+                        'float theta = time * 2.0;',
+                        'float c = cos( theta );',
+                        'float s = sin( theta );',
+
+                        'mat3 m = mat3( c, 0, s, 0, 1, 0, -s, 0, c );',
+                        'vec3 transformed = vec3( position ) * m;',
+                        'vNormal = vNormal * m;'
+
+                    ].join('\n')
+                );
+                selfRef.materialShader = shader;
+            };
+            mesh.scale.set(0.8, 0.8, 0.8);
+            selfRef.add(mesh);
+        });
+    }
+}
+
+class AmmoItem extends THREE.Group {
+    constructor() {
+        super();
+        this.init();
+    }
+
+    UpdateTime() {
+        if (this.materialShader) {
+
+            this.materialShader.uniforms.time.value = performance.now() / 1000;
+        }
+    }
+
+    init() {
+        var selfRef = this;
+
+        loadOBJModel("/models/objects/Pickups/", "Pickup_Ammo.obj", "/models/materials/Pickups/", "Pickup_Ammo.mtl", (mesh) => {
+            mesh.children[0].material.onBeforeCompile = function (shader) {
+
+                console.log(shader);
+
+                shader.uniforms.time = { value: 0 };
+
+                shader.vertexShader = 'uniform float time;\n' + shader.vertexShader;
+                shader.vertexShader = shader.vertexShader.replace(
+                    '#include <begin_vertex>',
+                    [
+                        'float theta = time * 2.0;',
+                        'float c = cos( theta );',
+                        'float s = sin( theta );',
+
+                        'mat3 m = mat3( c, 0, s, 0, 1, 0, -s, 0, c );',
+                        'vec3 transformed = vec3( position ) * m;',
+                        'vNormal = vNormal * m;'
+
+                    ].join('\n')
+                );
+                selfRef.materialShader = shader;
+            };
+            mesh.scale.set(0.8, 0.8, 0.8);
+            selfRef.add(mesh);
+        });
+    }
+}
+
+class HealthItem extends THREE.Group {
+    constructor() {
+        super();
+        this.init();
+    }
+
+    UpdateTime() {
+        if (this.materialShader) {
+
+            this.materialShader.uniforms.time.value = performance.now() / 1000;
+        }
+    }
+
+    init() {
+        var selfRef = this;
+
+        loadOBJModel("/models/objects/Pickups/", "Pickup_Health.obj", "/models/materials/Pickups/", "Pickup_Health.mtl", (mesh) => {
+            mesh.children[0].material.onBeforeCompile = function (shader) {
+
+                console.log(shader);
+
+                shader.uniforms.time = { value: 0 };
+
+                shader.vertexShader = 'uniform float time;\n' + shader.vertexShader;
+                shader.vertexShader = shader.vertexShader.replace(
+                    '#include <begin_vertex>',
+                    [
+                        'float theta = time * 2.0;',
+                        'float c = cos( theta );',
+                        'float s = sin( theta );',
+
+                        'mat3 m = mat3( c, 0, s, 0, 1, 0, -s, 0, c );',
+                        'vec3 transformed = vec3( position ) * m;',
+                        'vNormal = vNormal * m;'
+
+                    ].join('\n')
+                );
+                selfRef.materialShader = shader;
+            };
+            mesh.scale.set(0.8, 0.8, 0.8);
+            selfRef.add(mesh);
+        });
+    }
+}
+
+class ArmourItem extends THREE.Group {
+    constructor() {
+        super();
+        this.init();
+    }
+
+    UpdateTime() {
+        if (this.materialShader) {
+
+            this.materialShader.uniforms.time.value = performance.now() / 1000;
+        }
+    }
+
+    init() {
+        var selfRef = this;
+
+        loadOBJModel("/models/objects/Pickups/", "Pickup_Shield.obj", "/models/materials/Pickups/", "Pickup_Shield.mtl", (mesh) => {
+            mesh.children[0].material.onBeforeCompile = function (shader) {
+
+                console.log(shader);
+
+                shader.uniforms.time = { value: 0 };
+
+                shader.vertexShader = 'uniform float time;\n' + shader.vertexShader;
+                shader.vertexShader = shader.vertexShader.replace(
+                    '#include <begin_vertex>',
+                    [
+                        'float theta = time * 2.0;',
+                        'float c = cos( theta );',
+                        'float s = sin( theta );',
+
+                        'mat3 m = mat3( c, 0, s, 0, 1, 0, -s, 0, c );',
+                        'vec3 transformed = vec3( position ) * m;',
+                        'vNormal = vNormal * m;'
+
+                    ].join('\n')
+                );
+                selfRef.materialShader = shader;
+            };
+            mesh.scale.set(0.8, 0.8, 0.8);
+            selfRef.add(mesh);
+        });
+    }
+}
+
 /**
  * Load an OBJ model from the server
  * @param {string} objPath The path to the model (.obj) on the server

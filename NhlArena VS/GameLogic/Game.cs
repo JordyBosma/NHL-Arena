@@ -7,6 +7,7 @@ using System.Timers;
 using Clients;
 using WorldObjects;
 using Commands;
+using ItemLogic;
 using Timer = System.Timers.Timer;
 
 namespace GameLogic
@@ -14,6 +15,7 @@ namespace GameLogic
     public class Game: IDisposable
     {
         public Guid gameId { get; }
+        SpawnManager spawnManager;
         CommandManager commandManager; //handles commands
 
         Thread gameThread;// thread for the ticktimer
@@ -38,6 +40,7 @@ namespace GameLogic
             gameName = initialClient.username + "'s Game";
 
             commandManager = new CommandManager(this);
+            spawnManager = new SpawnManager(commandManager);
 
             //subscribes commandmanager and client to each other
             initialClient.Subscribe(commandManager);
@@ -132,7 +135,6 @@ namespace GameLogic
             return count;
         }
 
-
         public int GetGameTimeLeft()
         {
             return 200;
@@ -143,12 +145,10 @@ namespace GameLogic
         /// </summary>
         public void Dispose()
         {
-
             gameTimer.Dispose();
             commandManager.DisconnectAllClients();
             isActive = false;
-            //dispose spawnmanager hier !!!!!
-
+            spawnManager.Dispose();
 
             //DEZE ALS ALLERLAATST!!!
             GameManager.RemoveGame(this);
