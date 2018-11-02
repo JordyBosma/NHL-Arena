@@ -151,7 +151,7 @@
                 x = rows[i].cells[2];
                 y = rows[i + 1].cells[2];
                 //check if the two rows should switch place:
-                if (Number(x.innerHTML) > Number(y.innerHTML)) {
+                if (Number(x.innerHTML) < Number(y.innerHTML)) {
                     //if so, mark as a switch and break the loop:
                     shouldSwitch = true;
                     break;
