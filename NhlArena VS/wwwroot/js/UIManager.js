@@ -150,8 +150,8 @@
                 shouldSwitch = false;
                 /*Get the two elements you want to compare,
                 one from current row and one from the next:*/
-                x = rows[i][2];
-                y = rows[i + 1][2];
+                x = rows[i].cells[2];
+                y = rows[i + 1].cells[2];
                 //check if the two rows should switch place:
                 if (Number(x.innerHTML) > Number(y.innerHTML)) {
                     //if so, mark as a switch and break the loop:
@@ -167,7 +167,7 @@
             }
         }
         for (var j = 0; j < rows.length; j++) {
-            rows[j].getElementsByTagName("TD")[0].innerHTML = String(j+1) + ".";
+            rows[j].cells[0].innerHTML = String(j+1) + ".";
         }
     }
 
