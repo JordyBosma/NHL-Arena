@@ -23,7 +23,7 @@
         }
     </style>
 </head>
-<body>
+<body class="noselect">
     <!--UI-->
     <img class="crosshair" src="~/images/Crosshair.png" alt="">
 
@@ -55,7 +55,7 @@
                 <label class="icon__label">Y</label>
                 <i class="icon__i material-icons noselect">home</i>
             </div>
-            <div class="icon" onclick="ui.SwitchSoundOnOff(this)">
+            <div class="icon" onclick="ui.SwitchSoundOnOff()">
                 <label class="icon__label">U</label>
                 <i class="icon material-icons noselect volume">volume_mute</i>
             </div>
@@ -103,27 +103,13 @@
         <div class="part__right"></div>
     </div>
 
-    <!--
-        <div class="part__container part--bottom UIbottomleft">
-            <div class="part__center">
-                <label for="toggle-background" style="position:relative;">showcontent</label>
-                <input id="toggle-background" type="checkbox" class="toggleCheckBox">
-
-
-                <button onclick="ui.ShowOptionMenu(true)">true</button>
-                <button onclick="ui.ShowOptionMenu(false)">false</button>
-                <label for="toggle-OptionMenu">showcontent</label>
-            </div>
-            <div class="part__right"></div>
-        </div>
-    -->
     <!--menus:-->
     <input id="toggle-OptionMenu" type="checkbox" class="toggleCheckBox menu__checkbox">
     <div onclick="ui.ShowOptionMenu(false)" class="overlayBackground"></div>
     <div id="mainMenu" class="card red darken-4 center fallIn" style="width: 300px;">
         <div class="card-content orange-text text-accent-3">
             <div class="orange-text text-accent-3 card__option">
-                <i class="material-icons volume" onclick="ui.SwitchSoundOnOff(this)">volume_mute</i>
+                <i class="material-icons volume" onclick="ui.SwitchSoundOnOff()">volume_mute</i>
                 <i class="material-icons" onclick="ui.ShowOptionMenu(false)">clear</i>
             </div>
             <span class="card-title">Options:</span>
@@ -140,7 +126,7 @@
             <div class="orange-text text-accent-3 card__option">
                 <i class="material-icons" onclick="ui.ShowExitMenu(false)">clear</i>
             </div>
-            <span class="card-title">Options:</span>
+            <span class="card-title">Leave?</span>
             <a class="btn orange menu__option" href="/User/Main">Leave</a>
             <a class="btn orange menu__option" onclick="ui.ShowExitMenu(false)">Cancel</a>
         </div>
@@ -158,13 +144,14 @@
         var raycaster;
         var LastNonCollidedPostion = { x: 0, y: 0, z: 0 };
         var projectiles = [];
-        var firingTimer = 0;
+        var firingTimer;
 
         window.onload = function () {
             var playerGuid;
             var gameGuid;
 
             var prevTime = performance.now();
+            firingTimer = performance.now();
             var velocity = new THREE.Vector3();
 
             function init() {
@@ -202,6 +189,7 @@
                 var light2 = new THREE.HemisphereLight(0xDDDDDD, 0x454545, 1);
                 scene.add(light2);
 
+                // Player for testing purposes
                 var player = new Player(25, 5, -35, "1234");
                 //player.position.set()
                 scene.add(player);
@@ -213,6 +201,7 @@
                     this.play();
                 }, false);
                 myAudio.play();
+                ui.SetAudio(myAudio);
             }
 
             //socket
@@ -265,10 +254,14 @@
                                 ui.UpdateScoreboardScore(command[i]);
                                 break;
                             case "FireCommand":
+                                if (command[i].originPlayer != playerGuid) {
+                                    AddProjectiles(command[i].originPosition,
+                                        command[i].directionVector, command[i].velocity);
+                                }
                                 break;
-
-                            case "PlayerAmmoPickupCommand":
+                            case "PlayerPickupCommand":
                                 console.log(command[i]);
+                                //parse to weaponhandler
                                 break;
                             case "ErrorCommand":
                                 console.log(command[i]);
@@ -281,9 +274,55 @@
                                     if (command[i].obj.guid != playerGuid) {
                                         var player = new Player(command[i].obj.x, command[i].obj.y, command[i].obj.z, command[i].obj.guid);
                                         scene.add(player);
+                                        
                                         worldObjects[command[i].obj.guid] = player;
                                         console.log(command[i]);
                                     }
+                                }
+                                if (command[i].obj.type == "DamageBoost") {
+                                    
+                                    var damageBoost = new DamageBoost(command[i].obj.x, 1, command[i].obj.z);
+                                    damageBoost.position.x = command[i].obj.x;
+                                    damageBoost.position.y = command[i].obj.y;
+                                    damageBoost.position.z = command[i].obj.z;
+                                    scene.add(damageBoost);
+                                    worldObjects[command[i].obj.guid] = damageBoost;
+                                }
+                                if (command[i].obj.type == "SpeedBoost") {
+
+                                    var speedBoost = new SpeedBoost(command[i].obj.x, 1, command[i].obj.z);
+                                    speedBoost.position.x = command[i].obj.x;
+                                    speedBoost.position.y = command[i].obj.y;
+                                    speedBoost.position.z = command[i].obj.z;
+                                    scene.add(speedBoost);
+                                    worldObjects[command[i].obj.guid] = speedBoost;
+                                }
+                                if (command[i].obj.type == "HealthItem") {
+
+                                    var healthItem = new HealthItem(command[i].obj.x, 1, command[i].obj.z);
+                                    healthItem.position.x = command[i].obj.x;
+                                    healthItem.position.y = command[i].obj.y;
+                                    healthItem.position.z = command[i].obj.z;
+                                    scene.add(healthItem);
+                                    worldObjects[command[i].obj.guid] = healthItem;
+                                }
+                                if (command[i].obj.type == "ArmourItem") {
+
+                                    var armourItem = new ArmourItem(command[i].obj.x, 1, command[i].obj.z);
+                                    armourItem.position.x = command[i].obj.x;
+                                    armourItem.position.y = command[i].obj.y;
+                                    armourItem.position.z = command[i].obj.z;
+                                    scene.add(armourItem);
+                                    worldObjects[command[i].obj.guid] = armourItem;
+                                }
+                                if (command[i].obj.type == "AmmoItem") {
+
+                                    var ammoItem = new AmmoItem(command[i].obj.x, 1, command[i].obj.z);
+                                    ammoItem.position.x = command[i].obj.x;
+                                    ammoItem.position.y = command[i].obj.y;
+                                    ammoItem.position.z = command[i].obj.z;
+                                    scene.add(ammoItem);
+                                    worldObjects[command[i].obj.guid] = ammoItem;
                                 }
                                 break;
                             case "UpdateObjectCommand":
@@ -341,12 +380,12 @@
 
                         commandArray = [];
                     }
-            }
+                }
 
             document.addEventListener('click', WeaponFire);
 
             function WeaponFire() {
-                if (firingTimer <= 0) {
+                if (performance.now() > firingTimer) {
                     //Get direction and origin vectors
                     var direction = new THREE.Vector3();
                     camera.getWorldDirection(direction);
@@ -357,22 +396,51 @@
                     projectile.position.set(objPos.x, objPos.y, objPos.z);
                     scene.add(projectile);
 
-                    //Make new apple projectile and make it alive
-                    var appel = {
+                    //Make new projectile and make it alive
+                    var projectileObj = {
                         projectile: projectile,
                         direction: direction,
-                        alive: true
+                        alive: true,
+                        velocity: 0.5,
+                        isOwn: true
                     };
 
-                    setTimeout(function () {
-                        appel.alive = false;
-                        scene.remove(appel.projectile);
-                    }, 2000);
+                    //create a firecommand and add it to the send queue
+                    var fireCommand = {
+                        commandType: "FireCommand",
+                        originPlayer: playerGuid,
+                        directionVector: [direction.x, direction.y, direction.z],
+                        originPosition: [objPos.x, objPos.y, objPos.z],
+                        velocity: 0.5
+                    };
+
+                    commandArray.push(fireCommand);
 
                     //Add apple projectile to projectiles array
-                    projectiles.push(appel);
-                    firingTimer = 25;
+                    projectiles.push(projectileObj);
+                    firingTimer = performance.now() + 500;
                 }
+            }
+
+            function AddProjectiles(originPosition, directionVector, velocity) {
+                //Get direction vector
+                var direction = new THREE.Vector3(directionVector[0], directionVector[1], directionVector[2]);
+
+                //Make new projectile and set position to player position
+                var projectile = new Projectile();
+                projectile.position.set(originPosition[0], originPosition[1], originPosition[2]);
+                scene.add(projectile);
+
+                //Make new projectile and make it alive
+                var projectileObj = {
+                    projectile: projectile,
+                    direction: direction,
+                    alive: true,
+                    velocity: velocity,
+                    isOwn: false
+                };
+
+                projectiles.push(projectileObj)
             }
 
             /**
@@ -381,9 +449,9 @@
                 for (var i = 0; i < projectiles.length; i++) {
                     if (projectiles[i] === undefined) continue;
                     if (projectiles[i].alive) {
-                        projectiles[i].projectile.position.x += 0.5 * projectiles[i].direction.x;
-                        projectiles[i].projectile.position.y += 0.5 * projectiles[i].direction.y;
-                        projectiles[i].projectile.position.z += 0.5 * projectiles[i].direction.z;
+                        projectiles[i].projectile.position.x += projectiles[i].velocity * projectiles[i].direction.x;
+                        projectiles[i].projectile.position.y += projectiles[i].velocity * projectiles[i].direction.y;
+                        projectiles[i].projectile.position.z += projectiles[i].velocity * projectiles[i].direction.z;
 
                         var projectileRaycaster = new THREE.Raycaster(projectiles[i].projectile.position, projectiles[i].direction, 0, 0.5);
 
@@ -392,7 +460,7 @@
                             //check all intersects
                             for (var z = 0; z < intersects.length; z++) {
                                 console.log(intersects[z]);
-                                if (intersects[z].object.name == "Character") {
+                                if (intersects[z].object.name == "Character" && projectiles[i].isOwn) {
                                     //create a hitcommand and add it to the send queue
                                     var hitCommand = {
                                         commandType :"HitCommand",
@@ -416,7 +484,7 @@
                 if (firingTimer > 0) firingTimer -= 1;
             }
 
-            function playerControls() {
+            function PlayerControls() {
                 var canJump = false;
 
                 // Save the current time
@@ -501,7 +569,7 @@
                 renderer.setSize(window.innerWidth, window.innerHeight);
             }
 
-            function raycasting() {
+            function Raycasting() {
                 var directionVectors = [
                     new THREE.Vector3(0, 0, 1),
                     new THREE.Vector3(1, 0, 1),
@@ -545,10 +613,31 @@
                 }
             }
 
+            function UpdateItems() {
+                for (var i = 0; i < scene.children.length; i++) {
+                    if (scene.children[i] instanceof DamageBoost) {
+                        scene.children[i].UpdateTime();
+                    }
+                    if (scene.children[i] instanceof SpeedBoost) {
+                        scene.children[i].UpdateTime();
+                    }
+                    if (scene.children[i] instanceof AmmoItem) {
+                        scene.children[i].UpdateTime();
+                    }
+                    if (scene.children[i] instanceof HealthItem) {
+                        scene.children[i].UpdateTime();
+                    }
+                    if (scene.children[i] instanceof ArmourItem) {
+                        scene.children[i].UpdateTime();
+                    }
+                }
+            }
+
             function animate() {
                 requestAnimationFrame(animate);
-                raycasting();
-                playerControls();
+                Raycasting();
+                PlayerControls();
+                UpdateItems();
                 UpdateProjectiles();
                 renderer.render(scene, camera);
             }

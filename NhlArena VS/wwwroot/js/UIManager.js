@@ -1,6 +1,7 @@
 ﻿class UIManager {
     constructor(x) {
         this.volume = true;
+        this.audio;
         this.openMenu = "";
 
         this.timeLeft = 0;  //in seconds
@@ -23,7 +24,7 @@
                 }
             }
             if (event.keyCode == 85) {  // u - sound
-                scope.SwitchSoundOnOff(true);
+                scope.SwitchSoundOnOff();
             }
             if (event.keyCode == 89) {  // y - exit
                 if (scope.activeMenu == event.keyCode) {
@@ -52,9 +53,6 @@
                     scope.tabbedTab = false;
                     scope.ShowScoreboard(false);
                 }
-            }
-            if (event.keyCode == 85) {  // u - sound
-                scope.SwitchSoundOnOff(false);
             }
         });
     }
@@ -150,10 +148,10 @@
                 shouldSwitch = false;
                 /*Get the two elements you want to compare,
                 one from current row and one from the next:*/
-                x = rows[i][2];
-                y = rows[i + 1][2];
+                x = rows[i].cells[2];
+                y = rows[i + 1].cells[2];
                 //check if the two rows should switch place:
-                if (Number(x.innerHTML) > Number(y.innerHTML)) {
+                if (Number(x.innerHTML) < Number(y.innerHTML)) {
                     //if so, mark as a switch and break the loop:
                     shouldSwitch = true;
                     break;
@@ -167,7 +165,7 @@
             }
         }
         for (var j = 0; j < rows.length; j++) {
-            rows[j].getElementsByTagName("TD")[0].innerHTML = String(j+1) + ".";
+            rows[j].cells[0].innerHTML = String(j+1) + ".";
         }
     }
 
@@ -186,14 +184,21 @@
         }
     }
 
-    SwitchSoundOnOff(clicked) {
+    SwitchSoundOnOff() {
         var newInnerText;
-        if (clicked.innerText === "volume_up") {
+        if (this.volume) {
             this.volume = false;
             newInnerText = "volume_mute";
         } else {
             this.volume = true;
             newInnerText = "volume_up";
+        }
+        if (this.audio != null) {
+            if (this.volume) {
+                this.audio.play();
+            } else {
+                this.audio.pause();
+            }
         }
         var soundSwitchButtons = document.getElementsByClassName("volume");
         for (var i = 0; i < soundSwitchButtons.length; i++) {
@@ -251,5 +256,10 @@
             clearInterval(this.runTimer);
             console.log("stop");
         }
+    }
+
+    SetAudio(src) {
+        this.audio = src; 
+        console.log(src);
     }
 }

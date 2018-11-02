@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ItemLogic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -84,10 +85,12 @@ namespace Commands
     public class DeathCommand : Command
     {
         public Player deadPlayer { get; }
+        public PlayerSpawnLocation spawnLocation { get; }
 
-        public DeathCommand(Player deadPlayer) : base("DeathCommand")
+        public DeathCommand(Player deadPlayer, PlayerSpawnLocation spawnLocation) : base("DeathCommand")
         {
             this.deadPlayer = deadPlayer;
+            this.spawnLocation = spawnLocation;
         }
     }
 
@@ -115,14 +118,14 @@ namespace Commands
     /// <summary>
     /// pak ammo op command vanaf server naar client
     /// </summary>
-    public class PlayerAmmoPickupCommand : Command
+    public class PlayerPickupCommand : Command
     {
-        public string ammoType { get; }
+        public Item item { get; }
         public Player targetPlayer;
 
-        public PlayerAmmoPickupCommand(string ammoType, Player targetPlayer) : base("PlayerAmmoPickupCommand")
+        public PlayerPickupCommand(Item item, Player targetPlayer) : base("PlayerAmmoPickupCommand")
         {
-            this.ammoType = ammoType;
+            this.item = item;
             this.targetPlayer = targetPlayer;
         }
     }
@@ -179,7 +182,7 @@ namespace Commands
         public double rotationY { get; }
         public double rotationZ { get; }
 
-        public UpdatePlayerCommand(Guid playerGuid, double x, double y, double z, double rotationX, double rotationY, double rotationZ): base("UpdatePlayerCommand")
+        public UpdatePlayerCommand(Guid playerGuid, double x, double y, double z, double rotationX, double rotationY, double rotationZ) : base("UpdatePlayerCommand")
         {
             this.playerGuid = playerGuid;
             this.x = x;
