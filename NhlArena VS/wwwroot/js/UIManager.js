@@ -15,11 +15,35 @@
 
         var scope = this;
         this.tabbedTab = false;
+        this.activeMenu = 0;
         document.addEventListener('keydown', function (event) {     //https://css-tricks.com/snippets/javascript/javascript-keycodes/
-            if (event.keyCode == 69) {  //tab - 9  e - 69
+            if (event.keyCode == 69) {  // e
                 if (!scope.tabbedTab) {
                     scope.ShowScoreboard(true);
                 }
+            }
+            if (event.keyCode == 85) {  // u - sound
+                scope.SwitchSoundOnOff(true);
+            }
+            if (event.keyCode == 89) {  // y - exit
+                if (scope.activeMenu == event.keyCode) {
+                    scope.activeMenu = 0;
+                    scope.ShowExitMenu(false);
+                } else {
+                    scope.activeMenu = event.keyCode;
+                    scope.HideMenus();
+                    scope.ShowExitMenu(true);
+                }                
+            }
+            if (event.keyCode == 73) {  // i - options
+                if (scope.activeMenu == event.keyCode) {
+                    scope.activeMenu = 0;
+                    scope.ShowOptionMenu(false);
+                } else {
+                    scope.activeMenu = event.keyCode;
+                    scope.HideMenus();
+                    scope.ShowOptionMenu(true);
+                }   
             }
         });
         document.addEventListener('keyup', function (event) {
@@ -28,7 +52,9 @@
                     scope.tabbedTab = false;
                     scope.ShowScoreboard(false);
                 }
-                
+            }
+            if (event.keyCode == 85) {  // u - sound
+                scope.SwitchSoundOnOff(false);
             }
         });
     }
@@ -50,6 +76,11 @@
     }
     UpdatePlayerHealth(val) {
         document.getElementById("bar--ecs").style.width = val + "%";
+    }
+
+    HideMenus() {
+        this.ShowExitMenu(false);
+        this.ShowOptionMenu(false);
     }
 
     ShowOptionMenu(b) {

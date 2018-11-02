@@ -51,9 +51,22 @@
     <!--top:-->
     <div class="part__container part--top UItopleft">
         <div class="part__center">
-            <i class="material-icons noselect" onclick="ui.ShowExitMenu(true)">home</i>
-            <i class="material-icons noselect volume" onclick="ui.SwitchSoundOnOff(this)">volume_mute</i>
-            <i class="material-icons noselect" onclick="ui.ShowOptionMenu(true)">info</i>
+            <div class="icon" onclick="ui.ShowExitMenu(true)">
+                <label class="icon__label">Y</label>
+                <i class="icon__i material-icons noselect">home</i>
+            </div>
+            <div class="icon" onclick="ui.SwitchSoundOnOff(this)">
+                <label class="icon__label">U</label>
+                <i class="icon material-icons noselect volume">volume_mute</i>
+            </div>
+            <div class="icon" onclick="ui.ShowOptionMenu(true)">
+                <label class="icon__label">I</label>
+                <i class="icon material-icons noselect">info</i>
+            </div>
+            <div class="icon">
+                <label class="icon__label">E</label>
+                <i class="icon material-icons noselect">format_list_numbered</i>
+            </div>
         </div>
         <div class="part__right"></div>
     </div>
