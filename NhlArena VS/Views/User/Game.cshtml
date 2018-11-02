@@ -25,10 +25,11 @@
 </head>
 <body>
     <!--UI-->
+    <img class="crosshair" src="~/images/Crosshair.png" alt="">
 
     <input id="toggle-Scoreboard" type="checkbox" class="toggleCheckBox menu__checkbox">
     <div class="endBackground"></div>
-    <div id="Scoreboard" class="card red darken-4 center popIn" style="width: 60vw;">
+    <div id="Scoreboard" class="card red darken-4 center fallIn" style="width: 60vw;">
         <div class="card-content orange-text text-accent-3">
             <span class="card-title">Scoreboard:</span>
             <!--<div class="red darken-4" style="margin: 10px; padding: 0 10px 0 10px; display: block;"></div>-->
@@ -103,7 +104,6 @@
             <div class="part__right"></div>
         </div>
     -->
-
     <!--menus:-->
     <input id="toggle-OptionMenu" type="checkbox" class="toggleCheckBox menu__checkbox">
     <div onclick="ui.ShowOptionMenu(false)" class="overlayBackground"></div>
@@ -461,7 +461,7 @@
     <script src="~/lib/materialize/materialize.min.js"></script>
     <script src="~/js/UIManager.js"></script>
     <script>
-                                        //var ui = new UIManager();   //need to be made in init
+                                                                //var ui = new UIManager();   //need to be made in init
     </script>
     <!---->
 

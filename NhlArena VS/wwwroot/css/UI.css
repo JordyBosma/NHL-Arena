@@ -110,6 +110,21 @@
         clear: both;
     }
 
+.crosshair {
+    position: fixed;
+    display: block;
+    top: calc(50vh - 1.5vw);
+    left: 48.5vw;
+    background-image: url(/images/Crosshair.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    display: block;
+    margin: auto;
+    width: 3vw;
+    height: 3vw;
+}
+
 /*part style:*/
 .UItopleft {
     top: 0;
