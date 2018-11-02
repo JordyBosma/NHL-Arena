@@ -53,18 +53,18 @@
         <div class="part__center">
             <div class="icon" onclick="ui.ShowExitMenu(true)">
                 <label class="icon__label">Y</label>
-                <i class="icon__i material-icons noselect">home</i>
+                <i class="icon material-icons noselect">home</i>
             </div>
             <div class="icon" onclick="ui.SwitchSoundOnOff()">
                 <label class="icon__label">U</label>
-                <i class="icon material-icons noselect volume">volume_mute</i>
+                <i class="icon material-icons noselect volume">volume_up</i>
             </div>
             <div class="icon" onclick="ui.ShowOptionMenu(true)">
                 <label class="icon__label">I</label>
                 <i class="icon material-icons noselect">info</i>
             </div>
             <div class="icon">
-                <label class="icon__label">E</label>
+                <label class="icon__label">F</label>
                 <i class="icon material-icons noselect">format_list_numbered</i>
             </div>
         </div>
@@ -88,6 +88,15 @@
     </div>
 
     <!--bottom:-->
+    <div class="part__container part--bottom UIbottomleft">
+        <div class="part__center">
+            <i id="powerUpIcon" class="icon material-icons noselect fleft">flash_on</i>
+            <div id="powerUpTimer" class="timer fleft"></div>
+            <label id="powerUpName" class="poweruplabel fleft"></label>
+        </div>
+        <div class="part__right"></div>
+    </div>
+
     <div class="part__container part--bottom UIbottom">
         <div class="part__left"></div>
         <div class="part__center" style="width: 350px;">
@@ -103,13 +112,21 @@
         <div class="part__right"></div>
     </div>
 
+    <div class="part__container part--bottom UIbottomright">
+        <div class="part__left"></div>
+        <div class="part__center gamescore">
+            <div id="gunName">SlingerShot:</div>
+            <div><text id="gunCurAmmo">000</text> / <text id="gunMaxAmmo">000</text></div>
+        </div>
+    </div>
+
     <!--menus:-->
     <input id="toggle-OptionMenu" type="checkbox" class="toggleCheckBox menu__checkbox">
     <div onclick="ui.ShowOptionMenu(false)" class="overlayBackground"></div>
     <div id="mainMenu" class="card red darken-4 center fallIn" style="width: 300px;">
         <div class="card-content orange-text text-accent-3">
             <div class="orange-text text-accent-3 card__option">
-                <i class="material-icons volume" onclick="ui.SwitchSoundOnOff()">volume_mute</i>
+                <i class="material-icons volume" onclick="ui.SwitchSoundOnOff()">volume_up</i>
                 <i class="material-icons" onclick="ui.ShowOptionMenu(false)">clear</i>
             </div>
             <span class="card-title">Options:</span>
@@ -274,13 +291,13 @@
                                     if (command[i].obj.guid != playerGuid) {
                                         var player = new Player(command[i].obj.x, command[i].obj.y, command[i].obj.z, command[i].obj.guid);
                                         scene.add(player);
-                                        
+
                                         worldObjects[command[i].obj.guid] = player;
                                         console.log(command[i]);
                                     }
                                 }
                                 if (command[i].obj.type == "DamageBoost") {
-                                    
+
                                     var damageBoost = new DamageBoost(command[i].obj.x, 1, command[i].obj.z);
                                     damageBoost.position.x = command[i].obj.x;
                                     damageBoost.position.y = command[i].obj.y;
@@ -456,7 +473,7 @@
                         var projectileRaycaster = new THREE.Raycaster(projectiles[i].projectile.position, projectiles[i].direction, 0, 0.5);
 
                         var intersects = projectileRaycaster.intersectObjects(scene.children, true);
-                        if (intersects.length != 0) {         
+                        if (intersects.length != 0) {
                             //check all intersects
                             for (var z = 0; z < intersects.length; z++) {
                                 console.log(intersects[z]);
@@ -470,7 +487,7 @@
                                     };
                                     commandArray.push(hitCommand);
                                 }
-                            }      
+                            }
                             //intersect means something was hit so remove projectile
                             projectiles[i].alive = false;
                             scene.remove(projectiles[i].projectile);

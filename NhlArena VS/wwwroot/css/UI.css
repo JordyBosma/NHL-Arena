@@ -131,13 +131,9 @@
     left: 0;
 }
 
-    .UItopleft i {
-        color: white;
-        font-size: 40px;
-    }
-    .UItopleft i:last-child {
-        padding-right: 6px;
-    }
+.UItopleft i:last-child {
+    padding-right: 6px;
+}
 
 .part__center:after {
     clear: both;
@@ -148,6 +144,8 @@
     display: block;
     position: relative;
     margin-right: 1px;
+    color: white;
+    font-size: 40px;
 }
 
 .icon__label {
@@ -174,7 +172,6 @@
 }
 
 .UItopright {
-
     top: 0;
     right: 0;
 }
@@ -182,6 +179,32 @@
 .UIbottomleft {
     bottom: 0;
     left: 0;
+}
+.fleft{
+    float: left;
+}
+
+.timer {
+    color: white;
+    font-size: 30px;
+    letter-spacing: 6px;
+}
+.poweruplabel {
+    color: white;
+    letter-spacing: 3px;
+    font-size: 22px;
+    height: 45px;
+    padding-top: 7px;
+    margin-left: 8px;
+}
+.UIbottomright{
+    bottom: 0;
+    right: 0;
+}
+.UIbottomright .gamescore{
+    width: 400px;
+    display:flex;
+    justify-content: flex-end;
 }
 
 .UIbottom {
