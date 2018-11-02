@@ -233,9 +233,12 @@
                                 ui.EndScene();
                                 break;
                             case "DeathCommand":
-                                console.log("death");
-                                if (command[i].deadPlayer == playerGuid) {
+                                console.log(command[i]);
+                                if (command[i].deadPlayer.guid == playerGuid) {
                                     controls.getObject().position.set(20, 5, -30);
+                                    ui.UpdatePlayerArmor(command[i].deadPlayer.armour);
+                                    ui.UpdatePlayerHealth(command[i].deadPlayer.health);
+                                    ui.UpdateGameScores(command[i].deadPlayer.kills, command[i].deadPlayer.deaths);
                                 }
                                 break;
                             case "UpdatePlayerStatsCommand":
@@ -374,6 +377,7 @@
                                 if (intersects[z].object.name == "Character") {
                                     //create a hitcommand and add it to the send queue
                                     var hitCommand = {
+                                        commandType :"HitCommand",
                                         shootingPlayerGuid: playerGuid,
                                         hitPlayerGuid: intersects[z].object.parent.parent.playerGuid,
                                         damage: 10
