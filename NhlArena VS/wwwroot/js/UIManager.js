@@ -150,8 +150,8 @@
                 shouldSwitch = false;
                 /*Get the two elements you want to compare,
                 one from current row and one from the next:*/
-                x = rows[i].getElementsByTagName("TD")[2];
-                y = rows[i + 1].getElementsByTagName("TD")[2];
+                x = rows[i][2];
+                y = rows[i + 1][2];
                 //check if the two rows should switch place:
                 if (Number(x.innerHTML) > Number(y.innerHTML)) {
                     //if so, mark as a switch and break the loop:
@@ -172,15 +172,17 @@
     }
 
     RemoveScoreboardScore(guid) {
-        var row = document.getElementById(guid);
-        if (row != null) {
-            for (var i = 0; i < this.scores.rows.length; i++) {
-                if (this.scores.rows[i] == row) {
-                    this.scores.deleteRow(i);
-                    break;
+        if (!this.endScene) {
+            var row = document.getElementById(guid);
+            if (row != null) {
+                for (var i = 0; i < this.scores.rows.length; i++) {
+                    if (this.scores.rows[i] == row) {
+                        this.scores.deleteRow(i);
+                        break;
+                    }
                 }
+                this.OrderScoreboardScore();
             }
-            this.OrderScoreboardScore();
         }
     }
 
