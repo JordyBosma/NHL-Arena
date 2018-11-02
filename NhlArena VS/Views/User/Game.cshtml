@@ -11,7 +11,7 @@
     <link href="~/css/UI.css" rel="stylesheet" />
     <link href="~/css/UI_parts.css" rel="stylesheet" />
     <!---->
-
+	
     <style>
         body {
             margin: 0;
@@ -25,10 +25,11 @@
 </head>
 <body>
     <!--UI-->
+    <img class="crosshair" src="~/images/Crosshair.png" alt="">
 
     <input id="toggle-Scoreboard" type="checkbox" class="toggleCheckBox menu__checkbox">
     <div class="endBackground"></div>
-    <div id="Scoreboard" class="card red darken-4 center popIn" style="width: 60vw;">
+    <div id="Scoreboard" class="card red darken-4 center fallIn" style="width: 60vw;">
         <div class="card-content orange-text text-accent-3">
             <span class="card-title">Scoreboard:</span>
             <!--<div class="red darken-4" style="margin: 10px; padding: 0 10px 0 10px; display: block;"></div>-->
@@ -50,9 +51,22 @@
     <!--top:-->
     <div class="part__container part--top UItopleft">
         <div class="part__center">
-            <i class="material-icons noselect" onclick="ui.ShowExitMenu(true)">home</i>
-            <i class="material-icons noselect volume" onclick="ui.SwitchSoundOnOff(this)">volume_mute</i>
-            <i class="material-icons noselect" onclick="ui.ShowOptionMenu(true)">info</i>
+            <div class="icon" onclick="ui.ShowExitMenu(true)">
+                <label class="icon__label">Y</label>
+                <i class="icon__i material-icons noselect">home</i>
+            </div>
+            <div class="icon" onclick="ui.SwitchSoundOnOff(this)">
+                <label class="icon__label">U</label>
+                <i class="icon material-icons noselect volume">volume_mute</i>
+            </div>
+            <div class="icon" onclick="ui.ShowOptionMenu(true)">
+                <label class="icon__label">I</label>
+                <i class="icon material-icons noselect">info</i>
+            </div>
+            <div class="icon">
+                <label class="icon__label">E</label>
+                <i class="icon material-icons noselect">format_list_numbered</i>
+            </div>
         </div>
         <div class="part__right"></div>
     </div>
@@ -89,19 +103,20 @@
         <div class="part__right"></div>
     </div>
 
-    <div class="part__container part--bottom UIbottomleft">
-        <div class="part__center">
-            <label for="toggle-background" style="position:relative;">showcontent</label>
-            <input id="toggle-background" type="checkbox" class="toggleCheckBox">
+    <!--
+        <div class="part__container part--bottom UIbottomleft">
+            <div class="part__center">
+                <label for="toggle-background" style="position:relative;">showcontent</label>
+                <input id="toggle-background" type="checkbox" class="toggleCheckBox">
 
 
-            <button onclick="ui.ShowOptionMenu(true)">true</button>
-            <button onclick="ui.ShowOptionMenu(false)">false</button>
-            <label for="toggle-OptionMenu">showcontent</label>
+                <button onclick="ui.ShowOptionMenu(true)">true</button>
+                <button onclick="ui.ShowOptionMenu(false)">false</button>
+                <label for="toggle-OptionMenu">showcontent</label>
+            </div>
+            <div class="part__right"></div>
         </div>
-        <div class="part__right"></div>
-    </div>
-
+    -->
     <!--menus:-->
     <input id="toggle-OptionMenu" type="checkbox" class="toggleCheckBox menu__checkbox">
     <div onclick="ui.ShowOptionMenu(false)" class="overlayBackground"></div>
@@ -548,11 +563,7 @@
     <script src="~/lib/jQuery v3.3.1.js"></script>
     <script src="~/lib/materialize/materialize.min.js"></script>
     <script src="~/js/UIManager.js"></script>
-    <script>
-                                                //var ui = new UIManager();   //need to be made in init
-    </script>
     <!---->
-
     <script src="~/lib/threejs/three.min.js"></script>
     <script src="~/lib/threejs/OrbitControls.js"></script>
     <script src="~/lib/threejs/FirstPersonControls.js"></script>
