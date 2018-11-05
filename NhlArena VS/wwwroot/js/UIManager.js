@@ -8,6 +8,7 @@
         this.isRunning = false;
         this.runTimer;
         this.powerUpTimer;
+
         //this.StartTimer(360);
         //this.UpdateGameScores(8, 14);
         //this.UpdatePlayerArmor(70);
@@ -56,7 +57,7 @@
                 }
             }
         });
-        //this.StartPowerUp("jump", 30);
+        //this.StartPowerUp("jump", 90);
     }
 
     //stats
@@ -289,7 +290,6 @@
             this.powerUpTimer.StopTimer();
         }
         this.powerUpTimer = new displayTimer(length, "powerUpTimer", this.StopPowerUp);
-        //setTimeout(this.StopPowerUp(), length * 1000);
         document.getElementById("powerUpIcon").style.color = "rgb(0, 160, 255)";
         document.getElementById("powerUpName").innerHTML = name;
         console.log("start powerup");
