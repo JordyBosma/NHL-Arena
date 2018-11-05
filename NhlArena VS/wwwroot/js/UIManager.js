@@ -285,37 +285,47 @@
     }
     */
     //powerup
-    StartPowerUp(name, length) {
+    StartPowerUp(id, name, length) {
+        //remove empty powerdisplay:
         if (this.powers == 0) {
-            //remove empty powerdisplay
+            var emptyElement = document.getElementById("EmptyPower");
+            emptyElement.parentElement.removeChild(emptyElement);
+        }
+
+        //update powerdisplay:
+        var child = document.getElementById(id);
+        if (child != null) {
+            console.log("update powerup");
+            //remove timer
+            var parent = child.parentNode;
+            var index = Array.prototype.indexOf.call(parent.children, child);   // The equivalent of parent.children.indexOf(child)
+            this.powerUpTimers[index].StopTimer();
+            //add timer
+            var displayElement = child.getElementsByClassName("time")[0];
+            this.powerUpTimers[index] = new displayTimer(length, displayElement, this.StopPowerUp);
+
+        //add powerdisplay:
         } else {
-            if (document.getElementById(name) != null) {
-                //remove timer and !old powerdisplay!
-                var child = document.getElementById(name);
-                var parent = child.parentNode;
-                // The equivalent of parent.children.indexOf(child)
-                var index = Array.prototype.indexOf.call(parent.children, child);
-                this.powerUpTimers[index].StopTimer();
-                this.powerUpTimers[index] = null;
-                //this.powerUpTimers[index]. remove
+            this.powers = this.powers + 1;
+            console.log("start powerup");
+            // display values:
+            var color = rgb(0, 160, 255);
+            switch (id) {
+                case "speed":
+                    color = rgb(0, 160, 255);
+                    break;
             }
-            
+            //
+            this.powerUpTimers.push(new displayTimer(length, "powerUpTimer", this.StopPowerUp));
+            document.getElementById("powerUpIcon").style.color = color;
+            document.getElementById("powerUpName").innerHTML = id;
         }
-        //add powerdisplay
-
-        var color;
-        switch (name) {
-            case "speed":
-                color = rgb(0, 160, 255);
-                break;
-        }
-
-
-        this.powerUpTimers.push(new displayTimer(length, "powerUpTimer", this.StopPowerUp));
-        document.getElementById("powerUpIcon").style.color = "rgb(0, 160, 255)";
-        document.getElementById("powerUpName").innerHTML = name;
-        console.log("start powerup");
     }
+    /*
+     * <i id="powerUpIcon" class="icon material-icons noselect fleft">flash_on</i>
+    <div id="powerUpTimer" class="timer fleft"></div>
+    <label id="powerUpName" class="poweruplabel fleft"></label>
+    */
 
     StopPowerUp() {
         document.getElementById("powerUpIcon").style.color = "white";
@@ -323,13 +333,15 @@
         document.getElementById("powerUpName").innerHTML = "";
         this.powerUpTimers = null;
         console.log("stop powerup");
+        //this.powerUpTimers.slice(index, 1);
+
     }
 }
 
 class displayTimer {
-    constructor(length, elmentId, stopAction) {
+    constructor(length, element, stopAction) {
         this.timeLeft = length + 1;
-        this.displayElement = elmentId;
+        this.displayElement = element;
         var ref = this;
         this.runTimer = setInterval(function () {
             ref.UpdateTimer();
@@ -351,7 +363,8 @@ class displayTimer {
             displayTimeSec = '0' + displayTimeSec;
         }
         var displayTime = displayTimeMin + ':' + displayTimeSec;
-        document.getElementById(this.displayElement).innerText = displayTime;
+        //document.getElementById(this.displayElement).innerText = displayTime;
+        this.displayElement.innerText = displayTime;
         if (this.timeLeft <= 0) {
 
             this.StopTimer();
