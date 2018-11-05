@@ -121,9 +121,9 @@ namespace Commands
     public class PlayerPickupCommand : Command
     {
         public Item item { get; }
-        public Player targetPlayer;
+        public Guid targetPlayer;
 
-        public PlayerPickupCommand(Item item, Player targetPlayer) : base("PlayerAmmoPickupCommand")
+        public PlayerPickupCommand(Item item, Guid targetPlayer) : base("PlayerPickupCommand")
         {
             this.item = item;
             this.targetPlayer = targetPlayer;
