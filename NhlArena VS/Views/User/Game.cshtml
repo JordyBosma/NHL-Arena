@@ -148,6 +148,7 @@
     <!--/UI-->
 
     <script>
+        var playerSpeed = 100;
         var Socket;
         var camera, scene, renderer;
         var controls;
@@ -367,7 +368,7 @@
                         projectile: projectile,
                         direction: direction,
                         alive: true,
-                        velocity: 0.5,
+                        velocity: 5,
                         isOwn: true
                     };
 
@@ -377,7 +378,7 @@
                         originPlayer: playerGuid,
                         directionVector: [direction.x, direction.y, direction.z],
                         originPosition: [objPos.x, objPos.y, objPos.z],
-                        velocity: 0.5
+                        velocity: 5
                     };
 
                     commandArray.push(fireCommand);
@@ -477,22 +478,22 @@
 
                     // Moves the camera (player) forward
                     if (controls.moveForward) {
-                        velocity.z -= 200.0 * delta;
+                        velocity.z -= 100.0 * delta;
                     }
 
                     // Moves the camera (player) backward
                     if (controls.moveBackward) {
-                        velocity.z += 200.0 * delta;
+                        velocity.z += 100.0 * delta;
                     }
 
                     // Moves the camera (player) left
                     if (controls.moveLeft) {
-                        velocity.x -= 200.0 * delta;
+                        velocity.x -= 100.0 * delta;
                     }
 
                     // Moves the camera (player) right
                     if (controls.moveRight) {
-                        velocity.x += 200.0 * delta;
+                        velocity.x += 100.0 * delta;
                     }
 
                     // Update the position using the changed delta
