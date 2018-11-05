@@ -84,6 +84,35 @@ namespace WorldObjects
             _kills++;
         }
 
+        public void addDeath()
+        {
+            _deaths++;
+        }
+
+        public void addHealth(int healthValue)
+        {
+            if(health < 100)
+            {
+                _health += healthValue;
+                if (health > 100)
+                {
+                    _health = 100;
+                }
+            }
+        }
+
+        public void addArmour(int armourValue)
+        {
+            if (armour < 100)
+            {
+                _armour += armourValue;
+                if (armour > 100)
+                {
+                    _armour = 100;
+                }
+            }
+        }
+
         /// <summary>
         /// move the player to a ne set of coordinates
         /// </summary>
