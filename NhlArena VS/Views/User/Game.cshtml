@@ -11,7 +11,7 @@
     <link href="~/css/UI.css" rel="stylesheet" />
     <link href="~/css/UI_parts.css" rel="stylesheet" />
     <!---->
-	
+
     <style>
         body {
             margin: 0;
@@ -244,64 +244,67 @@
                     console.log(CloseEvent);
                     window.location.replace("http://" + window.location.hostname + ":" + window.location.port + "/User/Main");
                 };
+            Socket.onmessage = function (event) {
+                var command = JSON.parse(event.data);
+                for (var i = 0; i < command.length; i++) {
+                    switch (command[i].commandType) {
+                        case "InitializePlayerCommand":
+                            playerGuid = command[i].playerGuid
+                            //window.history.pushState("", "", '/User/Game/' + command[i].gameGuid);
+                            break;
+                        case "GameTimeLeftCommand":
+                            ui.UpdateTimerDisplay(command[i].gameTimeLeft);
+                            break;
+                        case "GameEndingCommand":
+                            ui.EndScene();
+                            break;
+                        case "DeathCommand":
+                            console.log(command[i]);
+                            if (command[i].deadPlayer.guid == playerGuid) {
+                                controls.getObject().position.set(20, 5, -30);
+                                ui.UpdatePlayerArmor(command[i].deadPlayer.armour);
+                                ui.UpdatePlayerHealth(command[i].deadPlayer.health);
+                                ui.UpdateGameScores(command[i].deadPlayer.kills, command[i].deadPlayer.deaths);
+                            }
+                            break;
+                        case "UpdatePlayerStatsCommand":
+                            if (command[i].guid == playerGuid) {
+                                ui.UpdatePlayerArmor(command[i].armour);
+                                ui.UpdatePlayerHealth(command[i].health);
+                                ui.UpdateGameScores(command[i].kills, command[i].deaths);
+                            }
+                            ui.UpdateScoreboardScore(command[i]);
+                            break;
+                        case "FireCommand":
+                            if (command[i].originPlayer != playerGuid) {
+                                AddProjectiles(command[i].originPosition,
+                                    command[i].directionVector, command[i].velocity);
+                            }
+                            break;
+                        case "PlayerPickupCommand":
+                            if (command[i].targetPlayer == playerGuid) {
+                                //console.log("yeetus");
+                                if (command[i].item.type == "DamageBoost") {
+                                    console.log("DAMAGE");
+                                }
+                                if (command[i].item.type == "SpeedBoost") {
+                                    console.log("SPEED");
+                                }
+                                if (command[i].item.type == "AmmoItem") {
+                                    console.log("AMMO");
+                                }
+                            }
+                            break;
+                        case "ErrorCommand":
+                            console.log(command[i]);
+                            break;
+                        case "NewObjectCommand":
+                            if (command[i].obj.type == "Player") {
+                                //var player = new Player(command[i].obj.x, command[i].obj.y, command[i].obj.z, command[i].obj.guid);
+                                //scene.add(player);
 
-                Socket.onmessage = function (event)
-                {
-                    var command = JSON.parse(event.data);
-                    for (var i = 0; i < command.length; i++)
-                    {
-                        switch (command[i].commandType) {
-                            case "InitializePlayerCommand":
-                                playerGuid = command[i].playerGuid
-                                //window.history.pushState("", "", '/User/Game/' + command[i].gameGuid);
-                                break;
-                            case "GameTimeLeftCommand":
-                                ui.UpdateTimerDisplay(command[i].gameTimeLeft);
-                                break;
-                            case "GameEndingCommand":
-                                ui.EndScene();
-                                break;
-                            case "DeathCommand":
+                                //worldObjects[command[i].obj.guid] = player;
                                 console.log(command[i]);
-                                if (command[i].deadPlayer.guid == playerGuid) {
-                                    controls.getObject().position.set(20, 5, -30);
-                                    ui.UpdatePlayerArmor(command[i].deadPlayer.armour);
-                                    ui.UpdatePlayerHealth(command[i].deadPlayer.health);
-                                    ui.UpdateGameScores(command[i].deadPlayer.kills, command[i].deadPlayer.deaths);
-                                }
-                                break;
-                            case "UpdatePlayerStatsCommand":
-                                if (command[i].guid == playerGuid) {
-                                    ui.UpdatePlayerArmor(command[i].armour);
-                                    ui.UpdatePlayerHealth(command[i].health);
-                                    ui.UpdateGameScores(command[i].kills, command[i].deaths);
-                                }
-                                ui.UpdateScoreboardScore(command[i]);
-                                break;
-                            case "FireCommand":
-                                if (command[i].originPlayer != playerGuid) {
-                                    AddProjectiles(command[i].originPosition,
-                                        command[i].directionVector, command[i].velocity);
-                                }
-                                break;
-                            case "PlayerPickupCommand":
-                                if (command[i].targetPlayer == playerGuid) {
-                                    //console.log("yeetus");
-                                    if (command[i].item.type == "DamageBoost") {
-                                        console.log("DAMAGE");
-                                    }
-                                    if (command[i].item.type == "SpeedBoost") {
-                                        console.log("SPEED");
-                                    }
-                                    if (command[i].item.type == "AmmoItem") {
-                                        console.log("AMMO");
-                                    }
-                                }
-                                break;
-                            case "ErrorCommand":
-                                console.log(command[i]);
-                                break;
-                            case "NewObjectCommand":
                                 ui.AddScoreboardScore(command[i].obj);
                                 if (command[i].obj.guid != playerGuid) {
                                     var player = new Player(command[i].obj.x, command[i].obj.y, command[i].obj.z, command[i].obj.guid);
@@ -309,91 +312,84 @@
 
                                     worldObjects[command[i].obj.guid] = player;
                                     console.log(command[i]);
-                                    ui.AddScoreboardScore(command[i].obj);
-                                    if (command[i].obj.guid != playerGuid) {
-                                        var player = new Player(command[i].obj.x, command[i].obj.y, command[i].obj.z, command[i].obj.guid);
-                                        scene.add(player);
+                                }
+                            }
+                            if (command[i].obj.type == "DamageBoost") {
+                                var damageBoost = new DamageBoost();
+                                damageBoost.position.x = command[i].obj.x;
+                                damageBoost.position.y = command[i].obj.y;
+                                damageBoost.position.z = command[i].obj.z;
+                                scene.add(damageBoost);
+                                worldObjects[command[i].obj.guid] = damageBoost;
+                            }
+                            if (command[i].obj.type == "SpeedBoost") {
 
-                                        worldObjects[command[i].obj.guid] = player;
-                                        console.log(command[i]);
-                                    }
-                                }
-                                if (command[i].obj.type == "DamageBoost") {
-                                    var damageBoost = new DamageBoost();
-                                    damageBoost.position.x = command[i].obj.x;
-                                    damageBoost.position.y = command[i].obj.y;
-                                    damageBoost.position.z = command[i].obj.z;
-                                    scene.add(damageBoost);
-                                    worldObjects[command[i].obj.guid] = damageBoost;
-                                }
-                                if (command[i].obj.type == "SpeedBoost") {
+                                var speedBoost = new SpeedBoost();
+                                speedBoost.position.x = command[i].obj.x;
+                                speedBoost.position.y = command[i].obj.y;
+                                speedBoost.position.z = command[i].obj.z;
+                                scene.add(speedBoost);
+                                worldObjects[command[i].obj.guid] = speedBoost;
+                            }
+                            if (command[i].obj.type == "HealthItem") {
 
-                                    var speedBoost = new SpeedBoost();
-                                    speedBoost.position.x = command[i].obj.x;
-                                    speedBoost.position.y = command[i].obj.y;
-                                    speedBoost.position.z = command[i].obj.z;
-                                    scene.add(speedBoost);
-                                    worldObjects[command[i].obj.guid] = speedBoost;
-                                }
-                                if (command[i].obj.type == "HealthItem") {
+                                var healthItem = new HealthItem();
+                                healthItem.position.x = command[i].obj.x;
+                                healthItem.position.y = command[i].obj.y;
+                                healthItem.position.z = command[i].obj.z;
+                                scene.add(healthItem);
+                                worldObjects[command[i].obj.guid] = healthItem;
+                            }
+                            if (command[i].obj.type == "ArmourItem") {
 
-                                    var healthItem = new HealthItem();
-                                    healthItem.position.x = command[i].obj.x;
-                                    healthItem.position.y = command[i].obj.y;
-                                    healthItem.position.z = command[i].obj.z;
-                                    scene.add(healthItem);
-                                    worldObjects[command[i].obj.guid] = healthItem;
-                                }
-                                if (command[i].obj.type == "ArmourItem") {
+                                var armourItem = new ArmourItem();
+                                armourItem.position.x = command[i].obj.x;
+                                armourItem.position.y = command[i].obj.y;
+                                armourItem.position.z = command[i].obj.z;
+                                scene.add(armourItem);
+                                worldObjects[command[i].obj.guid] = armourItem;
+                            }
+                            if (command[i].obj.type == "AmmoItem") {
 
-                                    var armourItem = new ArmourItem();
-                                    armourItem.position.x = command[i].obj.x;
-                                    armourItem.position.y = command[i].obj.y;
-                                    armourItem.position.z = command[i].obj.z;
-                                    scene.add(armourItem);
-                                    worldObjects[command[i].obj.guid] = armourItem;
-                                }
-                                if (command[i].obj.type == "AmmoItem") {
-
-                                    var ammoItem = new AmmoItem();
-                                    ammoItem.position.x = command[i].obj.x;
-                                    ammoItem.position.y = command[i].obj.y;
-                                    ammoItem.position.z = command[i].obj.z;
-                                    scene.add(ammoItem);
-                                    worldObjects[command[i].obj.guid] = ammoItem;
-                                }
+                                var ammoItem = new AmmoItem();
+                                ammoItem.position.x = command[i].obj.x;
+                                ammoItem.position.y = command[i].obj.y;
+                                ammoItem.position.z = command[i].obj.z;
+                                scene.add(ammoItem);
+                                worldObjects[command[i].obj.guid] = ammoItem;
+                            }
+                            break;
+                        case "UpdateObjectCommand":
+                            if (Object.keys(worldObjects).indexOf(command[i].obj.guid) < 0) {
                                 break;
-                            case "UpdateObjectCommand":
-                                if (Object.keys(worldObjects).indexOf(command[i].obj.guid) < 0) {
-                                    break;
-                                }
-                                var object = worldObjects[command[i].obj.guid];
+                            }
+                            var object = worldObjects[command[i].obj.guid];
 
-                                object.position.x = command[i].obj.x;
-                                object.position.y = command[i].obj.y;
-                                object.position.z = command[i].obj.z;
+                            object.position.x = command[i].obj.x;
+                            object.position.y = command[i].obj.y;
+                            object.position.z = command[i].obj.z;
 
-                                object.rotation.x = command[i].obj.rotationX;
-                                object.rotation.y = command[i].obj.rotationY;
-                                object.rotation.z = command[i].obj.rotationZ;
-                                //console.log(command[i]);
+                            object.rotation.x = command[i].obj.rotationX;
+                            object.rotation.y = command[i].obj.rotationY;
+                            object.rotation.z = command[i].obj.rotationZ;
+                            //console.log(command[i]);
+                            break;
+                        case "DeleteObjectCommand":
+                            console.log(command[i]);
+                            if (Object.keys(worldObjects).indexOf(command[i].obj.guid) < 0) {
                                 break;
-                            case "DeleteObjectCommand":
-                                console.log(command[i]);
-                                if (Object.keys(worldObjects).indexOf(command[i].obj.guid) < 0) {
-                                    break;
-                                }
-                                if (command[i].obj.type == "Player") {
-                                    ui.RemoveScoreboardScore(command[i].obj.guid);
-                                }
-                                var obj = worldObjects[command[i].obj.guid];
-                                scene.remove(obj);
+                            }
+                            if (command[i].obj.type == "Player") {
+                                ui.RemoveScoreboardScore(command[i].obj.guid);
+                            }
+                            var obj = worldObjects[command[i].obj.guid];
+                            scene.remove(obj);
 
-                                delete worldObjects[command[i].obj.guid];
-                                break;
-                        }
+                            delete worldObjects[command[i].obj.guid];
+                            break;
                     }
                 }
+
                 Respond();
 
                 function Respond() {
@@ -418,7 +414,8 @@
                     //console.log(Socket.readyState);
 
                     commandArray = [];
-                } 
+                }
+            }
 
             document.addEventListener('keydown', function (event) {
                 if (event.keyCode == 69) {  // e
@@ -436,7 +433,7 @@
                 if (event.keyCode == 51) {  // 3
                     currentWeapon = GetWeaponByIndex[3];
                 }
-                
+
             });
 
 
