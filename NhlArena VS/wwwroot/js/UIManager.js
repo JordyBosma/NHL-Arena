@@ -7,8 +7,8 @@
         this.timeLeft = 0;  //in seconds
         this.isRunning = false;
         this.runTimer;
-        this.powerUpTimer;
-
+        this.powerUpTimers = [];
+        this.powers = 0;
         //this.StartTimer(360);
         //this.UpdateGameScores(8, 14);
         //this.UpdatePlayerArmor(70);
@@ -286,10 +286,32 @@
     */
     //powerup
     StartPowerUp(name, length) {
-        if (this.powerUpTimer != null) {
-            this.powerUpTimer.StopTimer();
+        if (this.powers == 0) {
+            //remove empty powerdisplay
+        } else {
+            if (document.getElementById(name) != null) {
+                //remove timer and !old powerdisplay!
+                var child = document.getElementById(name);
+                var parent = child.parentNode;
+                // The equivalent of parent.children.indexOf(child)
+                var index = Array.prototype.indexOf.call(parent.children, child);
+                this.powerUpTimers[index].StopTimer();
+                this.powerUpTimers[index] = null;
+                //this.powerUpTimers[index]. remove
+            }
+            
         }
-        this.powerUpTimer = new displayTimer(length, "powerUpTimer", this.StopPowerUp);
+        //add powerdisplay
+
+        var color;
+        switch (name) {
+            case "speed":
+                color = rgb(0, 160, 255);
+                break;
+        }
+
+
+        this.powerUpTimers.push(new displayTimer(length, "powerUpTimer", this.StopPowerUp));
         document.getElementById("powerUpIcon").style.color = "rgb(0, 160, 255)";
         document.getElementById("powerUpName").innerHTML = name;
         console.log("start powerup");
@@ -299,7 +321,7 @@
         document.getElementById("powerUpIcon").style.color = "white";
         document.getElementById("powerUpTimer").innerHTML = "";
         document.getElementById("powerUpName").innerHTML = "";
-        this.powerUpTimer = null;
+        this.powerUpTimers = null;
         console.log("stop powerup");
     }
 }
