@@ -145,6 +145,7 @@
         var LastNonCollidedPostion = { x: 0, y: 0, z: 0 };
         var projectiles = [];
         var firingTimer;
+        var worldObjectsMesh = [];
 
         window.onload = function () {
             var playerGuid;
@@ -182,6 +183,9 @@
                 var NHLMap = new NHLArenaMap();
                 scene.add(NHLMap);
 
+                //Load worldobjects for better preformance
+                worldObjectsMesh[0] = projectileMesh = new Projectile();
+
                 var light = new THREE.AmbientLight(0x404040);
                 light.intensity = 2;
                 scene.add(light);
@@ -190,7 +194,7 @@
                 scene.add(light2);
 
                 // Player for testing purposes
-                var player = new Player(25, 5, -35, "1234");
+                var player = new Player(25, -2, -35, "1234");
                 //player.position.set()
                 scene.add(player);
 
@@ -260,8 +264,18 @@
                                 }
                                 break;
                             case "PlayerPickupCommand":
-                                console.log(command[i]);
-                                //parse to weaponhandler
+                                if (command[i].targetPlayer == playerGuid) {
+                                    //console.log("yeetus");
+                                    if (command[i].item.type == "DamageBoost") {
+                                        console.log("DAMAGE");
+                                    }
+                                    if (command[i].item.type == "SpeedBoost") {
+                                        console.log("SPEED");
+                                    }
+                                    if (command[i].item.type == "AmmoItem") {
+                                        console.log("AMMO");
+                                    }
+                                }
                                 break;
                             case "ErrorCommand":
                                 console.log(command[i]);
@@ -281,7 +295,7 @@
                                 }
                                 if (command[i].obj.type == "DamageBoost") {
                                     
-                                    var damageBoost = new DamageBoost(command[i].obj.x, 1, command[i].obj.z);
+                                    var damageBoost = new DamageBoost();
                                     damageBoost.position.x = command[i].obj.x;
                                     damageBoost.position.y = command[i].obj.y;
                                     damageBoost.position.z = command[i].obj.z;
@@ -290,7 +304,7 @@
                                 }
                                 if (command[i].obj.type == "SpeedBoost") {
 
-                                    var speedBoost = new SpeedBoost(command[i].obj.x, 1, command[i].obj.z);
+                                    var speedBoost = new SpeedBoost();
                                     speedBoost.position.x = command[i].obj.x;
                                     speedBoost.position.y = command[i].obj.y;
                                     speedBoost.position.z = command[i].obj.z;
@@ -299,7 +313,7 @@
                                 }
                                 if (command[i].obj.type == "HealthItem") {
 
-                                    var healthItem = new HealthItem(command[i].obj.x, 1, command[i].obj.z);
+                                    var healthItem = new HealthItem();
                                     healthItem.position.x = command[i].obj.x;
                                     healthItem.position.y = command[i].obj.y;
                                     healthItem.position.z = command[i].obj.z;
@@ -308,7 +322,7 @@
                                 }
                                 if (command[i].obj.type == "ArmourItem") {
 
-                                    var armourItem = new ArmourItem(command[i].obj.x, 1, command[i].obj.z);
+                                    var armourItem = new ArmourItem();
                                     armourItem.position.x = command[i].obj.x;
                                     armourItem.position.y = command[i].obj.y;
                                     armourItem.position.z = command[i].obj.z;
@@ -317,7 +331,7 @@
                                 }
                                 if (command[i].obj.type == "AmmoItem") {
 
-                                    var ammoItem = new AmmoItem(command[i].obj.x, 1, command[i].obj.z);
+                                    var ammoItem = new AmmoItem();
                                     ammoItem.position.x = command[i].obj.x;
                                     ammoItem.position.y = command[i].obj.y;
                                     ammoItem.position.z = command[i].obj.z;
@@ -392,7 +406,8 @@
                     var objPos = new THREE.Vector3(controls.getObject().position.x, controls.getObject().position.y, controls.getObject().position.z);
 
                     //Make new projectile and set position to player position
-                    var projectile = new Projectile();
+                    var projectile = new THREE.Object3D();
+                    projectile = worldObjectsMesh[0].children[0].clone();
                     projectile.position.set(objPos.x, objPos.y, objPos.z);
                     scene.add(projectile);
 
@@ -427,7 +442,8 @@
                 var direction = new THREE.Vector3(directionVector[0], directionVector[1], directionVector[2]);
 
                 //Make new projectile and set position to player position
-                var projectile = new Projectile();
+                var projectile = new THREE.Object3D();
+                projectile = worldObjectsMesh[0].children[0].clone();
                 projectile.position.set(originPosition[0], originPosition[1], originPosition[2]);
                 scene.add(projectile);
 
@@ -506,6 +522,10 @@
                     }
                     velocity.y -= deltaYVelocity;
 
+                    if (velocity.y < -60) {
+                        velocity.y = -60;
+                    }
+
                     //console.log(velocity.y);
                     //console.log(deltaYVelocity);
 
@@ -560,7 +580,6 @@
                 }
                 // Save the time for future delta calculations
                 prevTime = time;
-
             }
 
             function onWindowResize() {
