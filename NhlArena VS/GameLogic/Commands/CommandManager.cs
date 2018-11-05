@@ -100,7 +100,6 @@ namespace Commands
                     {
                         shootingPlayer = (Player)obj;
                     }
-
                 }
             }
 
@@ -134,40 +133,70 @@ namespace Commands
                 {
                     if (obj.guid == uPlayer.playerGuid)
                     {
-                        obj.Move(uPlayer.x, uPlayer.y, uPlayer.z);
-                        obj.Rotate(uPlayer.rotationX, uPlayer.rotationY, uPlayer.rotationZ);
-                        UpdateObjectCommand cmd = new UpdateObjectCommand(obj);
-                        SendCommandsToObservers(cmd);
-
-                        foreach (SpawnLocation s in spawnList)
+                        if (uPlayer.y > -100)
                         {
+                            obj.Move(uPlayer.x, uPlayer.y, uPlayer.z);
+                            obj.Rotate(uPlayer.rotationX, uPlayer.rotationY, uPlayer.rotationZ);
+                            CheckForPickup(uPlayer, obj);
+                            UpdateObjectCommand cmd = new UpdateObjectCommand(obj);
+                            SendCommandsToObservers(cmd);
+                        }
+                        else
+                        {
+                            PlayerSpawnLocation respawnLocation = playerSpawnList.GetSpawnLocation();
+                            DeathCommand cmd = new DeathCommand((Player)obj, respawnLocation);
+                            ((Player)obj).addDeath();
+                            UpdatePlayerStatsCommand cmd2 = new UpdatePlayerStatsCommand((Player)obj);
+                            SendCommandsToObservers(cmd);
+                            SendCommandsToObservers(cmd2);
+                        }
+                    }
+                }
+            }
+        }
 
-
-                            if (s.item != null)
+        public void CheckForPickup(UpdatePlayerCommand uPlayer, Object3D obj)
+        {
+            foreach (SpawnLocation s in spawnList)
+            {
+                if (s.item != null)
+                {
+                    if (s.item.type != "DamageBoost")
+                    {
+                        if (uPlayer.x > (s.item.x - 0.6) && uPlayer.x < (s.item.x + 0.6) && uPlayer.y > (s.item.y + 1.4) && uPlayer.y < (s.item.y + 2.6) && uPlayer.z > (s.item.z - 0.6) && uPlayer.z < (s.item.z + 0.6))
+                        {
+                            if (s.item.type == "HealthItem")
                             {
-                                if (s.item.type != "DamageBoost")
-                                {
-                                    if (uPlayer.x > (s.item.x - 0.6) && uPlayer.x < (s.item.x + 0.6) && uPlayer.y > (s.item.y + 1.4) && uPlayer.y < (s.item.y + 2.6) && uPlayer.z > (s.item.z - 0.6) && uPlayer.z < (s.item.z + 0.6))
-                                    {
-                                        DeleteObjectCommand cmd2 = new DeleteObjectCommand(s.item);
-                                        PlayerPickupCommand cmd3 = new PlayerPickupCommand(s.item, (Player)obj);
-                                        SendCommandsToObservers(cmd2);
-                                        SendCommandsToObservers(cmd3);
-                                        s.dellItem();
-                                    }
-                                }
-                                else
-                                {
-                                    if (uPlayer.x > (s.item.x - 1.45) && uPlayer.x < (s.item.x + 1.45) && uPlayer.y > (s.item.y + 0.75) && uPlayer.y < (s.item.y + 3.25) && uPlayer.z > (s.item.z - 1.45) && uPlayer.z < (s.item.z + 1.45))
-                                    {
-                                        DeleteObjectCommand cmd4 = new DeleteObjectCommand(s.item);
-                                        PlayerPickupCommand cmd5 = new PlayerPickupCommand(s.item, (Player)obj);
-                                        SendCommandsToObservers(cmd4);
-                                        SendCommandsToObservers(cmd5);
-                                        s.dellItem();
-                                    }
-                                }
+                                ((Player)obj).addHealth(((HealthItem)s.item).itemValue);
+                                UpdatePlayerStatsCommand cmd = new UpdatePlayerStatsCommand((Player)obj);
+                                SendCommandsToObservers(cmd);
                             }
+                            else if (s.item.type == "ArmourItem")
+                            {
+                                ((Player)obj).addArmour(((ArmourItem)s.item).itemValue);
+                                UpdatePlayerStatsCommand cmd = new UpdatePlayerStatsCommand((Player)obj);
+                                SendCommandsToObservers(cmd);
+                            }
+                            else
+                            {
+                                PlayerPickupCommand cmd = new PlayerPickupCommand(s.item, ((Player)obj).guid);
+                                SendCommandsToObservers(cmd);
+                            }
+
+                            DeleteObjectCommand cmd1 = new DeleteObjectCommand(s.item);
+                            SendCommandsToObservers(cmd1);
+                            s.dellItem();
+                        }
+                    }
+                    else
+                    {
+                        if (uPlayer.x > (s.item.x - 1.45) && uPlayer.x < (s.item.x + 1.45) && uPlayer.y > (s.item.y + 0.75) && uPlayer.y < (s.item.y + 3.25) && uPlayer.z > (s.item.z - 1.45) && uPlayer.z < (s.item.z + 1.45))
+                        {
+                            DeleteObjectCommand cmd3 = new DeleteObjectCommand(s.item);
+                            PlayerPickupCommand cmd4 = new PlayerPickupCommand(s.item, ((Player)obj).guid);
+                            SendCommandsToObservers(cmd3);
+                            SendCommandsToObservers(cmd4);
+                            s.dellItem();
                         }
                     }
                 }
