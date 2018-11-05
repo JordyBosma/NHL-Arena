@@ -1,11 +1,13 @@
 ﻿class UIManager {
     constructor(x) {
         this.volume = true;
+        this.audio;
         this.openMenu = "";
 
         this.timeLeft = 0;  //in seconds
         this.isRunning = false;
         this.runTimer;
+        this.powerUpTimer;
         //this.StartTimer(360);
         //this.UpdateGameScores(8, 14);
         //this.UpdatePlayerArmor(70);
@@ -17,13 +19,13 @@
         this.tabbedTab = false;
         this.activeMenu = 0;
         document.addEventListener('keydown', function (event) {     //https://css-tricks.com/snippets/javascript/javascript-keycodes/
-            if (event.keyCode == 69) {  // e
+            if (event.keyCode == 70) {  // f - scoreboard
                 if (!scope.tabbedTab) {
                     scope.ShowScoreboard(true);
                 }
             }
             if (event.keyCode == 85) {  // u - sound
-                scope.SwitchSoundOnOff(true);
+                scope.SwitchSoundOnOff();
             }
             if (event.keyCode == 89) {  // y - exit
                 if (scope.activeMenu == event.keyCode) {
@@ -47,18 +49,17 @@
             }
         });
         document.addEventListener('keyup', function (event) {
-            if (event.keyCode == 69) {  //tab e
+            if (event.keyCode == 70) {  // f - scoreboard
                 if (!scope.endScene) {
                     scope.tabbedTab = false;
                     scope.ShowScoreboard(false);
                 }
             }
-            if (event.keyCode == 85) {  // u - sound
-                scope.SwitchSoundOnOff(false);
-            }
         });
+        //this.StartPowerUp("jump", 30);
     }
 
+    //stats
     UpdateGameScores(K, D) {
         this.UpdateGameScore(K, "gameScoreK", "K: ");
         this.UpdateGameScore(D, "gameScoreD", "D: ");
@@ -78,6 +79,20 @@
         document.getElementById("bar--ecs").style.width = val + "%";
     }
 
+    //gun
+    UpdateGunName(val) {
+        document.getElementById("gunName").innerHTML = val + ":";
+    }
+
+    UpdateGunCurAmmo(val) {
+        document.getElementById("gunCurAmmo").innerHTML = val;
+    }
+
+    UpdateGunMaxAmmo(val) {
+        document.getElementById("gunMaxAmmo").innerHTML = val;
+    }
+
+    //menus
     HideMenus() {
         this.ShowExitMenu(false);
         this.ShowOptionMenu(false);
@@ -100,7 +115,8 @@
         this.ShowScoreboard(true);
         document.getElementById("toggle-Scoreboard").classList.add("endBgr");
     }
-    
+
+    //scoreboard
     UpdateScoreboardScore(score) {
         /*score.guid;
         score.kills;
@@ -150,10 +166,10 @@
                 shouldSwitch = false;
                 /*Get the two elements you want to compare,
                 one from current row and one from the next:*/
-                x = rows[i].getElementsByTagName("TD")[2];
-                y = rows[i + 1].getElementsByTagName("TD")[2];
+                x = rows[i].cells[2];
+                y = rows[i + 1].cells[2];
                 //check if the two rows should switch place:
-                if (Number(x.innerHTML) > Number(y.innerHTML)) {
+                if (Number(x.innerHTML) < Number(y.innerHTML)) {
                     //if so, mark as a switch and break the loop:
                     shouldSwitch = true;
                     break;
@@ -167,31 +183,46 @@
             }
         }
         for (var j = 0; j < rows.length; j++) {
-            rows[j].getElementsByTagName("TD")[0].innerHTML = String(j+1) + ".";
+            rows[j].cells[0].innerHTML = String(j+1) + ".";
         }
     }
 
     RemoveScoreboardScore(guid) {
-        var row = document.getElementById(guid);
-        if (row != null) {
-            for (var i = 0; i < this.scores.rows.length; i++) {
-                if (this.scores.rows[i] == row) {
-                    this.scores.deleteRow(i);
-                    break;
+        if (!this.endScene) {
+            var row = document.getElementById(guid);
+            if (row != null) {
+                for (var i = 0; i < this.scores.rows.length; i++) {
+                    if (this.scores.rows[i] == row) {
+                        this.scores.deleteRow(i);
+                        break;
+                    }
                 }
+                this.OrderScoreboardScore();
             }
-            this.OrderScoreboardScore();
         }
     }
 
-    SwitchSoundOnOff(clicked) {
+    //sound
+    SetAudio(src) {
+        this.audio = src; 
+        console.log(src);
+    }
+
+    SwitchSoundOnOff() {
         var newInnerText;
-        if (clicked.innerText === "volume_up") {
+        if (this.volume) {
             this.volume = false;
             newInnerText = "volume_mute";
         } else {
             this.volume = true;
             newInnerText = "volume_up";
+        }
+        if (this.audio != null) {
+            if (this.volume) {
+                this.audio.play();
+            } else {
+                this.audio.pause();
+            }
         }
         var soundSwitchButtons = document.getElementsByClassName("volume");
         for (var i = 0; i < soundSwitchButtons.length; i++) {
@@ -199,6 +230,7 @@
         }
     }
 
+    //timer
     UpdateTimerDisplay(timeLeft) {
         var displayTimeMin = Math.floor(timeLeft / 60);
         displayTimeMin = displayTimeMin.toString();
@@ -212,32 +244,32 @@
         var displayTime = displayTimeMin + ':' + displayTimeSec;
         document.getElementById('gameTimer').innerText = displayTime;
     }
-
-    StartTimer(time) {
+    /*
+    StartTimer(time, timeLeft) {
         this.StopTimer();
-        this.timeLeft = time;
+        timeLeft = time;
         var cls = this;
         this.runTimer = setInterval(function () {
-            cls.UpdateTimer(cls);
+            cls.UpdateTimer(cls, timeLeft);
         }, 1000);
         this.isRunning = true;
         console.log("start");
     }
 
-    UpdateTimer(cls) {
-        cls.timeLeft = cls.timeLeft - 1;
-        var displayTimeMin = Math.floor(cls.timeLeft / 60);
+    UpdateTimer(cls, timeLeft) {
+        timeLeft = timeLeft - 1;
+        var displayTimeMin = Math.floor(timeLeft / 60);
         displayTimeMin = displayTimeMin.toString();
         if (displayTimeMin.length < 2) {
             displayTimeMin = '0' + displayTimeMin;
         }
-        var displayTimeSec = String(cls.timeLeft % 60);
+        var displayTimeSec = String(timeLeft % 60);
         if (displayTimeSec.length < 2) {
             displayTimeSec = '0' + displayTimeSec;
         }
         var displayTime = displayTimeMin + ':' + displayTimeSec;
         document.getElementById('gameTimer').innerText = displayTime;
-        if (cls.timeLeft <= 0) {
+        if (timeLeft <= 0) {
             
             cls.StopTimer();
         }
@@ -249,5 +281,66 @@
             clearInterval(this.runTimer);
             console.log("stop");
         }
+    }
+    */
+    //powerup
+    StartPowerUp(name, length) {
+        if (this.powerUpTimer != null) {
+            this.powerUpTimer.StopTimer();
+        }
+        this.powerUpTimer = new displayTimer(length, "powerUpTimer", this.StopPowerUp);
+        //setTimeout(this.StopPowerUp(), length * 1000);
+        document.getElementById("powerUpIcon").style.color = "rgb(0, 160, 255)";
+        document.getElementById("powerUpName").innerHTML = name;
+        console.log("start powerup");
+    }
+
+    StopPowerUp() {
+        document.getElementById("powerUpIcon").style.color = "white";
+        document.getElementById("powerUpTimer").innerHTML = "";
+        document.getElementById("powerUpName").innerHTML = "";
+        this.powerUpTimer = null;
+        console.log("stop powerup");
+    }
+}
+
+class displayTimer {
+    constructor(length, elmentId, stopAction) {
+        this.timeLeft = length + 1;
+        this.displayElement = elmentId;
+        var ref = this;
+        this.runTimer = setInterval(function () {
+            ref.UpdateTimer();
+        }, 1000);
+        this.UpdateTimer();
+        this.stopAction = stopAction;
+        return this.runTimer;
+    }
+
+    UpdateTimer() {
+        this.timeLeft = this.timeLeft - 1;
+        var displayTimeMin = Math.floor(this.timeLeft / 60);
+        displayTimeMin = displayTimeMin.toString();
+        if (displayTimeMin.length < 2) {
+            displayTimeMin = '0' + displayTimeMin;
+        }
+        var displayTimeSec = String(this.timeLeft % 60);
+        if (displayTimeSec.length < 2) {
+            displayTimeSec = '0' + displayTimeSec;
+        }
+        var displayTime = displayTimeMin + ':' + displayTimeSec;
+        document.getElementById(this.displayElement).innerText = displayTime;
+        if (this.timeLeft <= 0) {
+
+            this.StopTimer();
+        }
+    }
+
+    StopTimer() {
+        clearInterval(this.runTimer);
+        console.log("stop timerDisplay");
+        if (this.stopAction != null) {
+            this.stopAction();
+        } 
     }
 }
