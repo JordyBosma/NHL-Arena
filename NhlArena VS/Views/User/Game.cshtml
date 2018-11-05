@@ -298,7 +298,6 @@
 
                                     worldObjects[command[i].obj.guid] = player;
                                     console.log(command[i]);
-<<<<<<< HEAD
                                     ui.AddScoreboardScore(command[i].obj);
                                     if (command[i].obj.guid != playerGuid) {
                                         var player = new Player(command[i].obj.x, command[i].obj.y, command[i].obj.z, command[i].obj.guid);
@@ -352,8 +351,6 @@
                                     ammoItem.position.z = command[i].obj.z;
                                     scene.add(ammoItem);
                                     worldObjects[command[i].obj.guid] = ammoItem;
-=======
->>>>>>> weapon-handler
                                 }
                             }
                             if (command[i].obj.type == "DamageBoost") {
