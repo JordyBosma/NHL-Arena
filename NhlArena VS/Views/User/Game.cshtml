@@ -64,7 +64,11 @@
                 <i class="icon material-icons noselect">info</i>
             </div>
             <div class="icon">
+<<<<<<< HEAD
                 <label class="icon__label">F</label>
+=======
+                <label class="icon__label">R</label>
+>>>>>>> weapon-handler
                 <i class="icon material-icons noselect">format_list_numbered</i>
             </div>
         </div>
@@ -151,17 +155,19 @@
     <!--/UI-->
 
     <script>
-        var Socket;
-        var camera, scene, renderer;
-        var controls;
-        var worldObjects = {};
-        var ui;
-        var commandArray = [];
-        var playerGuid;
-        var raycaster;
-        var LastNonCollidedPostion = { x: 0, y: 0, z: 0 };
-        var projectiles = [];
-        var firingTimer;
+        var Socket; //the socket used to connect to the server
+        var camera, scene, renderer; //stuff for three js
+        var controls; //first person movement controls
+        var worldObjects = {}; //list with active/mobile worldobjects
+        var ui;  //the hud and scoreboard stuff
+        var commandArray = []; //command queue to be send to the sever
+        var playerGuid; //guid of the player
+        var raycaster; //used for collision checking
+        var LastNonCollidedPostion = { x: 0, y: 0, z: 0 };  //used for collision checking
+        var projectiles = []; //list of current projectiles
+        var firingTimer = 0; //used to check if a player can fire accoriding to their firerate
+        var currentWeapon; // current weapon
+        var lastScrollY; // last y coordinat of the scroll wheel to check if we scroll up or down
 
         window.onload = function () {
             var playerGuid;
@@ -170,6 +176,7 @@
             var prevTime = performance.now();
             firingTimer = performance.now();
             var velocity = new THREE.Vector3();
+            currentWeapon = GetDefaultWeapon();
 
             function init() {
                 ui = new UIManager();
@@ -237,56 +244,61 @@
                     console.log(CloseEvent);
                     window.location.replace("http://" + window.location.hostname + ":" + window.location.port + "/User/Main");
                 };
-                Socket.onmessage = function (event)
-                {
-                    var command = JSON.parse(event.data);
-                    for (var i = 0; i < command.length; i++)
-                    {
-                        switch (command[i].commandType) {
-                            case "InitializePlayerCommand":
-                                playerGuid = command[i].playerGuid
-                                //window.history.pushState("", "", '/User/Game/' + command[i].gameGuid);
-                                break;
-                            case "GameTimeLeftCommand":
-                                ui.UpdateTimerDisplay(command[i].gameTimeLeft);
-                                break;
-                            case "GameEndingCommand":
-                                ui.EndScene();
-                                break;
-                            case "DeathCommand":
+            Socket.onmessage = function (event) {
+                var command = JSON.parse(event.data);
+                for (var i = 0; i < command.length; i++) {
+                    switch (command[i].commandType) {
+                        case "InitializePlayerCommand":
+                            playerGuid = command[i].playerGuid
+                            //window.history.pushState("", "", '/User/Game/' + command[i].gameGuid);
+                            break;
+                        case "GameTimeLeftCommand":
+                            ui.UpdateTimerDisplay(command[i].gameTimeLeft);
+                            break;
+                        case "GameEndingCommand":
+                            ui.EndScene();
+                            break;
+                        case "DeathCommand":
+                            console.log(command[i]);
+                            if (command[i].deadPlayer.guid == playerGuid) {
+                                controls.getObject().position.set(20, 5, -30);
+                                ui.UpdatePlayerArmor(command[i].deadPlayer.armour);
+                                ui.UpdatePlayerHealth(command[i].deadPlayer.health);
+                                ui.UpdateGameScores(command[i].deadPlayer.kills, command[i].deadPlayer.deaths);
+                            }
+                            break;
+                        case "UpdatePlayerStatsCommand":
+                            if (command[i].guid == playerGuid) {
+                                ui.UpdatePlayerArmor(command[i].armour);
+                                ui.UpdatePlayerHealth(command[i].health);
+                                ui.UpdateGameScores(command[i].kills, command[i].deaths);
+                            }
+                            ui.UpdateScoreboardScore(command[i]);
+                            break;
+                        case "FireCommand":
+                            if (command[i].originPlayer != playerGuid) {
+                                AddProjectiles(command[i].originPosition,
+                                    command[i].directionVector, command[i].velocity);
+                            }
+                            break;
+                        case "PlayerPickupCommand":
+                            console.log(command[i]);
+                            //parse to weaponhandler
+                            break;
+                        case "ErrorCommand":
+                            console.log(command[i]);
+                            break;
+                        case "NewObjectCommand":
+                            if (command[i].obj.type == "Player") {
                                 console.log(command[i]);
-                                if (command[i].deadPlayer.guid == playerGuid) {
-                                    controls.getObject().position.set(20, 5, -30);
-                                    ui.UpdatePlayerArmor(command[i].deadPlayer.armour);
-                                    ui.UpdatePlayerHealth(command[i].deadPlayer.health);
-                                    ui.UpdateGameScores(command[i].deadPlayer.kills, command[i].deadPlayer.deaths);
-                                }
-                                break;
-                            case "UpdatePlayerStatsCommand":
-                                if (command[i].guid == playerGuid) {
-                                    ui.UpdatePlayerArmor(command[i].armour);
-                                    ui.UpdatePlayerHealth(command[i].health);
-                                    ui.UpdateGameScores(command[i].kills, command[i].deaths);
-                                }
-                                ui.UpdateScoreboardScore(command[i]);
-                                break;
-                            case "FireCommand":
-                                if (command[i].originPlayer != playerGuid) {
-                                    AddProjectiles(command[i].originPosition,
-                                        command[i].directionVector, command[i].velocity);
-                                }
-                                break;
-                            case "PlayerPickupCommand":
-                                console.log(command[i]);
-                                //parse to weaponhandler
-                                break;
-                            case "ErrorCommand":
-                                console.log(command[i]);
-                                break;
-                            case "NewObjectCommand":
-                                if (command[i].obj.type == "Player")
-                                {
+                                ui.AddScoreboardScore(command[i].obj);
+                                if (command[i].obj.guid != playerGuid) {
+                                    var player = new Player(command[i].obj.x, command[i].obj.y, command[i].obj.z, command[i].obj.guid);
+                                    scene.add(player);
+
+                                    worldObjects[command[i].obj.guid] = player;
                                     console.log(command[i]);
+<<<<<<< HEAD
                                     ui.AddScoreboardScore(command[i].obj);
                                     if (command[i].obj.guid != playerGuid) {
                                         var player = new Player(command[i].obj.x, command[i].obj.y, command[i].obj.z, command[i].obj.guid);
@@ -340,64 +352,132 @@
                                     ammoItem.position.z = command[i].obj.z;
                                     scene.add(ammoItem);
                                     worldObjects[command[i].obj.guid] = ammoItem;
+=======
+>>>>>>> weapon-handler
                                 }
+                            }
+                            if (command[i].obj.type == "DamageBoost") {
+
+                                var damageBoost = new DamageBoost(command[i].obj.x, 1, command[i].obj.z);
+                                damageBoost.position.x = command[i].obj.x;
+                                damageBoost.position.y = command[i].obj.y;
+                                damageBoost.position.z = command[i].obj.z;
+                                scene.add(damageBoost);
+                                worldObjects[command[i].obj.guid] = damageBoost;
+                            }
+                            if (command[i].obj.type == "SpeedBoost") {
+
+                                var speedBoost = new SpeedBoost(command[i].obj.x, 1, command[i].obj.z);
+                                speedBoost.position.x = command[i].obj.x;
+                                speedBoost.position.y = command[i].obj.y;
+                                speedBoost.position.z = command[i].obj.z;
+                                scene.add(speedBoost);
+                                worldObjects[command[i].obj.guid] = speedBoost;
+                            }
+                            if (command[i].obj.type == "HealthItem") {
+
+                                var healthItem = new HealthItem(command[i].obj.x, 1, command[i].obj.z);
+                                healthItem.position.x = command[i].obj.x;
+                                healthItem.position.y = command[i].obj.y;
+                                healthItem.position.z = command[i].obj.z;
+                                scene.add(healthItem);
+                                worldObjects[command[i].obj.guid] = healthItem;
+                            }
+                            if (command[i].obj.type == "ArmourItem") {
+
+                                var armourItem = new ArmourItem(command[i].obj.x, 1, command[i].obj.z);
+                                armourItem.position.x = command[i].obj.x;
+                                armourItem.position.y = command[i].obj.y;
+                                armourItem.position.z = command[i].obj.z;
+                                scene.add(armourItem);
+                                worldObjects[command[i].obj.guid] = armourItem;
+                            }
+                            if (command[i].obj.type == "AmmoItem") {
+
+                                var ammoItem = new AmmoItem(command[i].obj.x, 1, command[i].obj.z);
+                                ammoItem.position.x = command[i].obj.x;
+                                ammoItem.position.y = command[i].obj.y;
+                                ammoItem.position.z = command[i].obj.z;
+                                scene.add(ammoItem);
+                                worldObjects[command[i].obj.guid] = ammoItem;
+                            }
+                            break;
+                        case "UpdateObjectCommand":
+                            if (Object.keys(worldObjects).indexOf(command[i].obj.guid) < 0) {
                                 break;
-                            case "UpdateObjectCommand":
-                                if (Object.keys(worldObjects).indexOf(command[i].obj.guid) < 0) {
-                                    break;
-                                }
-                                var object = worldObjects[command[i].obj.guid];
+                            }
+                            var object = worldObjects[command[i].obj.guid];
 
-                                object.position.x = command[i].obj.x;
-                                object.position.y = command[i].obj.y;
-                                object.position.z = command[i].obj.z;
+                            object.position.x = command[i].obj.x;
+                            object.position.y = command[i].obj.y;
+                            object.position.z = command[i].obj.z;
 
-                                object.rotation.x = command[i].obj.rotationX;
-                                object.rotation.y = command[i].obj.rotationY;
-                                object.rotation.z = command[i].obj.rotationZ;
-                                //console.log(command[i]);
+                            object.rotation.x = command[i].obj.rotationX;
+                            object.rotation.y = command[i].obj.rotationY;
+                            object.rotation.z = command[i].obj.rotationZ;
+                            //console.log(command[i]);
+                            break;
+                        case "DeleteObjectCommand":
+                            console.log(command[i]);
+                            if (Object.keys(worldObjects).indexOf(command[i].obj.guid) < 0) {
                                 break;
-                            case "DeleteObjectCommand":
-                                console.log(command[i]);
-                                if (Object.keys(worldObjects).indexOf(command[i].obj.guid) < 0) {
-                                    break;
-                                }
-                                if (command[i].obj.type == "Player") {
-                                    ui.RemoveScoreboardScore(command[i].obj.guid);
-                                }
-                                var obj = worldObjects[command[i].obj.guid];
-                                scene.remove(obj);
+                            }
+                            if (command[i].obj.type == "Player") {
+                                ui.RemoveScoreboardScore(command[i].obj.guid);
+                            }
+                            var obj = worldObjects[command[i].obj.guid];
+                            scene.remove(obj);
 
-                                delete worldObjects[command[i].obj.guid];
-                                break;
-                        }
-                    }
-                    Respond();
-
-                    function Respond() {
-
-                        var obj = new controls.getObject();
-
-                        commandArray.push(updatePlayerCommand = {
-                            commandType: "UpdatePlayerCommand",
-                            playerGuid: playerGuid,
-                            x: obj.position.x.toFixed(2),
-                            y: obj.position.y.toFixed(2),
-                            z: obj.position.z.toFixed(2),
-                            rotationX: (obj.rotation.x % (2 * Math.PI)).toFixed(2),
-                            rotationY: (obj.rotation.y % (2 * Math.PI)).toFixed(2),
-                            rotationZ: (obj.rotation.z % (2 * Math.PI)).toFixed(2)
-                        });
-
-                        var cmd = JSON.stringify(commandArray);
-                        //console.log(cmd);
-                        //console.log(Socket.readyState);
-                        Socket.send(cmd);
-                        //console.log(Socket.readyState);
-
-                        commandArray = [];
+                            delete worldObjects[command[i].obj.guid];
+                            break;
                     }
                 }
+                Respond();
+
+                function Respond() {
+
+                    var obj = new controls.getObject();
+
+                    commandArray.push(updatePlayerCommand = {
+                        commandType: "UpdatePlayerCommand",
+                        playerGuid: playerGuid,
+                        x: obj.position.x.toFixed(2),
+                        y: obj.position.y.toFixed(2),
+                        z: obj.position.z.toFixed(2),
+                        rotationX: (obj.rotation.x % (2 * Math.PI)).toFixed(2),
+                        rotationY: (obj.rotation.y % (2 * Math.PI)).toFixed(2),
+                        rotationZ: (obj.rotation.z % (2 * Math.PI)).toFixed(2)
+                    });
+
+                    var cmd = JSON.stringify(commandArray);
+                    //console.log(cmd);
+                    //console.log(Socket.readyState);
+                    Socket.send(cmd);
+                    //console.log(Socket.readyState);
+
+                    commandArray = [];
+                }
+            }            
+
+            document.addEventListener('keydown', function (event) {
+                if (event.keyCode == 69) {  // e
+                    currentWeapon = GetNextWeapon(currentWeapon);
+                }
+                if (event.keyCode == 81) {  // q
+                    currentWeapon = GetPreviousWeapon(currentWeapon);
+                }
+                if (event.keyCode == 49) {  // 1
+                    currentWeapon = GetWeaponByIndex[1];
+                }
+                if (event.keyCode == 50) {  // 2
+                    currentWeapon = GetWeaponByIndex[2];
+                }
+                if (event.keyCode == 51) {  // 3
+                    currentWeapon = GetWeaponByIndex[3];
+                }
+                
+            });
+
 
             document.addEventListener('click', WeaponFire);
 
@@ -676,6 +756,7 @@
     <script src="~/lib/threejs/OBJLoader.js"></script>
     <script src="~/js/BasicPlane.js"></script>
     <script src="~/js/ModelLoader.js"></script>
+    <script src="~/js/WeaponHandler.js"></script>
 </body>
 </html>
 
