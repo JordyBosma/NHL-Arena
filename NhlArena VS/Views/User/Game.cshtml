@@ -261,7 +261,8 @@
                         case "DeathCommand":
                             console.log(command[i]);
                             if (command[i].deadPlayer.guid == playerGuid) {
-                                controls.getObject().position.set(20, 5, -30);
+                                controls.getObject().position.set(command[i].spawnLocation.x, command[i].spawnLocation.y, command[i].spawnLocation.z);
+                                controls.getObject().rotation.set(0, command[i].spawnLocation.rotationY, 0);
                                 ui.UpdatePlayerArmor(command[i].deadPlayer.armour);
                                 ui.UpdatePlayerHealth(command[i].deadPlayer.health);
                                 ui.UpdateGameScores(command[i].deadPlayer.kills, command[i].deadPlayer.deaths);
@@ -435,7 +436,6 @@
                 }
 
             });
-
 
             document.addEventListener('click', WeaponFire);
 
