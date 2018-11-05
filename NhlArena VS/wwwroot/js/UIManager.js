@@ -18,7 +18,7 @@
         this.tabbedTab = false;
         this.activeMenu = 0;
         document.addEventListener('keydown', function (event) {     //https://css-tricks.com/snippets/javascript/javascript-keycodes/
-            if (event.keyCode == 69) {  // e
+            if (event.keyCode == 82) {  // r
                 if (!scope.tabbedTab) {
                     scope.ShowScoreboard(true);
                 }
@@ -48,7 +48,7 @@
             }
         });
         document.addEventListener('keyup', function (event) {
-            if (event.keyCode == 69) {  //tab e
+            if (event.keyCode == 82) {  //tab r
                 if (!scope.endScene) {
                     scope.tabbedTab = false;
                     scope.ShowScoreboard(false);

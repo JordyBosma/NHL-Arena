@@ -64,7 +64,7 @@
                 <i class="icon material-icons noselect">info</i>
             </div>
             <div class="icon">
-                <label class="icon__label">E</label>
+                <label class="icon__label">R</label>
                 <i class="icon material-icons noselect">format_list_numbered</i>
             </div>
         </div>
@@ -380,23 +380,26 @@
 
                     commandArray = [];
                 }
-            }
+            }            
 
-                   
-
-            window.onscroll = function(e) {
-                requestAnimationFrame(function(){
-                    if (window.scrollY > lastScrollY) {
-                        currentWeapon = GetNextWeapon();
-                    }
-                    else if (window.scrollY < lastScrollY) {
-                        currentWeapon = GetPreviousWeapon();
-                    }
-                    lastScrollY = window.scrollY;
-                })
+            document.addEventListener('keydown', function (event) {
+                if (event.keyCode == 69) {  // e
+                    currentWeapon = GetNextWeapon(currentWeapon);
+                }
+                if (event.keyCode == 81) {  // q
+                    currentWeapon = GetPreviousWeapon(currentWeapon);
+                }
+                if (event.keyCode == 49) {  // 1
+                    currentWeapon = GetWeaponByIndex[1];
+                }
+                if (event.keyCode == 50) {  // 2
+                    currentWeapon = GetWeaponByIndex[2];
+                }
+                if (event.keyCode == 51) {  // 3
+                    currentWeapon = GetWeaponByIndex[3];
+                }
                 
-            }
-
+            });
 
 
             document.addEventListener('click', WeaponFire);
