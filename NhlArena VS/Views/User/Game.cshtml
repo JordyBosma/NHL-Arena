@@ -64,11 +64,7 @@
                 <i class="icon material-icons noselect">info</i>
             </div>
             <div class="icon">
-<<<<<<< HEAD
-                <label class="icon__label">F</label>
-=======
                 <label class="icon__label">R</label>
->>>>>>> weapon-handler
                 <i class="icon material-icons noselect">format_list_numbered</i>
             </div>
         </div>
@@ -543,10 +539,12 @@
                 for (var i = 0; i < projectiles.length; i++) {
                     if (projectiles[i] === undefined) continue;
                     if (projectiles[i].alive) {
+                        //translate projectile along a vector
                         projectiles[i].projectile.position.x += projectiles[i].velocity * projectiles[i].direction.x;
                         projectiles[i].projectile.position.y += projectiles[i].velocity * projectiles[i].direction.y;
                         projectiles[i].projectile.position.z += projectiles[i].velocity * projectiles[i].direction.z;
 
+                        //create raycaster and check for intersects
                         var projectileRaycaster = new THREE.Raycaster(projectiles[i].projectile.position, projectiles[i].direction, 0, 0.5);
 
                         var intersects = projectileRaycaster.intersectObjects(scene.children, true);
@@ -570,6 +568,7 @@
                             scene.remove(projectiles[i].projectile);
                         }
                     }
+                    //remove dead projectiles from array
                     if (projectiles[i].alive == false) {
                         projectiles.splice(i, 1);
                         continue;
@@ -664,6 +663,7 @@
             }
 
             function Raycasting() {
+
                 var directionVectors = [
                     new THREE.Vector3(0, 0, 1),
                     new THREE.Vector3(1, 0, 1),
@@ -690,7 +690,7 @@
                     for (var j = 0; j < intersects.length; j++) {
                         if (intersects.length != 0) {
                             if (intersects[j].object.name == "Map_Base") {
-                                controls.getObject().position.set(LastNonCollidedPostion.x, LastNonCollidedPostion.y, LastNonCollidedPostion.z);
+                                controls.getObject().position.set(LastNonCollidedPostion.x, LastNonCollidedPostion.y, LastNonCollidedPostion.z);                                
                                 hasCollided = true;
                             }
                         }
@@ -703,7 +703,7 @@
                 if (!hasCollided) {
                     LastNonCollidedPostion.x = pos.x;
                     LastNonCollidedPostion.y = pos.y;
-                    LastNonCollidedPostion.z = pos.z;
+                    LastNonCollidedPostion.z = pos.z;                    
                 }
             }
 
@@ -756,7 +756,3 @@
     <script src="~/js/WeaponHandler.js"></script>
 </body>
 </html>
-
-
-
-
