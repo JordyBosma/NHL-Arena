@@ -88,11 +88,11 @@
     </div>
 
     <!--bottom:-->
-    <div class="part__container part--bottom UIbottomleft">
-        <div class="part__center">
-            <i id="powerUpIcon" class="icon material-icons noselect fleft">flash_on</i>
-            <div id="powerUpTimer" class="timer fleft"></div>
-            <label id="powerUpName" class="poweruplabel fleft"></label>
+    <div id="powerup" class="part__container part--bottom UIbottomleft">
+        <div class="powerup part__center">
+            <div id="EmptyPower" class="powerup__item">
+                <i class="powerup__icon icon material-icons noselect fleft">flash_on</i>
+            </div>
         </div>
         <div class="part__right"></div>
     </div>
@@ -179,7 +179,7 @@
 
 
             function init() {
-                ui = new UIManager(ref);
+                ui = new UIManager(SetMultiplier);
                 renderer = new THREE.WebGLRenderer({ antialias: true });
                 renderer.setPixelRatio(window.devicePixelRatio);
                 renderer.setSize(window.innerWidth, window.innerHeight + 5);
@@ -300,10 +300,10 @@
                             if (command[i].targetPlayer == playerGuid) {
                                 //console.log("yeetus");
                                 if (command[i].item.type == "DamageBoost") {
-                                    //ui.StartPowerUp("Damage Boost", 30, "DamageBoost", 4);
+                                    ui.StartPowerUp("DamageBoost", "Damage Boost", 30, 4);
                                 }
                                 if (command[i].item.type == "SpeedBoost") {
-                                    //ui.StartPowerUp("Speed Boost", 20, "SpeedBoost", 2);
+                                    ui.StartPowerUp("SpeedBoost", "Speed Boost", 20, 2);
                                 }
                                 if (command[i].item.type == "AmmoItem") {
                                     console.log(command[i]);
