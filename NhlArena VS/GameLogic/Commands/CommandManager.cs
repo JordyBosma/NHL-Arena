@@ -163,6 +163,7 @@ namespace Commands
             {
                 game.getWorldObjects().Remove(obj);
             }
+            deleteCueue.Clear();
         }
 
         /// <summary>
