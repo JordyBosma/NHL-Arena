@@ -163,21 +163,19 @@
         var projectiles = []; //list of current projectiles
         var firingTimer = 0; //used to check if a player can fire accoriding to their firerate
         var currentWeapon; // current weapon
-        var lastScrollY; // last y coordinat of the scroll wheel to check if we scroll up or down
         var worldObjectsMesh = [];
-        var damageMultiplier = 1;
-        var speedMultiplier = 1;
+        var damageMultiplier = 1; //damageMultiplier used for damage boost powerup
+        var speedMultiplier = 1; //speedMultiplier used for speed boost powerup
         var ref = this;
 
         window.onload = function () {
             var playerGuid;
             var gameGuid;
 
+            //get the current time
             var prevTime = performance.now();
-
             var velocity = new THREE.Vector3();
-
-
+            
             function init() {
                 ui = new UIManager(SetMultiplier);
                 renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -186,7 +184,7 @@
 
                 document.body.appendChild(renderer.domElement);
 
-                //create new camera with controls
+                // Create new camera with controls
                 camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
 
                 // Create scene
@@ -199,9 +197,6 @@
                 controls.getObject().position.set(20, 5, -30);
 
                 window.addEventListener('resize', onWindowResize, false);
-
-                //var basicPlane = new BasicPlane();
-                //scene.add(basicPlane);
 
                 var NHLMap = new NHLArenaMap();
                 NHLMap.receiveShadow = true;
@@ -423,7 +418,7 @@
                 }
             }
 
-            //change guns
+            // Change guns using 'q' and 'a'
             document.addEventListener('keydown', function (event) {
                 if (event.keyCode == 69) {  // e
                     currentWeapon = GetNextWeapon(currentWeapon);
@@ -459,6 +454,8 @@
 
             document.addEventListener('click', WeaponFire);
 
+            /**
+             * When called fires weapon and add projectiles*/
             function WeaponFire() {
                 if (performance.now() > firingTimer && currentWeapon.ammo > 0) {
                     //Get direction and origin vectors
@@ -501,6 +498,10 @@
                 }
             }
 
+            // Add projectiles to the scene for the other players (not you)
+            // originPosition is a vector used to determine the origin of the projectile
+            // directionVector is a vector used to determine the direction of the projectile
+            // velocity is the speed of the projectile
             function AddProjectiles(weaponId, originPosition, directionVector, velocity) {
                 //Get direction vector
                 var direction = new THREE.Vector3(directionVector[0], directionVector[1], directionVector[2]);
@@ -523,6 +524,7 @@
                 projectiles.push(projectileObj)
             }
 
+            // Change the damage and speed value when you have a boost active
             function SetMultiplier(type, value) {
                 if (type == "DamageBoost") {
                     this.damageMultiplier = value;
@@ -575,6 +577,8 @@
                 if (firingTimer > 0) firingTimer -= 1;
             }
 
+            /**
+             * Move the player based on keyboard inputs and hit detection with the map*/
             function PlayerControls() {
                 var canJump = false;
 
@@ -663,6 +667,8 @@
                 renderer.setSize(window.innerWidth, window.innerHeight);
             }
 
+            /**
+             * Check for collisions with the map (so you don't fall out of the world)*/
             function Raycasting() {
                 var directionVectors = [
                     new THREE.Vector3(0, 0, 1),
@@ -740,12 +746,9 @@
         }
 
     </script>
-
-    <!--UI_need-->
     <script src="~/lib/jQuery v3.3.1.js"></script>
     <script src="~/lib/materialize/materialize.min.js"></script>
     <script src="~/js/UIManager.js"></script>
-    <!---->
     <script src="~/lib/threejs/three.min.js"></script>
     <script src="~/lib/threejs/OrbitControls.js"></script>
     <script src="~/lib/threejs/FirstPersonControls.js"></script>

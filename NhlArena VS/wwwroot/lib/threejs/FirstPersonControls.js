@@ -12,20 +12,11 @@ THREE.FirstPersonControls = function (camera) {
 
     camera.rotation.set(0, 0, 0);
 
-    //var box = new THREE.Mesh(
-    //    new THREE.BoxGeometry(0.1, 0.1, 5)
-    //);
-
-    //box.position.set(0, 0, -10);
-
     var pitchObject = new THREE.Object3D();
     pitchObject.add(camera);
 
     var yawObject = new THREE.Object3D();
     yawObject.add(pitchObject);
-    //pitchObject.add(box);
-
-    
 
     var PI_2 = Math.PI / 2;
 
@@ -43,10 +34,6 @@ THREE.FirstPersonControls = function (camera) {
     this.getObject = function () {
         return yawObject;
     };
-
-    //this.getCrosshair = function () {
-    //    return box;
-    //}
 
     this.moveForward = false;
     this.moveBackward = false;
@@ -76,12 +63,6 @@ THREE.FirstPersonControls = function (camera) {
                 break;
             case 32: // spacebar
                 scope.jump = true;
-                //if (canJump) {
-
-                //    //scope.jump = true;
-                //    //canJump = false;
-                //    //var timer = setTimeout(UpdateCanJump, delay);                                     
-                //}
                 break;
             case 49:
                 scope.goDown = true;
@@ -160,7 +141,7 @@ THREE.FirstPersonControls = function (camera) {
 
     this.getDirection = function () {
 
-        // assumes the camera itself is not rotated
+        // Assumes the camera itself is not rotated
 
         var direction = new THREE.Vector3(0, 0, - 1);
         var rotation = new THREE.Euler(0, 0, 0, "YXZ");

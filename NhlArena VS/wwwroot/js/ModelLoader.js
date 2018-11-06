@@ -13,6 +13,7 @@
             light.intensity = 2;
 
             // Create all lights in the map
+
             var lightKantine = new THREE.PointLight(0xfbffb7, 0.5, 80);
             lightKantine.position.set(-40, 5, -33);
 
