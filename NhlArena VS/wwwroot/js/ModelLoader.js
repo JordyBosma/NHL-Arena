@@ -14,7 +14,7 @@
     }
 }
 
-class Player1 extends THREE.Group {
+class Player extends THREE.Group {
     constructor(x,y,z,guid) {
         super();
         this.init(x,y,z,guid);
