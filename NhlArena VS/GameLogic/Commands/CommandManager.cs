@@ -132,37 +132,44 @@ namespace Commands
             List<Object3D> worldObjects = game.getWorldObjects();
             List<Object3D> deleteCueue = new List<Object3D>();
 
-            foreach (Object3D obj in worldObjects)
+            for(int i = 0; i < worldObjects.Count; i++)            
             {
-                if (obj is Player)
+                if(worldObjects[i] == null)
                 {
-                    if (obj.guid == uPlayer.playerGuid)
+                    return;
+                }
+                else if (worldObjects[i] is Player)
+                {
+                    if (worldObjects[i].guid == uPlayer.playerGuid)
                     {
                         if (uPlayer.y > -100)
                         {
-                            obj.Move(uPlayer.x, uPlayer.y, uPlayer.z);
-                            obj.Rotate(uPlayer.rotationX, uPlayer.rotationY, uPlayer.rotationZ);
-                            deleteCueue = CheckForPickup(uPlayer, obj);
-                            UpdateObjectCommand cmd = new UpdateObjectCommand(obj);
+                            worldObjects[i].Move(uPlayer.x, uPlayer.y, uPlayer.z);
+                            worldObjects[i].Rotate(uPlayer.rotationX, uPlayer.rotationY, uPlayer.rotationZ);
+                            deleteCueue = CheckForPickup(uPlayer, worldObjects[i]);
+                            for(int j =0; j< deleteCueue.Count; j++)
+                            {
+                                if (worldObjects.Contains(deleteCueue[j]))
+                                {
+                                    worldObjects.Remove(deleteCueue[j]);
+                                }
+                            }
+                            deleteCueue.Clear();
+                            UpdateObjectCommand cmd = new UpdateObjectCommand(worldObjects[i]);
                             SendCommandsToObservers(cmd);
                         }
                         else
                         {
                             PlayerSpawnLocation respawnLocation = playerSpawnList.GetSpawnLocation();
-                            DeathCommand cmd = new DeathCommand((Player)obj, respawnLocation);
-                            ((Player)obj).addDeath();
-                            UpdatePlayerStatsCommand cmd2 = new UpdatePlayerStatsCommand((Player)obj);
+                            DeathCommand cmd = new DeathCommand((Player)worldObjects[i], respawnLocation);
+                            ((Player)worldObjects[i]).addDeath();
+                            UpdatePlayerStatsCommand cmd2 = new UpdatePlayerStatsCommand((Player)worldObjects[i]);
                             SendCommandsToObservers(cmd);
                             SendCommandsToObservers(cmd2);
                         }
                     }
                 }
-            }
-
-            foreach (Object3D obj in deleteCueue)
-            {
-                game.getWorldObjects().Remove(obj);
-            }
+            }            
         }
 
         /// <summary>
@@ -236,7 +243,7 @@ namespace Commands
         public void InitializePlayer(Player newPlayer)
         {
             //new player krijgt zn guid en game guid
-            InitializePlayerCommand cmd = new InitializePlayerCommand(newPlayer.guid, game.gameId);
+            InitializePlayerCommand cmd = new InitializePlayerCommand(newPlayer.guid, game.gameId ,newPlayer.x, newPlayer.y,newPlayer.z);
             observers[observers.Count - 1].OnNext(cmd);
 
             //alle andere spelers krijgen die nieuwe speler
