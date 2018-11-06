@@ -274,6 +274,7 @@
                             if (command[i].deadPlayer.guid == playerGuid) {
                                 controls.getObject().position.set(command[i].spawnLocation.x, command[i].spawnLocation.y, command[i].spawnLocation.z);
                                 controls.getObject().rotation.set(0, command[i].spawnLocation.rotationY, 0);
+                                velocity.set(0, 0, 0);
                                 resetAmmo();
                                 ui.UpdateGunCurAmmo(currentWeapon.ammo);
                                 ui.UpdatePlayerArmor(command[i].deadPlayer.armour);
