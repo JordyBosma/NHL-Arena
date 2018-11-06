@@ -56,6 +56,7 @@ namespace WorldObjects
                 if (armourDamage > _armour)
                 {
                     armourDamage -= _armour;
+                    _armour = 0;
                     currentDamage = armourDamage / 2;
                 }
                 else
