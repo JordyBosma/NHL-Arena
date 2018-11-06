@@ -151,6 +151,11 @@ namespace ItemLogic
             }
         }
 
+        public PlayerSpawnLocation GetPlayerSpawnLocation()
+        {
+            return playerSpawnList.GetSpawnLocation();
+        }
+
         public void Dispose()
         {
             spawnTimer.Dispose();

@@ -196,7 +196,7 @@
                 controls = new THREE.FirstPersonControls(camera);
                 scene.add(controls.getObject());
 
-                controls.getObject().position.set(20, 5, -30);
+                controls.getObject().position.set(0, 100, 0);
 
                 window.addEventListener('resize', onWindowResize, false);
 
@@ -247,13 +247,13 @@
                 };
                 Socket.onerror = error => {
                     console.log(error);
-                    window.location.replace("http://" + window.location.hostname + ":" + window.location.port + "/User/Main");
+                    //window.location.replace("http://" + window.location.hostname + ":" + window.location.port + "/User/Main");
                 };
                 Socket.onclose = CloseEvent =>
                 {
                     console.log("socket closed");
                     console.log(CloseEvent);
-                    window.location.replace("http://" + window.location.hostname + ":" + window.location.port + "/User/Main");
+                    //window.location.replace("http://" + window.location.hostname + ":" + window.location.port + "/User/Main");
                 };
             Socket.onmessage = function (event) {
                 var command = JSON.parse(event.data);
@@ -261,6 +261,9 @@
                     switch (command[i].commandType) {
                         case "InitializePlayerCommand":
                             playerGuid = command[i].playerGuid
+
+                            controls.getObject().position.set(command[i].x, command[i].y, command[i].z);
+
                             //window.history.pushState("", "", '/User/Game/' + command[i].gameGuid);
                             break;
                         case "GameTimeLeftCommand":

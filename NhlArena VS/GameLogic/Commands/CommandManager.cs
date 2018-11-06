@@ -236,7 +236,7 @@ namespace Commands
         public void InitializePlayer(Player newPlayer)
         {
             //new player krijgt zn guid en game guid
-            InitializePlayerCommand cmd = new InitializePlayerCommand(newPlayer.guid, game.gameId);
+            InitializePlayerCommand cmd = new InitializePlayerCommand(newPlayer.guid, game.gameId ,newPlayer.x, newPlayer.y,newPlayer.z);
             observers[observers.Count - 1].OnNext(cmd);
 
             //alle andere spelers krijgen die nieuwe speler
