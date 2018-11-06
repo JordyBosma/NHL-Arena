@@ -189,7 +189,6 @@
     right: 0;
 }
 .UIbottomright .gamescore{
-    width: 400px;
     display:flex;
     justify-content: flex-end;
 }
