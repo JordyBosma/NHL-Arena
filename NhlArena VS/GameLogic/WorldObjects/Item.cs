@@ -27,19 +27,19 @@ namespace WorldObjects
             if (weaponId == 0)
             {
                 this.weaponId = weaponId;
-                this.itemValue = 50;
+                this.itemValue = 100;
             }
 
             if (weaponId == 1)
             {
                 this.weaponId = weaponId;
-                this.itemValue = 10;
+                this.itemValue = 15;
             }
 
             if (weaponId == 2)
             {
                 this.weaponId = weaponId;
-                this.itemValue = 30;
+                this.itemValue = 50;
             }
         }
     }
