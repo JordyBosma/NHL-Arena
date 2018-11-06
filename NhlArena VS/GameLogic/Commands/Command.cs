@@ -144,15 +144,25 @@ namespace Commands
         }
     }
 
+    /// <summary>
+    /// initialize player. server to client
+    /// </summary>
     public class InitializePlayerCommand : Command
     {
         public Guid playerGuid { get; }
         public Guid gameGuid { get; }
+        public double x { get; }
+        public double y { get; }
+        public double z { get; }
 
-        public InitializePlayerCommand(Guid playerGuid, Guid gameGuid) : base("InitializePlayerCommand")
+        public InitializePlayerCommand(Guid playerGuid, Guid gameGuid, double x, double y, double z) : base("InitializePlayerCommand")
         {
             this.playerGuid = playerGuid;
             this.gameGuid = gameGuid;
+            this.x = x;
+            this.y = y;
+            this.z = z;
+
         }
     }
 
