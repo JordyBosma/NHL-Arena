@@ -15,12 +15,12 @@
 }
 
 class Player extends THREE.Group {
-    constructor(x,y,z,guid, charPath) {
+    constructor(x, y, z, guid, charPath) {
         super();
-        this.init(x,y,z,guid, charPath);
+        this.init(x, y, z, guid, charPath);
     }
 
-    init(x,y,z,guid, charPath) {
+    init(x, y, z, guid, charPath) {
         var selfRef = this;
         var charPathobj = charPath + ".obj";
         var charPathmtl = charPath + ".mtl";
@@ -50,8 +50,18 @@ class Projectile extends THREE.Group {
         var pathobj = "/models/objects/" + charPath + "/"
         var pathmtl = "/models/materials/" + charPath + "/"
         loadOBJModel(pathobj, charPathobj, pathmtl, charPathmtl, (mesh) => {
-            mesh.scale.set(1, 1, 1);
-            //mesh.rotation.y = Math.PI;
+            if (charPath == "Duffcan") {
+                mesh.scale.set(0.05, 0.05, 0.05);
+            }
+            else {
+                mesh.scale.set(1, 1, 1);
+            }
+
+            if (charPath == "Yeettop") {
+                mesh.rotation.z = (Math.PI / 2);
+                mesh.rotation.y = (Math.PI / 2);
+            }
+
             selfRef.add(mesh);
         });
     }
@@ -88,11 +98,11 @@ class DamageBoost extends THREE.Group {
                         'float theta = time * 2.0;',
                         'float c = cos( theta );',
                         'float s = sin( theta );',
-                        
+
                         'mat3 m = mat3( c, 0, s, 0, 1, 0, -s, 0, c );',
                         'vec3 transformed = vec3( position ) * m;',
                         'vNormal = vNormal * m;'
-                        
+
                     ].join('\n')
                 );
                 selfRef.materialShader = shader;

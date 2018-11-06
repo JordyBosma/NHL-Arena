@@ -448,24 +448,24 @@
                     ui.UpdateGunMaxAmmo(currentWeapon.maxAmmo);
                     ui.UpdateGunCurAmmo(currentWeapon.ammo);
                 }
-                if (event.keyCode == 49) {  // 1
-                    currentWeapon = GetWeaponByIndex[1];
-                    ui.UpdateGunName(currentWeapon.name);
-                    ui.UpdateGunMaxAmmo(currentWeapon.maxAmmo);
-                    ui.UpdateGunCurAmmo(currentWeapon.ammo);
-                }
-                if (event.keyCode == 50) {  // 2
-                    currentWeapon = GetWeaponByIndex[2];
-                    ui.UpdateGunName(currentWeapon.name);
-                    ui.UpdateGunMaxAmmo(currentWeapon.maxAmmo);
-                    ui.UpdateGunCurAmmo(currentWeapon.ammo);
-                }
-                if (event.keyCode == 51) {  // 3
-                    currentWeapon = GetWeaponByIndex[3];
-                    ui.UpdateGunName(currentWeapon.name);
-                    ui.UpdateGunMaxAmmo(currentWeapon.maxAmmo);
-                    ui.UpdateGunCurAmmo(currentWeapon.ammo);
-                }
+            //    if (event.keyCode == 49) {  // 1
+            //        currentWeapon = GetWeaponByIndex[0];
+            //        ui.UpdateGunName(currentWeapon.name);
+            //        ui.UpdateGunMaxAmmo(currentWeapon.maxAmmo);
+            //        ui.UpdateGunCurAmmo(currentWeapon.ammo);
+            //    }
+            //    if (event.keyCode == 50) {  // 2
+            //        currentWeapon = GetWeaponByIndex[1];
+            //        ui.UpdateGunName(currentWeapon.name);
+            //        ui.UpdateGunMaxAmmo(currentWeapon.maxAmmo);
+            //        ui.UpdateGunCurAmmo(currentWeapon.ammo);
+            //    }
+            //    if (event.keyCode == 51) {  // 3
+            //        currentWeapon = GetWeaponByIndex[2];
+            //        ui.UpdateGunName(currentWeapon.name);
+            //        ui.UpdateGunMaxAmmo(currentWeapon.maxAmmo);
+            //        ui.UpdateGunCurAmmo(currentWeapon.ammo);
+            //    }
             });
 
             document.addEventListener('click', WeaponFire);
@@ -479,7 +479,7 @@
 
                     //Make new projectile and set position to player position
                     var projectile = new THREE.Object3D();
-                    projectile = worldObjectsMesh[0].children[0].clone();
+                    projectile = worldObjectsMesh[currentWeapon.id].children[0].clone();
                     projectile.position.set(objPos.x, objPos.y, objPos.z);
                     scene.add(projectile);
 
@@ -518,6 +518,7 @@
                 var direction = new THREE.Vector3(directionVector[0], directionVector[1], directionVector[2]);
 
                 //Make new projectile and set position to player position
+
                 var projectile = new THREE.Object3D();
                 projectile = worldObjectsMesh[0].children[0].clone();
                 projectile.position.set(originPosition[0], originPosition[1], originPosition[2]);
