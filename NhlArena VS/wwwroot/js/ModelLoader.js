@@ -14,110 +14,18 @@
     }
 }
 
-class Player1 extends THREE.Group {
-    constructor(x,y,z,guid) {
+class Player extends THREE.Group {
+    constructor(x,y,z,guid, charPath) {
         super();
-        this.init(x,y,z,guid);
+        this.init(x,y,z,guid, charPath);
     }
 
-    init(x,y,z,guid) {
+    init(x,y,z,guid, charPath) {
         var selfRef = this;
-        loadOBJModel("/models/objects/Character/Blonde/", "Character_Blonde.obj", "/models/materials/Character/Blonde/", "Character_Blonde.mtl", (mesh) => {
-            mesh.scale.set(1, 1, 1);
-            mesh.position.y -= 2;
-            mesh.rotation.y = Math.PI;
-            selfRef.add(mesh);
-        });
-        selfRef.position.set(x, y, z);
-        this.playerGuid = guid;
-    }
-}
-
-class Player2 extends THREE.Group {
-    constructor(x, y, z, guid) {
-        super();
-        this.init(x, y, z, guid);
-    }
-
-    init(x, y, z, guid) {
-        var selfRef = this;
-        loadOBJModel("/models/objects/Character/Coby/", "Player_NBA.obj", "/models/materials/Character/Coby/", "Player_NBA.mtl", (mesh) => {
-            mesh.scale.set(1, 1, 1);
-            mesh.position.y -= 2;
-            mesh.rotation.y = Math.PI;
-            selfRef.add(mesh);
-        });
-        selfRef.position.set(x, y, z);
-        this.playerGuid = guid;
-    }
-}
-
-class Player3 extends THREE.Group {
-    constructor(x, y, z, guid) {
-        super();
-        this.init(x, y, z, guid);
-    }
-
-    init(x, y, z, guid) {
-        var selfRef = this;
-        loadOBJModel("/models/objects/Character/Jos/", "Character_Jos.obj", "/models/materials/Character/Jos/", "Character_Jos.mtl", (mesh) => {
-            mesh.scale.set(1, 1, 1);
-            mesh.position.y -= 2;
-            mesh.rotation.y = Math.PI;
-            selfRef.add(mesh);
-        });
-        selfRef.position.set(x, y, z);
-        this.playerGuid = guid;
-    }
-}
-
-class Player4 extends THREE.Group {
-    constructor(x, y, z, guid) {
-        super();
-        this.init(x, y, z, guid);
-    }
-
-    init(x, y, z, guid) {
-        var selfRef = this;
-        loadOBJModel("/models/objects/Character/Lifter/", "Character_Lifter.obj", "/models/materials/Character/Lifter/", "Character_Lifter.mtl", (mesh) => {
-            mesh.scale.set(1, 1, 1);
-            mesh.position.y -= 2;
-            mesh.rotation.y = Math.PI;
-            selfRef.add(mesh);
-        });
-        selfRef.position.set(x, y, z);
-        this.playerGuid = guid;
-    }
-}
-
-class Player5 extends THREE.Group {
-    constructor(x, y, z, guid) {
-        super();
-        this.init(x, y, z, guid);
-    }
-
-    init(x, y, z, guid) {
-        var selfRef = this;
-        loadOBJModel("/models/objects/Character/Math/", "Character_Math.obj", "/models/materials/Character/Math/", "Character_Math.mtl", (mesh) => {
-            mesh.scale.set(1, 1, 1);
-            mesh.position.y -= 2;
-            mesh.rotation.y = Math.PI;
-            selfRef.add(mesh);
-        });
-        selfRef.position.set(x, y, z);
-        this.playerGuid = guid;
-    }
-}
-
-class Player6 extends THREE.Group {
-    constructor(x, y, z, guid) {
-        super();
-        this.init(x, y, z, guid);
-    }
-
-    init(x, y, z, guid) {
-        var selfRef = this;
-        loadOBJModel("/models/objects/Character/Red/", "Character_Red.obj", "/models/materials/Character/Red/", "Character_Red.mtl", (mesh) => {
+        var charPathobj = charPath + ".obj";
+        var charPathmtl = charPath + ".mtl";
+        var path = "/models/materials/Character/" + charPath + "/"
+        loadOBJModel("/models/objects/Character/", charPathobj, path, charPathmtl, (mesh) => {
             mesh.scale.set(1, 1, 1);
             mesh.position.y -= 2;
             mesh.rotation.y = Math.PI;
@@ -129,20 +37,23 @@ class Player6 extends THREE.Group {
 }
 
 class Projectile extends THREE.Group {
-    constructor() {
+    constructor(weapontype) {
         super();
-        this.init();
+        this.init(weapontype);
     }
 
-    init() {
+    init(charPath) {
         var selfRef = this;
-        var material = new THREE.MeshLambertMaterial({ color: 0xff0000, wireframe: true });
-        var box = new THREE.Mesh(
-            new THREE.SphereGeometry(1),
-            material
-        );
-        box.scale.set(0.1, 0.1, 0.1);
-        selfRef.add(box);
+
+        var charPathobj = charPath + ".obj";
+        var charPathmtl = charPath + ".mtl";
+        var pathobj = "/models/objects/" + charPath + "/"
+        var pathmtl = "/models/materials/" + charPath + "/"
+        loadOBJModel(pathobj, charPathobj, pathmtl, charPathmtl, (mesh) => {
+            mesh.scale.set(1, 1, 1);
+            //mesh.rotation.y = Math.PI;
+            selfRef.add(mesh);
+        });
     }
 }
 

@@ -176,7 +176,6 @@
             var prevTime = performance.now();
             
             var velocity = new THREE.Vector3();
-            
 
             function init() {
                 ui = new UIManager(ref);
@@ -206,14 +205,10 @@
                 var NHLMap = new NHLArenaMap();
                 scene.add(NHLMap);
 
-                //Load worldobjects for better preformance
-                worldObjectsMesh[0] = player1 = new Player1();
-                worldObjectsMesh[1] = player2 = new Player2();
-                worldObjectsMesh[2] = player3 = new Player3();
-                worldObjectsMesh[3] = player4 = new Player4();
-                worldObjectsMesh[4] = player5 = new Player5();
-                worldObjectsMesh[5] = player6 = new Player6();
-                worldObjectsMesh[6] = projectile = new Projectile();
+                //load all projectiles, so that it doesn't have to be loaded on every shot
+                worldObjectsMesh[0] = apple = new Projectile("Apple");
+                worldObjectsMesh[1] = yeettop = new Projectile("Yeettop");
+                worldObjectsMesh[2] = duffcan = new Projectile("Duffcan");
 
                 var light = new THREE.AmbientLight(0x404040);
                 light.intensity = 2;
@@ -254,7 +249,7 @@
                     console.log(error);
                     window.location.replace("http://" + window.location.hostname + ":" + window.location.port + "/User/Main");
                 };
-                Socket.onclosed = CloseEvent =>
+                Socket.onclose = CloseEvent =>
                 {
                     console.log("socket closed");
                     console.log(CloseEvent);
@@ -325,9 +320,11 @@
                                 ui.AddScoreboardScore(command[i].obj);
                                 if (command[i].obj.guid != playerGuid) {
 
-                                    var newPlayer = new THREE.Object3D();
-                                    newPlayer = worldObjectsMesh[command[i].playerModel].children[0].clone();
-                                    scene.add(newPlayer);
+                                    var player = new Player(command[i].obj.x, command[i].obj.y, command[i].obj.z, command[i].obj.guid, "Character_Lifter");
+                                    scene.add(player);
+                                    //var newPlayer = new THREE.Object3D();
+                                    //newPlayer = worldObjectsMesh[command[i].playerModel].children[0].clone();
+                                    //scene.add(newPlayer);
 
                                     worldObjects[command[i].obj.guid] = player;
                                     console.log(command[i]);
@@ -481,7 +478,7 @@
 
                     //Make new projectile and set position to player position
                     var projectile = new THREE.Object3D();
-                    projectile = worldObjectsMesh[6].children[0].clone();
+                    projectile = worldObjectsMesh[0].children[0].clone();
                     projectile.position.set(objPos.x, objPos.y, objPos.z);
                     scene.add(projectile);
 
@@ -505,7 +502,6 @@
                         velocity: currentWeapon.velocity
                     };
 
-
                     commandArray.push(fireCommand);
 
                     //Add apple projectile to projectiles array
@@ -522,7 +518,7 @@
 
                 //Make new projectile and set position to player position
                 var projectile = new THREE.Object3D();
-                projectile = worldObjectsMesh[6].children[0].clone();
+                projectile = worldObjectsMesh[0].children[0].clone();
                 projectile.position.set(originPosition[0], originPosition[1], originPosition[2]);
                 scene.add(projectile);
 
