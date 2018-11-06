@@ -517,7 +517,6 @@
 
                 var projectile = new THREE.Object3D();
                 projectile = worldObjectsMesh[weaponId].children[0].clone();
-                projectile.position.set(objPos.x, objPos.y, objPos.z);
                 projectile.position.set(originPosition[0], originPosition[1], originPosition[2]);
                 scene.add(projectile);
 
