@@ -17,6 +17,7 @@
         this.endScene = false;
 
         var scope = this;
+        this.sscope = x;
         this.tabbedTab = false;
         this.activeMenu = 0;
         document.addEventListener('keydown', function (event) {     //https://css-tricks.com/snippets/javascript/javascript-keycodes/
@@ -285,17 +286,19 @@
     }
     */
     //powerup
-    StartPowerUp(name, length) {
+    StartPowerUp(name, length, type, value, powerupObject) {
         if (this.powerUpTimer != null) {
             this.powerUpTimer.StopTimer();
         }
-        this.powerUpTimer = new displayTimer(length, "powerUpTimer", this.StopPowerUp);
+        this.sscope.SetMultiplier(type, value);
+        this.powerUpTimer = new displayTimer(length, "powerUpTimer", function() { this.StopPowerUp(); this.sscope.SetMultiplier(type, 1); });
         document.getElementById("powerUpIcon").style.color = "rgb(0, 160, 255)";
         document.getElementById("powerUpName").innerHTML = name;
         console.log("start powerup");
     }
 
     StopPowerUp() {
+        //this.sscope.SetMultiplier()
         document.getElementById("powerUpIcon").style.color = "white";
         document.getElementById("powerUpTimer").innerHTML = "";
         document.getElementById("powerUpName").innerHTML = "";

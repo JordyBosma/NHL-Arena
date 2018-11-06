@@ -5,12 +5,26 @@ Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd Body_txt.png
 Ni 1.00
-newmtl Feet_Shader
+newmtl FeetL_Shader
 illum 4
 Kd 1.00 1.00 1.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
-map_Kd Feet_txt.png
+map_Kd FeetL_txt.png
+Ni 1.00
+newmtl FeetR_Shader
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd FeetR_txt.png
+Ni 1.00
+newmtl Hand_Shader
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Hand_Txt.png
 Ni 1.00
 newmtl Head_Shader
 illum 4
@@ -24,11 +38,4 @@ illum 4
 Kd 0.50 0.50 0.50
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
-Ni 1.00
-newmtl lambert2SG
-illum 4
-Kd 1.00 1.00 1.00
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-map_Kd Hand_Txt.png
 Ni 1.00

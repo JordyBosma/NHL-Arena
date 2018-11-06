@@ -179,16 +179,16 @@ namespace Commands
                                 UpdatePlayerStatsCommand cmd = new UpdatePlayerStatsCommand((Player)obj);
                                 SendCommandsToObservers(cmd);
                             }
-                            else if (s.item.type == "ArmourItem")
+                            if (s.item.type == "ArmourItem")
                             {
                                 ((Player)obj).addArmour(((ArmourItem)s.item).itemValue);
                                 UpdatePlayerStatsCommand cmd = new UpdatePlayerStatsCommand((Player)obj);
                                 SendCommandsToObservers(cmd);
                             }
-                            else
+                            if (s.item.type == "SpeedBoost")
                             {
-                                PlayerPickupCommand cmd = new PlayerPickupCommand(s.item, ((Player)obj).guid);
-                                SendCommandsToObservers(cmd);
+                                PlayerPickupCommand cmd2 = new PlayerPickupCommand(s.item, ((Player)obj).guid);
+                                SendCommandsToObservers(cmd2);
                             }
 
                             DeleteObjectCommand cmd1 = new DeleteObjectCommand(s.item);

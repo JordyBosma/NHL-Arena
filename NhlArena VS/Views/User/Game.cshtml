@@ -165,6 +165,9 @@
         var currentWeapon; // current weapon
         var lastScrollY; // last y coordinat of the scroll wheel to check if we scroll up or down
         var worldObjectsMesh = [];
+        var damageMultiplier = 1;
+        var speedMultiplier = 1;
+        var ref = this;
 
         window.onload = function () {
             var playerGuid;
@@ -176,7 +179,7 @@
             currentWeapon = GetDefaultWeapon();
 
             function init() {
-                ui = new UIManager();
+                ui = new UIManager(ref);
                 renderer = new THREE.WebGLRenderer({ antialias: true });
                 renderer.setPixelRatio(window.devicePixelRatio);
                 renderer.setSize(window.innerWidth, window.innerHeight + 5);
@@ -286,10 +289,10 @@
                             if (command[i].targetPlayer == playerGuid) {
                                 //console.log("yeetus");
                                 if (command[i].item.type == "DamageBoost") {
-                                    console.log("DAMAGE");
+                                    //ui.StartPowerUp("Damage Boost", 30, "DamageBoost", 4);
                                 }
                                 if (command[i].item.type == "SpeedBoost") {
-                                    console.log("SPEED");
+                                    //ui.StartPowerUp("Speed Boost", 20, "SpeedBoost", 2);
                                 }
                                 if (command[i].item.type == "AmmoItem") {
                                     console.log("AMMO");
@@ -301,10 +304,6 @@
                             break;
                         case "NewObjectCommand":
                             if (command[i].obj.type == "Player") {
-                                //var player = new Player(command[i].obj.x, command[i].obj.y, command[i].obj.z, command[i].obj.guid);
-                                //scene.add(player);
-
-                                //worldObjects[command[i].obj.guid] = player;
                                 console.log(command[i]);
                                 ui.AddScoreboardScore(command[i].obj);
                                 if (command[i].obj.guid != playerGuid) {
@@ -497,6 +496,17 @@
                 };
 
                 projectiles.push(projectileObj)
+            }
+
+            function SetMultiplier(type, value) {
+                if (type == "DamageBoost") {
+                    this.damageMultiplier = value;
+                    console.log(this.damageMultiplier);
+                }
+                if (type == "SpeedBoost") {
+                    this.speedMultiplier = value;
+                    console.log(this.speedMultiplier);
+                }
             }
 
             /**
