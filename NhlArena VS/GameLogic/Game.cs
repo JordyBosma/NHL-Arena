@@ -69,7 +69,7 @@ namespace GameLogic
         /// <returns></returns>
         public bool AddPlayer(Client newClient)
         {
-            if (worldObjects.Count() < 7)
+            if (GetPlayerCount() < 7)
             {
                 PlayerSpawnLocation spawn = spawnManager.GetPlayerSpawnLocation();
                 Player newPlayer = new Player(newClient, spawn.x, spawn.y, spawn.z, spawn.rotationX, spawn.rotationY, spawn.rotationZ);

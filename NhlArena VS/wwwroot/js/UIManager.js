@@ -119,8 +119,6 @@
         if (row != null) {
             row.cells[2].innerHTML = score.kills;
             row.cells[3].innerHTML = score.deaths;
-            console.log("update soreboard:");
-            console.log({ updscore: score });
             this.OrderScoreboardScore();
         }
         
@@ -138,8 +136,6 @@
             cell3.innerHTML = score.kills;
             var cell4 = row.insertCell(3);  //deaths
             cell4.innerHTML = score.deaths;
-            console.log("add soreboard:");
-            console.log({ addscore: score });
             this.OrderScoreboardScore(score);
         }
     }
@@ -253,7 +249,6 @@
             var parent = child.parentNode;
             var index = Array.prototype.indexOf.call(parent.children, child);   // The equivalent of parent.children.indexOf(child)
             this.powerUpTimers[index].SetTime(length);
-            console.log("update powerup");
         //add powerdisplay:
         } else {
             this.powers = this.powers + 1;
@@ -285,7 +280,6 @@
             document.getElementById("powerup").style.setProperty('--part-height', this.pheight+"px");
             document.getElementById("powerup").getElementsByClassName("powerup")[0].appendChild(newpowerdisplay);
             this.setMultiplier(id, value);
-            console.log("start powerup");
         }
     }
 
@@ -311,7 +305,6 @@
         document.getElementById("powerup").style.setProperty('--part-height', scope.pheight + "px");
         var power = powerElement.id;
         scope.setMultiplier(power, 1);
-        console.log("stop powerup");
     }
 
     StopPowers() {
@@ -363,7 +356,6 @@ class displayTimer {
 
     StopTimer() {
         clearInterval(this.runTimer);
-        console.log("stop timerDisplay");
         if (this.stopAction != null) {
             this.stopAction(this.displayElement, this.scope);
         } 

@@ -10,7 +10,6 @@ namespace WorldObjects
     {
         private Client playerClient;
         public string username { get; }
-        private bool _isMoving;
         public bool isMoving;
 
         private int _health;
@@ -22,6 +21,8 @@ namespace WorldObjects
         private int _deaths;
         public int kills { get { return _kills; } }
         public int deaths { get { return _deaths; } }
+        public string playerModel { get; }
+        
 
         public Player(Client playerClient, double x, double y, double z, double rotationX, double rotationY, double rotationZ) : base(x, y, z, rotationX, rotationY, rotationZ, "Player")
         {
@@ -36,6 +37,10 @@ namespace WorldObjects
             }
             this._health = 100;
             this._armour = 0;
+
+            Random random = new Random();
+            string[] playerOptions = new string[] { "Character_Blonde", "Character_Jos", "Character_Lifter", "Character_Math", "Character_Red", "Player_NBA" };
+            this.playerModel = playerOptions[random.Next(6)];
             playerClient.SetPlayer(this);
         }
 

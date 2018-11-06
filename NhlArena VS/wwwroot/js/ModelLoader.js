@@ -48,109 +48,17 @@
 }
 
 class Player extends THREE.Group {
-    constructor(x, y, z, guid) {
+    constructor(x, y, z, guid, charPath) {
         super();
-        this.init(x, y, z, guid);
+        this.init(x, y, z, guid, charPath);
     }
 
-    init(x, y, z, guid) {
+    init(x, y, z, guid, charPath) {
         var selfRef = this;
-        loadOBJModel("/models/objects/Character/", "CharacterRed.obj", "/models/materials/Character/", "CharacterRed.mtl", (mesh) => {
-            mesh.scale.set(1, 1, 1);
-            mesh.position.y -= 2;
-            mesh.rotation.y = Math.PI;
-            selfRef.add(mesh);
-        });
-        selfRef.position.set(x, y, z);
-        this.playerGuid = guid;
-    }
-}
-
-class Player2 extends THREE.Group {
-    constructor(x, y, z, guid) {
-        super();
-        this.init(x, y, z, guid);
-    }
-
-    init(x, y, z, guid) {
-        var selfRef = this;
-        loadOBJModel("/models/objects/Character/", "CharacterRed.obj", "/models/materials/Character/", "CharacterRed.mtl", (mesh) => {
-            mesh.scale.set(1, 1, 1);
-            mesh.position.y -= 2;
-            mesh.rotation.y = Math.PI;
-            selfRef.add(mesh);
-        });
-        selfRef.position.set(x, y, z);
-        this.playerGuid = guid;
-    }
-}
-
-class Player3 extends THREE.Group {
-    constructor(x, y, z, guid) {
-        super();
-        this.init(x, y, z, guid);
-    }
-
-    init(x, y, z, guid) {
-        var selfRef = this;
-        loadOBJModel("/models/objects/Character/", "CharacterRed.obj", "/models/materials/Character/", "CharacterRed.mtl", (mesh) => {
-            mesh.scale.set(1, 1, 1);
-            mesh.position.y -= 2;
-            mesh.rotation.y = Math.PI;
-            selfRef.add(mesh);
-        });
-        selfRef.position.set(x, y, z);
-        this.playerGuid = guid;
-    }
-}
-
-class Player4 extends THREE.Group {
-    constructor(x, y, z, guid) {
-        super();
-        this.init(x, y, z, guid);
-    }
-
-    init(x, y, z, guid) {
-        var selfRef = this;
-        loadOBJModel("/models/objects/Character/", "CharacterRed.obj", "/models/materials/Character/", "CharacterRed.mtl", (mesh) => {
-            mesh.scale.set(1, 1, 1);
-            mesh.position.y -= 2;
-            mesh.rotation.y = Math.PI;
-            selfRef.add(mesh);
-        });
-        selfRef.position.set(x, y, z);
-        this.playerGuid = guid;
-    }
-}
-
-class Player5 extends THREE.Group {
-    constructor(x, y, z, guid) {
-        super();
-        this.init(x, y, z, guid);
-    }
-
-    init(x, y, z, guid) {
-        var selfRef = this;
-        loadOBJModel("/models/objects/Character/", "CharacterRed.obj", "/models/materials/Character/", "CharacterRed.mtl", (mesh) => {
-            mesh.scale.set(1, 1, 1);
-            mesh.position.y -= 2;
-            mesh.rotation.y = Math.PI;
-            selfRef.add(mesh);
-        });
-        selfRef.position.set(x, y, z);
-        this.playerGuid = guid;
-    }
-}
-
-class Player6 extends THREE.Group {
-    constructor(x, y, z, guid) {
-        super();
-        this.init(x, y, z, guid);
-    }
-
-    init(x, y, z, guid) {
-        var selfRef = this;
-        loadOBJModel("/models/objects/Character/", "CharacterRed.obj", "/models/materials/Character/", "CharacterRed.mtl", (mesh) => {
+        var charPathobj = charPath + ".obj";
+        var charPathmtl = charPath + ".mtl";
+        var path = "/models/materials/Character/" + charPath + "/"
+        loadOBJModel("/models/objects/Character/", charPathobj, path, charPathmtl, (mesh) => {
             mesh.scale.set(1, 1, 1);
             mesh.position.y -= 2;
             mesh.rotation.y = Math.PI;
@@ -162,20 +70,33 @@ class Player6 extends THREE.Group {
 }
 
 class Projectile extends THREE.Group {
-    constructor() {
+    constructor(weapontype) {
         super();
-        this.init();
+        this.init(weapontype);
     }
 
-    init() {
+    init(charPath) {
         var selfRef = this;
-        var material = new THREE.MeshLambertMaterial({ color: 0xff0000, wireframe: true });
-        var box = new THREE.Mesh(
-            new THREE.SphereGeometry(1),
-            material
-        );
-        box.scale.set(0.1, 0.1, 0.1);
-        selfRef.add(box);
+
+        var charPathobj = charPath + ".obj";
+        var charPathmtl = charPath + ".mtl";
+        var pathobj = "/models/objects/" + charPath + "/"
+        var pathmtl = "/models/materials/" + charPath + "/"
+        loadOBJModel(pathobj, charPathobj, pathmtl, charPathmtl, (mesh) => {
+            if (charPath == "Duffcan") {
+                mesh.scale.set(0.05, 0.05, 0.05);
+            }
+            else {
+                mesh.scale.set(1, 1, 1);
+            }
+
+            if (charPath == "Yeettop") {
+                mesh.rotation.z = (Math.PI / 2);
+                mesh.rotation.y = (Math.PI / 2);
+            }
+
+            selfRef.add(mesh);
+        });
     }
 }
 
@@ -198,9 +119,7 @@ class DamageBoost extends THREE.Group {
         loadOBJModel("/models/objects/Pickups/", "Pickup_Damage.obj", "/models/materials/Pickups/", "Pickup_Damage.mtl", (mesh) => {
             //console.log(mesh);
             mesh.children[0].material.onBeforeCompile = function (shader) {
-
-                console.log(shader);
-
+                
                 shader.uniforms.time = { value: 0 };
 
                 shader.vertexShader = 'uniform float time;\n' + shader.vertexShader;
@@ -243,9 +162,7 @@ class SpeedBoost extends THREE.Group {
 
         loadOBJModel("/models/objects/Pickups/", "Pickup_Speed.obj", "/models/materials/Pickups/", "Pickup_Speed.mtl", (mesh) => {
             mesh.children[0].material.onBeforeCompile = function (shader) {
-
-                console.log(shader);
-
+                               
                 shader.uniforms.time = { value: 0 };
 
                 shader.vertexShader = 'uniform float time;\n' + shader.vertexShader;
@@ -288,9 +205,7 @@ class AmmoItem extends THREE.Group {
 
         loadOBJModel("/models/objects/Pickups/", "Pickup_Ammo.obj", "/models/materials/Pickups/", "Pickup_Ammo.mtl", (mesh) => {
             mesh.children[0].material.onBeforeCompile = function (shader) {
-
-                console.log(shader);
-
+                                
                 shader.uniforms.time = { value: 0 };
 
                 shader.vertexShader = 'uniform float time;\n' + shader.vertexShader;
@@ -333,9 +248,7 @@ class HealthItem extends THREE.Group {
 
         loadOBJModel("/models/objects/Pickups/", "Pickup_Health.obj", "/models/materials/Pickups/", "Pickup_Health.mtl", (mesh) => {
             mesh.children[0].material.onBeforeCompile = function (shader) {
-
-                console.log(shader);
-
+                
                 shader.uniforms.time = { value: 0 };
 
                 shader.vertexShader = 'uniform float time;\n' + shader.vertexShader;
@@ -378,9 +291,7 @@ class ArmourItem extends THREE.Group {
 
         loadOBJModel("/models/objects/Pickups/", "Pickup_Shield.obj", "/models/materials/Pickups/", "Pickup_Shield.mtl", (mesh) => {
             mesh.children[0].material.onBeforeCompile = function (shader) {
-
-                console.log(shader);
-
+                
                 shader.uniforms.time = { value: 0 };
 
                 shader.vertexShader = 'uniform float time;\n' + shader.vertexShader;
@@ -423,6 +334,6 @@ function loadOBJModel(objPath, objName, materialPath, materialName, onload) {
                 .setMaterials(materials)
                 .load(objName, function (object) {
                     onload(object);
-                }, function () { }, function (e) { console.log("Error loading model"); console.log(e); });
+                }, function () { }, function (e) { console.log("Error loading model"); });
         });
 }
