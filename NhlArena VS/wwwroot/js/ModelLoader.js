@@ -14,40 +14,42 @@
 
             // Create all lights in the map
 
-            var lightKantine = new THREE.PointLight(0xfbffb7, 0.5, 80);
+            var lightKantine = new THREE.PointLight(0xfbffb7, 0.5, 80); // light with color 0xfbffb7, intensity 0.5, distance 80
             lightKantine.position.set(-40, 5, -33);
 
-            var lightKuil = new THREE.PointLight(0xfbffb7, 0.5, 80);
+            var lightKuil = new THREE.PointLight(0xfbffb7, 0.5, 80); // light with color 0xfbffb7, intensity 0.5, distance 80
             lightKuil.position.set(25, 15, -40);
 
-            var lightTunnel1 = new THREE.PointLight(0xfbffb7, 0.5, 10);
+            var lightTunnel1 = new THREE.PointLight(0xfbffb7, 0.5, 10); // light with color 0xfbffb7, intensity 0.5, distance 10
             lightTunnel1.position.set(-10, 2, 55);
 
-            var lightTunnel2 = new THREE.PointLight(0xfbffb7, 0.5, 10);
+            var lightTunnel2 = new THREE.PointLight(0xfbffb7, 0.5, 10); // light with color 0xfbffb7, intensity 0.5, distance 10
             lightTunnel2.position.set(-46, 2, 10);
 
-            var lightTunnel3 = new THREE.PointLight(0xfbffb7, 0.5, 10);
+            var lightTunnel3 = new THREE.PointLight(0xfbffb7, 0.5, 10); // light with color 0xfbffb7, intensity 0.5, distance 10
             lightTunnel3.position.set(-46, 2, 33);
 
-            var lightTunnel4 = new THREE.PointLight(0xfbffb7, 0.5, 10);
+            var lightTunnel4 = new THREE.PointLight(0xfbffb7, 0.5, 10); // light with color 0xfbffb7, intensity 0.5, distance 10
             lightTunnel4.position.set(-46, 2, 56);
 
-            var lightTunnel5 = new THREE.PointLight(0xfbffb7, 0.5, 10);
+            var lightTunnel5 = new THREE.PointLight(0xfbffb7, 0.5, 10); // light with color 0xfbffb7, intensity 0.5, distance 10
             lightTunnel5.position.set(-30, 2, 57);
 
-            var lightBar = new THREE.PointLight(0xfbffb7, 0.5, 100);
+            var lightBar = new THREE.PointLight(0xfbffb7, 0.5, 100); // light with color 0xfbffb7, intensity 0.5, distance 100
             lightBar.position.set(20, 4, 37);
 
-            var lightMiddle = new THREE.PointLight(0xfbffb7, 0.5, 50);
+            var lightMiddle = new THREE.PointLight(0xfbffb7, 0.5, 50); // light with color 0xfbffb7, intensity 0.5, distance 50
             lightMiddle.position.set(-10, 10, 5);
 
-            // Add the lights to the mesh, so it loads at the same time
+            // Add the lights to the mesh, so it loads at the same time as the map
             mesh.add(light, lightKantine, lightKuil, lightBar, lightMiddle, lightTunnel1, lightTunnel2, lightTunnel3, lightTunnel4, lightTunnel5);
             selfRef.add(mesh);
         });
     }
 }
 
+/**
+ * Create first player object */
 class Player extends THREE.Group {
     constructor(x, y, z, guid) {
         super();
@@ -66,7 +68,8 @@ class Player extends THREE.Group {
         this.playerGuid = guid;
     }
 }
-
+/**
+ * Create second player object */
 class Player2 extends THREE.Group {
     constructor(x, y, z, guid) {
         super();
@@ -85,7 +88,8 @@ class Player2 extends THREE.Group {
         this.playerGuid = guid;
     }
 }
-
+/**
+ * Create third player object */
 class Player3 extends THREE.Group {
     constructor(x, y, z, guid) {
         super();
@@ -104,7 +108,8 @@ class Player3 extends THREE.Group {
         this.playerGuid = guid;
     }
 }
-
+/**
+ * Create fourth player object */
 class Player4 extends THREE.Group {
     constructor(x, y, z, guid) {
         super();
@@ -123,7 +128,8 @@ class Player4 extends THREE.Group {
         this.playerGuid = guid;
     }
 }
-
+/**
+ * Create fifth player object */
 class Player5 extends THREE.Group {
     constructor(x, y, z, guid) {
         super();
@@ -142,7 +148,8 @@ class Player5 extends THREE.Group {
         this.playerGuid = guid;
     }
 }
-
+/**
+ * Create sixth player object */
 class Player6 extends THREE.Group {
     constructor(x, y, z, guid) {
         super();
@@ -162,6 +169,8 @@ class Player6 extends THREE.Group {
     }
 }
 
+/**
+ * Create projectile object */
 class Projectile extends THREE.Group {
     constructor() {
         super();
@@ -180,6 +189,7 @@ class Projectile extends THREE.Group {
     }
 }
 
+/** Damageboost object with a custom shader to make it rotate */
 class DamageBoost extends THREE.Group {
     constructor() {
         super();
@@ -226,6 +236,7 @@ class DamageBoost extends THREE.Group {
     }
 }
 
+/** Speedboost object with a custom shader to make it rotate */
 class SpeedBoost extends THREE.Group {
     constructor() {
         super();
@@ -271,6 +282,7 @@ class SpeedBoost extends THREE.Group {
     }
 }
 
+/** Ammo item object with a custom shader to make it rotate */
 class AmmoItem extends THREE.Group {
     constructor() {
         super();
@@ -316,6 +328,7 @@ class AmmoItem extends THREE.Group {
     }
 }
 
+/** Health item object with a custom shader to make it rotate */
 class HealthItem extends THREE.Group {
     constructor() {
         super();
@@ -361,6 +374,7 @@ class HealthItem extends THREE.Group {
     }
 }
 
+/** Armour item object with a custom shader to make it rotate */
 class ArmourItem extends THREE.Group {
     constructor() {
         super();
