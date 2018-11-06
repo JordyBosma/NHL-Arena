@@ -57,7 +57,8 @@
                 }
             }
         });
-        //this.StartPowerUp("jump", 90);
+        this.StartPowerUp("jmp", "jump", 90);
+        this.StartPowerUp("spd", "speed", 90);
     }
 
     //stats
@@ -301,31 +302,37 @@
             var index = Array.prototype.indexOf.call(parent.children, child);   // The equivalent of parent.children.indexOf(child)
             this.powerUpTimers[index].StopTimer();
             //add timer
-            var displayElement = child.getElementsByClassName("time")[0];
+            var displayElement = child.getElementsByClassName("powerup__timer")[0];
             this.powerUpTimers[index] = new displayTimer(length, displayElement, this.StopPowerUp);
 
         //add powerdisplay:
         } else {
             this.powers = this.powers + 1;
             console.log("start powerup");
+            var newpowerdisplay = document.createElement("div");
+            newpowerdisplay.id = id;
+            newpowerdisplay.classList.add("powerup__item");
+            newpowerdisplay.innerHTML = "<i class='powerup__icon icon material-icons noselect fleft'>flash_on</i><div class='powerup__timer fleft'></div><label class='powerup__label fleft'></label>";
             // display values:
-            var color = rgb(0, 160, 255);
+            var color;
             switch (id) {
-                case "speed":
-                    color = rgb(0, 160, 255);
+                case "jmp":
+                    color = "rgb(0, 160, 255)";
+                    break;
+                case "spd":
+                    color = "rgb(70, 245, 65)";
+                    break;
+                default:
+                    color = "rgb(0, 160, 255)";
                     break;
             }
-            //
-            this.powerUpTimers.push(new displayTimer(length, "powerUpTimer", this.StopPowerUp));
-            document.getElementById("powerUpIcon").style.color = color;
-            document.getElementById("powerUpName").innerHTML = id;
+            newpowerdisplay.getElementsByClassName("powerup__icon")[0].style.color = color;
+            newpowerdisplay.getElementsByClassName("powerup__label")[0].innerText = name;
+            document.getElementById("powerup").getElementsByClassName("powerup")[0].appendChild(newpowerdisplay);
+            console.log(document.getElementById(id));
+            this.powerUpTimers.push(new displayTimer(length, document.getElementById(id).getElementsByClassName("powerup__timer")[0], this.StopPowerUp));
         }
-    }
-    /*
-     * <i id="powerUpIcon" class="icon material-icons noselect fleft">flash_on</i>
-    <div id="powerUpTimer" class="timer fleft"></div>
-    <label id="powerUpName" class="poweruplabel fleft"></label>
-    */
+    }//hoogte aanpassen (--part-height op #powerup)
 
     StopPowerUp() {
         document.getElementById("powerUpIcon").style.color = "white";
@@ -334,8 +341,12 @@
         this.powerUpTimers = null;
         console.log("stop powerup");
         //this.powerUpTimers.slice(index, 1);
-
     }
+    /*
+    <div id="EmptyPower" class="powerup__item">
+        <i class="powerup__icon icon material-icons noselect fleft">flash_on</i>
+    </div>
+    */
 }
 
 class displayTimer {
@@ -363,7 +374,6 @@ class displayTimer {
             displayTimeSec = '0' + displayTimeSec;
         }
         var displayTime = displayTimeMin + ':' + displayTimeSec;
-        //document.getElementById(this.displayElement).innerText = displayTime;
         this.displayElement.innerText = displayTime;
         if (this.timeLeft <= 0) {
 

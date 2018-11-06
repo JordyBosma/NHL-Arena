@@ -240,13 +240,31 @@
 }
 
 /*power up*/
-.poweruptimer {
+#powerup {
+    --part-height: 110px;
+}
+.powerup {
+    
+}
+.powerup:after {
+    clear: both;
+}
+
+.powerup__icon {
+
+}
+
+.powerup__item {
+    display: flex;
+}
+
+.powerup__timer {
     color: white;
     font-size: 30px;
     letter-spacing: 6px;
 }
 
-.poweruplabel {
+.powerup__label {
     color: white;
     letter-spacing: 3px;
     font-size: 22px;
