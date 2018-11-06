@@ -64,12 +64,13 @@ namespace Commands
 
     public class FireCommand : Command
     {
+        public int weaponId { get; }
         public Guid originPlayer { get; }
         public double[] directionVector { get; }
         public double[] originPosition { get; }
         public double velocity { get; }
 
-        public FireCommand(Guid originPlayer, double[] directionVector, double[] originPosition, double velocity) : base("FireCommand")
+        public FireCommand(int weaponId ,Guid originPlayer, double[] directionVector, double[] originPosition, double velocity) : base("FireCommand")
         {
             this.originPlayer = originPlayer;
             this.directionVector = directionVector;

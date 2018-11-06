@@ -126,6 +126,7 @@ namespace Commands
         public void PlayerUpdateHandler(UpdatePlayerCommand uPlayer)
         {
             List<Object3D> worldObjects = game.getWorldObjects();
+            List<Object3D> deleteCueue = new List<Object3D>();
 
             foreach (Object3D obj in worldObjects)
             {
@@ -137,7 +138,7 @@ namespace Commands
                         {
                             obj.Move(uPlayer.x, uPlayer.y, uPlayer.z);
                             obj.Rotate(uPlayer.rotationX, uPlayer.rotationY, uPlayer.rotationZ);
-                            CheckForPickup(uPlayer, obj);
+                            deleteCueue = CheckForPickup(uPlayer, obj);
                             UpdateObjectCommand cmd = new UpdateObjectCommand(obj);
                             SendCommandsToObservers(cmd);
                         }
@@ -153,10 +154,17 @@ namespace Commands
                     }
                 }
             }
+
+            foreach (Object3D obj in deleteCueue)
+            {
+                game.getWorldObjects().Remove(obj);
+            }
         }
 
-        public void CheckForPickup(UpdatePlayerCommand uPlayer, Object3D obj)
+        public List<Object3D> CheckForPickup(UpdatePlayerCommand uPlayer, Object3D obj)
         {
+            List<Object3D> deleteCueue = new List<Object3D>();
+
             foreach (SpawnLocation s in spawnList)
             {
                 if (s.item != null)
@@ -171,20 +179,21 @@ namespace Commands
                                 UpdatePlayerStatsCommand cmd = new UpdatePlayerStatsCommand((Player)obj);
                                 SendCommandsToObservers(cmd);
                             }
-                            else if (s.item.type == "ArmourItem")
+                            if (s.item.type == "ArmourItem")
                             {
                                 ((Player)obj).addArmour(((ArmourItem)s.item).itemValue);
                                 UpdatePlayerStatsCommand cmd = new UpdatePlayerStatsCommand((Player)obj);
                                 SendCommandsToObservers(cmd);
                             }
-                            else
+                            if (s.item.type == "SpeedBoost")
                             {
-                                PlayerPickupCommand cmd = new PlayerPickupCommand(s.item, ((Player)obj).guid);
-                                SendCommandsToObservers(cmd);
+                                PlayerPickupCommand cmd2 = new PlayerPickupCommand(s.item, ((Player)obj).guid);
+                                SendCommandsToObservers(cmd2);
                             }
 
                             DeleteObjectCommand cmd1 = new DeleteObjectCommand(s.item);
                             SendCommandsToObservers(cmd1);
+                            deleteCueue.Add(s.item);
                             s.dellItem();
                         }
                     }
@@ -196,11 +205,13 @@ namespace Commands
                             PlayerPickupCommand cmd4 = new PlayerPickupCommand(s.item, ((Player)obj).guid);
                             SendCommandsToObservers(cmd3);
                             SendCommandsToObservers(cmd4);
+                            deleteCueue.Add(s.item);
                             s.dellItem();
                         }
                     }
                 }
             }
+            return deleteCueue;
         }
 
         /// <summary>
@@ -232,6 +243,7 @@ namespace Commands
         public void InitializeItem(Item newItem)
         {
             NewObjectCommand newDBoost = new NewObjectCommand(newItem);
+            game.getWorldObjects().Add(newItem);
             SendCommandsToObservers(newDBoost);
         }
 

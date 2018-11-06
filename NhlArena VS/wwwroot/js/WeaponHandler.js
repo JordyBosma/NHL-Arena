@@ -3,30 +3,46 @@
         id: 0,
         name: "Apple",
         damage: 20,
-        velocity: 5,
-        fireRate: 300,
-        maxAmmo: 100,
+        velocity: 2.5,
+        fireRate: 200,
+        maxAmmo: 200,
         ammo: 100
     },
     {
         id: 1,
         name: "Laptop",
-        damage: 75,
-        velocity: 2,
-        fireRate: 1000,
-        maxAmmo: 100,
-        ammo: 100
+        damage: 100,
+        velocity: 1.2,
+        fireRate: 400,
+        maxAmmo: 50,
+        ammo: 0
     },
     {
         id: 2,
         name: "Beer",
-        damage: 40,
-        velocity: 4,
-        fireRate: 500,
+        damage: 35,
+        velocity: 1.8,
+        fireRate: 250,
         maxAmmo: 100,
-        ammo: 100
+        ammo: 0
     }
 ]
+
+function resetAmmo() {
+    for (var i = 0; i < 3; i++) {
+        weaponArray[i].ammo = 0;        
+    }
+    weaponArray[0].ammo = 50;
+}
+
+function AddAmmo(weaponId, Value) {
+    if (weaponArray[weaponId].ammo + Value > weaponArray[weaponId].maxAmmo) {
+        weaponArray[weaponId].ammo = weaponArray[weaponId].maxAmmo;
+    }
+    else {
+        weaponArray[weaponId].ammo += Value;
+    }
+}
 
 function GetDefaultWeapon() {
     return weaponArray[0];
