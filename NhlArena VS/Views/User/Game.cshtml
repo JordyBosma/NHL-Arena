@@ -88,11 +88,11 @@
     </div>
 
     <!--bottom:-->
-    <div class="part__container part--bottom UIbottomleft">
-        <div class="part__center">
-            <i id="powerUpIcon" class="icon material-icons noselect fleft">flash_on</i>
-            <div id="powerUpTimer" class="timer fleft"></div>
-            <label id="powerUpName" class="poweruplabel fleft"></label>
+    <div id="powerup" class="part__container part--bottom UIbottomleft">
+        <div class="powerup part__center">
+            <div id="EmptyPower" class="powerup__item">
+                <i class="powerup__icon icon material-icons noselect fleft">flash_on</i>
+            </div>
         </div>
         <div class="part__right"></div>
     </div>
@@ -174,11 +174,11 @@
             var gameGuid;
 
             var prevTime = performance.now();
-            
+
             var velocity = new THREE.Vector3();
 
             function init() {
-                ui = new UIManager(ref);
+                ui = new UIManager(SetMultiplier);
                 renderer = new THREE.WebGLRenderer({ antialias: true });
                 renderer.setPixelRatio(window.devicePixelRatio);
                 renderer.setSize(window.innerWidth, window.innerHeight + 5);
@@ -274,8 +274,9 @@
                             if (command[i].deadPlayer.guid == playerGuid) {
                                 controls.getObject().position.set(command[i].spawnLocation.x, command[i].spawnLocation.y, command[i].spawnLocation.z);
                                 controls.getObject().rotation.set(0, command[i].spawnLocation.rotationY, 0);
+                                velocity.set(0, 0, 0);
                                 resetAmmo();
-
+                                ui.UpdateGunCurAmmo(currentWeapon.ammo);
                                 ui.UpdatePlayerArmor(command[i].deadPlayer.armour);
                                 ui.UpdatePlayerHealth(command[i].deadPlayer.health);
                                 ui.UpdateGameScores(command[i].deadPlayer.kills, command[i].deadPlayer.deaths);
@@ -299,10 +300,10 @@
                             if (command[i].targetPlayer == playerGuid) {
                                 //console.log("yeetus");
                                 if (command[i].item.type == "DamageBoost") {
-                                    //ui.StartPowerUp("Damage Boost", 30, "DamageBoost", 4);
+                                    ui.StartPowerUp("DamageBoost", "Damage Boost", 30, 4);
                                 }
                                 if (command[i].item.type == "SpeedBoost") {
-                                    //ui.StartPowerUp("Speed Boost", 20, "SpeedBoost", 2);
+                                    ui.StartPowerUp("SpeedBoost", "Speed Boost", 20, 2);
                                 }
                                 if (command[i].item.type == "AmmoItem") {
                                     console.log(command[i]);
@@ -562,7 +563,7 @@
                             //check all intersects
                             for (var z = 0; z < intersects.length; z++) {
                                 console.log(intersects[z]);
-                                if (intersects[z].object.name == "Character" && projectiles[i].isOwn) {
+                                if (intersects[z].object.name.includes("Character") && projectiles[i].isOwn) {
                                     //create a hitcommand and add it to the send queue
                                     var hitCommand = {
                                         commandType :"HitCommand",
@@ -627,12 +628,12 @@
 
                     // Moves the camera (player) left
                     if (controls.moveLeft) {
-                        velocity.x -= 130.0 * delta;
+                        velocity.x -= 100.0 * delta;
                     }
 
                     // Moves the camera (player) right
                     if (controls.moveRight) {
-                        velocity.x += 130.0 * delta;
+                        velocity.x += 100.0 * delta;
                     }
 
                     // Update the position using the changed delta

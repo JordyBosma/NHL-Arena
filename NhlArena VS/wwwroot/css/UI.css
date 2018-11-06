@@ -184,19 +184,6 @@
     float: left;
 }
 
-.timer {
-    color: white;
-    font-size: 30px;
-    letter-spacing: 6px;
-}
-.poweruplabel {
-    color: white;
-    letter-spacing: 3px;
-    font-size: 22px;
-    height: 45px;
-    padding-top: 7px;
-    margin-left: 8px;
-}
 .UIbottomright{
     bottom: 0;
     right: 0;
@@ -250,5 +237,39 @@
 #bar--herkansing {
     width: 0%;
     background-color: rgb(0, 190, 255);
+}
+
+/*power up*/
+#powerup {
+    --part-height: 110px;
+}
+.powerup {
+    
+}
+.powerup:after {
+    clear: both;
+}
+
+.powerup__icon {
+
+}
+
+.powerup__item {
+    display: flex;
+}
+
+.powerup__timer {
+    color: white;
+    font-size: 30px;
+    letter-spacing: 6px;
+}
+
+.powerup__label {
+    color: white;
+    letter-spacing: 3px;
+    font-size: 22px;
+    height: 45px;
+    padding-top: 7px;
+    margin-left: 8px;
 }
 

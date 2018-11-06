@@ -64,6 +64,10 @@ namespace Commands
             }
         }
 
+        /// <summary>
+        /// deletes a player on all other clients when said player loses connection to the server
+        /// </summary>
+        /// <param name="cmd">the command containing the details about the player that needs to be deleted</param>
         public void PlayerDisconnectHandler(DeleteObjectCommand cmd)
         {
             game.getWorldObjects().Remove(cmd.obj);
@@ -161,6 +165,12 @@ namespace Commands
             }
         }
 
+        /// <summary>
+        /// checks if a player is currently on a pickup and if so sends the player a pickupcommand with the items details of the item he picked up
+        /// </summary>
+        /// <param name="uPlayer">the current position update received from the client</param>
+        /// <param name="obj">the previous position of the player</param>
+        /// <returns></returns>
         public List<Object3D> CheckForPickup(UpdatePlayerCommand uPlayer, Object3D obj)
         {
             List<Object3D> deleteCueue = new List<Object3D>();
@@ -187,8 +197,13 @@ namespace Commands
                             }
                             if (s.item.type == "SpeedBoost")
                             {
-                                PlayerPickupCommand cmd2 = new PlayerPickupCommand(s.item, ((Player)obj).guid);
-                                SendCommandsToObservers(cmd2);
+                                PlayerPickupCommand cmd = new PlayerPickupCommand(s.item, ((Player)obj).guid);
+                                SendCommandsToObservers(cmd);
+                            }
+                            if (s.item.type == "AmmoItem")
+                            {
+                                PlayerPickupCommand cmd = new PlayerPickupCommand(s.item, ((Player)obj).guid);
+                                SendCommandsToObservers(cmd);
                             }
 
                             DeleteObjectCommand cmd1 = new DeleteObjectCommand(s.item);
@@ -220,12 +235,15 @@ namespace Commands
         /// <param name="newPlayer"></param>
         public void InitializePlayer(Player newPlayer)
         {
+            //new player krijgt zn guid en game guid
             InitializePlayerCommand cmd = new InitializePlayerCommand(newPlayer.guid, game.gameId);
             observers[observers.Count - 1].OnNext(cmd);
 
+            //alle andere spelers krijgen die nieuwe speler
             NewObjectCommand cmd2 = new NewObjectCommand(newPlayer);
             SendCommandsToObservers(cmd2);
 
+            //de nieuwe speler krijgt alle worldobjects
             List<Object3D> worldObjects = game.getWorldObjects();
             foreach (Object3D obj in worldObjects)
             {
@@ -234,6 +252,11 @@ namespace Commands
             }
         }
 
+        /// <summary>
+        /// initializes the list of spawn locations for players and items
+        /// </summary>
+        /// <param name="spawnList">the list with location for itemspawns</param>
+        /// <param name="playerSpawnList">the list with locations for playerspawns</param>
         public void InitializeSpawnList(List<SpawnLocation> spawnList, PlayerSpawnLocationList playerSpawnList)
         {
             this.spawnList = spawnList;
@@ -266,11 +289,20 @@ namespace Commands
             return new Unsubscriber<Command>(observers, observer);
         }
 
+        /// <summary>
+        /// sends commands used to update the gametimer in the top of the screen
+        /// </summary>
+        /// <param name="cmd"></param>
         public void SendGameTimeLeftCommand(GameTimeLeftCommand cmd)
         {
             SendCommandsToObservers(cmd);
         }
 
+
+        /// <summary>
+        /// sends a command that triggers the end game display on all clients
+        /// </summary>
+        /// <param name="cmd"></param>
         public void SendGameEndingCommand(GameEndingCommand cmd)
         {
             SendCommandsToObservers(cmd);
