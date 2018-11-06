@@ -313,6 +313,12 @@
         scope.setMultiplier(power, 1);
         console.log("stop powerup");
     }
+
+    StopPowers() {
+        while (this.powerUpTimers.length != 0) {
+            this.powerUpTimers[0].StopTimer();
+        }
+    }
 }
 
 class displayTimer {

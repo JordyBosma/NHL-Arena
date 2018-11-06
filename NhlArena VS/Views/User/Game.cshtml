@@ -270,6 +270,7 @@
                                 controls.getObject().rotation.set(0, command[i].spawnLocation.rotationY, 0);
                                 velocity.set(0, 0, 0);
                                 resetAmmo();
+                                ui.StopPowers();
                                 ui.UpdateGunCurAmmo(currentWeapon.ammo);
                                 ui.UpdatePlayerArmor(command[i].deadPlayer.armour);
                                 ui.UpdatePlayerHealth(command[i].deadPlayer.health);
