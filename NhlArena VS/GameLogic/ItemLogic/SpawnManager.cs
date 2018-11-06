@@ -30,6 +30,11 @@ namespace ItemLogic
             spawnList.Add(new SpawnLocation(20, 0, 36, "AHA"));
             spawnList.Add(new SpawnLocation(-46.4, 0, 57, "AHA"));
             spawnList.Add(new SpawnLocation(-51, 0, -13.4, "AHA"));
+            spawnList.Add(new SpawnLocation(-24, 0, -28, "AHA"));
+            spawnList.Add(new SpawnLocation( 64, 10, -8, "AHA"));
+            spawnList.Add(new SpawnLocation(3.2, 0, 29.5, "AHA"));
+            spawnList.Add(new SpawnLocation(-3, 0, -66, "AHA"));
+            spawnList.Add(new SpawnLocation(-9, 0, 0.5, "AHA"));
 
             playerSpawnList.AddLocation(-37, 1, 9.55, -1.60);
             playerSpawnList.AddLocation(-10.15, 1, 50.95, 0.00);
