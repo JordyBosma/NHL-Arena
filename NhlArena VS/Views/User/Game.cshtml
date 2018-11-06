@@ -558,7 +558,7 @@
                             //check all intersects
                             for (var z = 0; z < intersects.length; z++) {
                                 console.log(intersects[z]);
-                                if (intersects[z].object.name == "Character" && projectiles[i].isOwn) {
+                                if (intersects[z].object.name.includes("Character") && projectiles[i].isOwn) {
                                     //create a hitcommand and add it to the send queue
                                     var hitCommand = {
                                         commandType :"HitCommand",
