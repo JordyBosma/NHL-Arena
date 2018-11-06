@@ -12,6 +12,7 @@
             var light = new THREE.AmbientLight(0x404040);
             light.intensity = 2;
 
+            // Create all lights in the map
             var lightKantine = new THREE.PointLight(0xfbffb7, 0.5, 80);
             lightKantine.position.set(-40, 5, -33);
 
@@ -39,6 +40,7 @@
             var lightMiddle = new THREE.PointLight(0xfbffb7, 0.5, 50);
             lightMiddle.position.set(-10, 10, 5);
 
+            // Add the lights to the mesh, so it loads at the same time
             mesh.add(light, lightKantine, lightKuil, lightBar, lightMiddle, lightTunnel1, lightTunnel2, lightTunnel3, lightTunnel4, lightTunnel5);
             selfRef.add(mesh);
         });
@@ -46,12 +48,12 @@
 }
 
 class Player extends THREE.Group {
-    constructor(x,y,z,guid) {
+    constructor(x, y, z, guid) {
         super();
-        this.init(x,y,z,guid);
+        this.init(x, y, z, guid);
     }
 
-    init(x,y,z,guid) {
+    init(x, y, z, guid) {
         var selfRef = this;
         loadOBJModel("/models/objects/Character/", "CharacterRed.obj", "/models/materials/Character/", "CharacterRed.mtl", (mesh) => {
             mesh.scale.set(1, 1, 1);
@@ -208,11 +210,11 @@ class DamageBoost extends THREE.Group {
                         'float theta = time * 2.0;',
                         'float c = cos( theta );',
                         'float s = sin( theta );',
-                        
+
                         'mat3 m = mat3( c, 0, s, 0, 1, 0, -s, 0, c );',
                         'vec3 transformed = vec3( position ) * m;',
                         'vNormal = vNormal * m;'
-                        
+
                     ].join('\n')
                 );
                 selfRef.materialShader = shader;
