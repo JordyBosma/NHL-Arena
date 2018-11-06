@@ -275,7 +275,7 @@
                                 controls.getObject().position.set(command[i].spawnLocation.x, command[i].spawnLocation.y, command[i].spawnLocation.z);
                                 controls.getObject().rotation.set(0, command[i].spawnLocation.rotationY, 0);
                                 resetAmmo();
-
+                                ui.UpdateGunCurAmmo(currentWeapon.ammo);
                                 ui.UpdatePlayerArmor(command[i].deadPlayer.armour);
                                 ui.UpdatePlayerHealth(command[i].deadPlayer.health);
                                 ui.UpdateGameScores(command[i].deadPlayer.kills, command[i].deadPlayer.deaths);
