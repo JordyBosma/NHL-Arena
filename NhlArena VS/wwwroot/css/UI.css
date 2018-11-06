@@ -189,7 +189,6 @@
     right: 0;
 }
 .UIbottomright .gamescore{
-    width: 400px;
     display:flex;
     justify-content: flex-end;
 }
@@ -241,7 +240,7 @@
 
 /*power up*/
 #powerup {
-    --part-height: 110px;
+    --part-height: 58px;
 }
 .powerup {
     

@@ -32,14 +32,13 @@
     <div id="Scoreboard" class="card red darken-4 center fallIn" style="width: 60vw;">
         <div class="card-content orange-text text-accent-3">
             <span class="card-title">Scoreboard:</span>
-            <!--<div class="red darken-4" style="margin: 10px; padding: 0 10px 0 10px; display: block;"></div>-->
             <table>
                 <thead>
                     <tr class="orange-text text-accent-3">
                         <th class="" style="width: 4%"></th>
                         <th class="" style="width: auto">Username:</th>
-                        <th class="" style="width: 15%">Kills</th>
-                        <th class="" style="width: 25%">Deaths</th>
+                        <th class="" style="width: 15%">Kicks</th>
+                        <th class="" style="width: 25%">Dropouts</th>
                     </tr>
                 </thead>
                 <tbody id="Scoreboard__Content"></tbody>
@@ -203,19 +202,13 @@
                 //scene.add(basicPlane);
 
                 var NHLMap = new NHLArenaMap();
+                NHLMap.receiveShadow = true;
                 scene.add(NHLMap);
 
                 //load all projectiles, so that it doesn't have to be loaded on every shot
                 worldObjectsMesh[0] = apple = new Projectile("Apple");
                 worldObjectsMesh[1] = yeettop = new Projectile("Yeettop");
                 worldObjectsMesh[2] = duffcan = new Projectile("Duffcan");
-
-                var light = new THREE.AmbientLight(0x404040);
-                light.intensity = 2;
-                scene.add(light);
-
-                var light2 = new THREE.HemisphereLight(0xDDDDDD, 0x454545, 1);
-                scene.add(light2);
 
                 // Player for testing purposes
                 //var player1 = new Player1(25, -2, -35, "1234");
@@ -276,6 +269,7 @@
                                 controls.getObject().rotation.set(0, command[i].spawnLocation.rotationY, 0);
                                 velocity.set(0, 0, 0);
                                 resetAmmo();
+                                ui.StopPowers();
                                 ui.UpdateGunCurAmmo(currentWeapon.ammo);
                                 ui.UpdatePlayerArmor(command[i].deadPlayer.armour);
                                 ui.UpdatePlayerHealth(command[i].deadPlayer.health);
