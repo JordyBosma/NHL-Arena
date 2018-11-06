@@ -2,15 +2,12 @@
     constructor(setMultiplier) {
         this.volume = true;
         this.audio;
-        this.openMenu = "";
+
         this.setMultiplier = setMultiplier;
-        console.log(this.setMultiplier);
-        this.timeLeft = 0;  //in seconds
-        this.isRunning = false;
-        this.runTimer;
         this.powerUpTimers = [];
         this.powers = 0;
         this.pheight = 58;
+
         this.scores = document.getElementById("Scoreboard__Content");
         this.endScene = false;
 
@@ -18,7 +15,7 @@
         this.tabbedTab = false;
         this.activeMenu = 0;
         document.addEventListener('keydown', function (event) {     //https://css-tricks.com/snippets/javascript/javascript-keycodes/
-            if (event.keyCode == 82) {  // r
+            if (event.keyCode == 82) {  // r - scoreboard
                 if (!scope.tabbedTab) {
                     scope.ShowScoreboard(true);
                 }
@@ -48,15 +45,13 @@
             }
         });
         document.addEventListener('keyup', function (event) {
-            if (event.keyCode == 82) {  //tab r
+            if (event.keyCode == 82) {  // r - scoreboard
                 if (!scope.endScene) {
                     scope.tabbedTab = false;
                     scope.ShowScoreboard(false);
                 }
             }
         });
-        //this.StartPowerUp("jmp", "jump", 30, 4);
-        //this.StartPowerUp("spd", "speed", 60, 4);
     }
 
     //stats
@@ -118,9 +113,6 @@
 
     //scoreboard
     UpdateScoreboardScore(score) {
-        /*score.guid;
-        score.kills;
-        score.deaths;*/
         var row = document.getElementById(score.guid);
         if (row != null) {
             row.cells[2].innerHTML = score.kills;
@@ -136,13 +128,13 @@
         if (document.getElementById(score.guid) == null) {
             var row = this.scores.insertRow(0);
             row.id = score.guid;
-            var cell1 = row.insertCell(0);//index
+            var cell1 = row.insertCell(0);  //index
             cell1.innerHTML = "1.";
-            var cell2 = row.insertCell(1);//username
+            var cell2 = row.insertCell(1);  //username
             cell2.innerHTML = score.username;
-            var cell3 = row.insertCell(2);//kills
+            var cell3 = row.insertCell(2);  //kills
             cell3.innerHTML = score.kills;
-            var cell4 = row.insertCell(3);//deaths
+            var cell4 = row.insertCell(3);  //deaths
             cell4.innerHTML = score.deaths;
             console.log("add soreboard:");
             console.log({ addscore: score });
@@ -245,45 +237,7 @@
         var displayTime = displayTimeMin + ':' + displayTimeSec;
         document.getElementById('gameTimer').innerText = displayTime;
     }
-    /*
-    StartTimer(time, timeLeft) {
-        this.StopTimer();
-        timeLeft = time;
-        var cls = this;
-        this.runTimer = setInterval(function () {
-            cls.UpdateTimer(cls, timeLeft);
-        }, 1000);
-        this.isRunning = true;
-        console.log("start");
-    }
 
-    UpdateTimer(cls, timeLeft) {
-        timeLeft = timeLeft - 1;
-        var displayTimeMin = Math.floor(timeLeft / 60);
-        displayTimeMin = displayTimeMin.toString();
-        if (displayTimeMin.length < 2) {
-            displayTimeMin = '0' + displayTimeMin;
-        }
-        var displayTimeSec = String(timeLeft % 60);
-        if (displayTimeSec.length < 2) {
-            displayTimeSec = '0' + displayTimeSec;
-        }
-        var displayTime = displayTimeMin + ':' + displayTimeSec;
-        document.getElementById('gameTimer').innerText = displayTime;
-        if (timeLeft <= 0) {
-            
-            cls.StopTimer();
-        }
-    }
-
-    StopTimer() {
-        if (this.isRunning) {
-            this.isRunning = false;
-            clearInterval(this.runTimer);
-            console.log("stop");
-        }
-    }
-    */
     //powerup
     StartPowerUp(id, name, length, value) {
         //remove empty powerdisplay:
@@ -299,11 +253,6 @@
             var parent = child.parentNode;
             var index = Array.prototype.indexOf.call(parent.children, child);   // The equivalent of parent.children.indexOf(child)
             this.powerUpTimers[index].SetTime(length);
-            //remove timer
-            //this.powerUpTimers[index].StopTimer();
-            //add timer
-            //var displayElement = child.getElementsByClassName("powerup__timer")[0];
-            //this.powerUpTimers[index] = new displayTimer(length, displayElement, this.StopPowerUp, this);
             console.log("update powerup");
         //add powerdisplay:
         } else {
@@ -338,7 +287,7 @@
             this.setMultiplier(id, value);
             console.log("start powerup");
         }
-    }//hoogte aanpassen (--part-height op #powerup)
+    }
 
     StopPowerUp(displayElement, scope) {
         //remove powerdisplay
@@ -368,7 +317,7 @@
 
 class displayTimer {
     constructor(length, element, stopAction, scope) {
-        this.timeLeft = length + 1;
+        this.timeLeft = length + 1; // in seconds
         this.displayElement = element;
         var ref = this;
         this.runTimer = setInterval(function () {
