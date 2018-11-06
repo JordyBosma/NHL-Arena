@@ -187,8 +187,13 @@ namespace Commands
                             }
                             if (s.item.type == "SpeedBoost")
                             {
-                                PlayerPickupCommand cmd2 = new PlayerPickupCommand(s.item, ((Player)obj).guid);
-                                SendCommandsToObservers(cmd2);
+                                PlayerPickupCommand cmd = new PlayerPickupCommand(s.item, ((Player)obj).guid);
+                                SendCommandsToObservers(cmd);
+                            }
+                            if (s.item.type == "AmmoItem")
+                            {
+                                PlayerPickupCommand cmd = new PlayerPickupCommand(s.item, ((Player)obj).guid);
+                                SendCommandsToObservers(cmd);
                             }
 
                             DeleteObjectCommand cmd1 = new DeleteObjectCommand(s.item);

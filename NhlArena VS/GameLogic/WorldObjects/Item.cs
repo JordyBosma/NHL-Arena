@@ -22,23 +22,20 @@ namespace WorldObjects
         public AmmoItem(SpawnLocation l) : base(l)
         {
             Random random = new Random();
-            int weaponId = random.Next(3);
+            weaponId = random.Next(3);
 
             if (weaponId == 0)
             {
-                this.weaponId = weaponId;
                 this.itemValue = 100;
             }
 
             if (weaponId == 1)
             {
-                this.weaponId = weaponId;
                 this.itemValue = 15;
             }
 
             if (weaponId == 2)
-            {
-                this.weaponId = weaponId;
+            {                
                 this.itemValue = 50;
             }
         }
