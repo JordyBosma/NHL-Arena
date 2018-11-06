@@ -57,8 +57,8 @@
                 }
             }
         });
-        this.StartPowerUp("jmp", "jump", 90);
-        this.StartPowerUp("spd", "speed", 90);
+        this.StartPowerUp("jmp", "jump", 30);
+        this.StartPowerUp("spd", "speed", 60);
     }
 
     //stats
@@ -329,24 +329,31 @@
             newpowerdisplay.getElementsByClassName("powerup__icon")[0].style.color = color;
             newpowerdisplay.getElementsByClassName("powerup__label")[0].innerText = name;
             document.getElementById("powerup").getElementsByClassName("powerup")[0].appendChild(newpowerdisplay);
-            console.log(document.getElementById(id));
             this.powerUpTimers.push(new displayTimer(length, document.getElementById(id).getElementsByClassName("powerup__timer")[0], this.StopPowerUp));
+            console.log(document.getElementById(id));
         }
     }//hoogte aanpassen (--part-height op #powerup)
 
-    StopPowerUp() {
-        document.getElementById("powerUpIcon").style.color = "white";
-        document.getElementById("powerUpTimer").innerHTML = "";
-        document.getElementById("powerUpName").innerHTML = "";
-        this.powerUpTimers = null;
+    StopPowerUp(displayElement) {
+        this.powers = this.powers - 1;
+        if (this.powers == 0) {
+            //add empty powerdisplay:
+            var emptypowerdisplay = document.createElement("div");
+            emptypowerdisplay.id = "EmptyPower";
+            emptypowerdisplay.classList.add("powerup__item");
+            emptypowerdisplay.innerHTML = "<i class='powerup__icon icon material-icons noselect fleft'>flash_on</i>";
+            document.getElementById("powerup").getElementsByClassName("powerup")[0].appendChild(emptypowerdisplay);
+        }
+        //remove powerdisplay
+        var powerElement = displayElement.parentNode;
+        var powersElement = powerElement.parentNode;
+        var index = Array.prototype.indexOf.call(powersElement.children, powerElement);   // The equivalent of parent.children.indexOf(child)
+        this.powerUpTimers[index].StopTimer();
+        this.powerUpTimers[index] = null;
+        this.powerUpTimers.slice(index, 1);
+        powersElement.removeChild(powerElement);
         console.log("stop powerup");
-        //this.powerUpTimers.slice(index, 1);
     }
-    /*
-    <div id="EmptyPower" class="powerup__item">
-        <i class="powerup__icon icon material-icons noselect fleft">flash_on</i>
-    </div>
-    */
 }
 
 class displayTimer {
@@ -385,7 +392,7 @@ class displayTimer {
         clearInterval(this.runTimer);
         console.log("stop timerDisplay");
         if (this.stopAction != null) {
-            this.stopAction();
+            this.stopAction(this.displayElement);
         } 
     }
 }
