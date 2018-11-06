@@ -3,7 +3,7 @@
         id: 0,
         name: "Apple",
         damage: 20,
-        velocity: 3,
+        velocity: 2.5,
         fireRate: 200,
         maxAmmo: 200,
         ammo: 100
@@ -11,9 +11,9 @@
     {
         id: 1,
         name: "Laptop",
-        damage: 80,
+        damage: 100,
         velocity: 1.2,
-        fireRate: 300,
+        fireRate: 400,
         maxAmmo: 50,
         ammo: 0
     },
@@ -21,7 +21,7 @@
         id: 2,
         name: "Beer",
         damage: 35,
-        velocity: 2,
+        velocity: 1.8,
         fireRate: 250,
         maxAmmo: 100,
         ammo: 0
