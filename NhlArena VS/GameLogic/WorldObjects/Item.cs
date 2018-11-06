@@ -16,25 +16,30 @@ namespace WorldObjects
 
     public class AmmoItem : Item
     {
-        public string weaponType { get; }
+        public int weaponId { get; }
         public int itemValue { get; }
 
         public AmmoItem(SpawnLocation l) : base(l)
         {
             Random random = new Random();
-            string[] itemOptions = new string[] { "Apple", "Apple", "Laptop" };
-            string weaponType = itemOptions[random.Next(3)];
+            int weaponId = random.Next(3);
 
-            if (weaponType == "Apple")
+            if (weaponId == 0)
             {
-                this.weaponType = weaponType;
-                this.itemValue = 20;
+                this.weaponId = weaponId;
+                this.itemValue = 100;
             }
 
-            if (weaponType == "Laptop")
+            if (weaponId == 1)
             {
-                this.weaponType = weaponType;
-                this.itemValue = 5;
+                this.weaponId = weaponId;
+                this.itemValue = 15;
+            }
+
+            if (weaponId == 2)
+            {
+                this.weaponId = weaponId;
+                this.itemValue = 50;
             }
         }
     }

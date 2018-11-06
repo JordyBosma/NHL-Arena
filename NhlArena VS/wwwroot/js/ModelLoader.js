@@ -33,6 +33,101 @@ class Player extends THREE.Group {
     }
 }
 
+class Player2 extends THREE.Group {
+    constructor(x, y, z, guid) {
+        super();
+        this.init(x, y, z, guid);
+    }
+
+    init(x, y, z, guid) {
+        var selfRef = this;
+        loadOBJModel("/models/objects/Character/", "CharacterRed.obj", "/models/materials/Character/", "CharacterRed.mtl", (mesh) => {
+            mesh.scale.set(1, 1, 1);
+            mesh.position.y -= 2;
+            mesh.rotation.y = Math.PI;
+            selfRef.add(mesh);
+        });
+        selfRef.position.set(x, y, z);
+        this.playerGuid = guid;
+    }
+}
+
+class Player3 extends THREE.Group {
+    constructor(x, y, z, guid) {
+        super();
+        this.init(x, y, z, guid);
+    }
+
+    init(x, y, z, guid) {
+        var selfRef = this;
+        loadOBJModel("/models/objects/Character/", "CharacterRed.obj", "/models/materials/Character/", "CharacterRed.mtl", (mesh) => {
+            mesh.scale.set(1, 1, 1);
+            mesh.position.y -= 2;
+            mesh.rotation.y = Math.PI;
+            selfRef.add(mesh);
+        });
+        selfRef.position.set(x, y, z);
+        this.playerGuid = guid;
+    }
+}
+
+class Player4 extends THREE.Group {
+    constructor(x, y, z, guid) {
+        super();
+        this.init(x, y, z, guid);
+    }
+
+    init(x, y, z, guid) {
+        var selfRef = this;
+        loadOBJModel("/models/objects/Character/", "CharacterRed.obj", "/models/materials/Character/", "CharacterRed.mtl", (mesh) => {
+            mesh.scale.set(1, 1, 1);
+            mesh.position.y -= 2;
+            mesh.rotation.y = Math.PI;
+            selfRef.add(mesh);
+        });
+        selfRef.position.set(x, y, z);
+        this.playerGuid = guid;
+    }
+}
+
+class Player5 extends THREE.Group {
+    constructor(x, y, z, guid) {
+        super();
+        this.init(x, y, z, guid);
+    }
+
+    init(x, y, z, guid) {
+        var selfRef = this;
+        loadOBJModel("/models/objects/Character/", "CharacterRed.obj", "/models/materials/Character/", "CharacterRed.mtl", (mesh) => {
+            mesh.scale.set(1, 1, 1);
+            mesh.position.y -= 2;
+            mesh.rotation.y = Math.PI;
+            selfRef.add(mesh);
+        });
+        selfRef.position.set(x, y, z);
+        this.playerGuid = guid;
+    }
+}
+
+class Player6 extends THREE.Group {
+    constructor(x, y, z, guid) {
+        super();
+        this.init(x, y, z, guid);
+    }
+
+    init(x, y, z, guid) {
+        var selfRef = this;
+        loadOBJModel("/models/objects/Character/", "CharacterRed.obj", "/models/materials/Character/", "CharacterRed.mtl", (mesh) => {
+            mesh.scale.set(1, 1, 1);
+            mesh.position.y -= 2;
+            mesh.rotation.y = Math.PI;
+            selfRef.add(mesh);
+        });
+        selfRef.position.set(x, y, z);
+        this.playerGuid = guid;
+    }
+}
+
 class Projectile extends THREE.Group {
     constructor() {
         super();

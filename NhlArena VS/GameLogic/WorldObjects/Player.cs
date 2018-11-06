@@ -56,6 +56,7 @@ namespace WorldObjects
                 if (armourDamage > _armour)
                 {
                     armourDamage -= _armour;
+                    _armour = 0;
                     currentDamage = armourDamage / 2;
                 }
                 else
@@ -65,7 +66,7 @@ namespace WorldObjects
                 }
             }
 
-            if (currentDamage > _health)
+            if (currentDamage >= _health)
             {
                 _health = 100;
                 _deaths++;
@@ -82,6 +83,35 @@ namespace WorldObjects
         public void addKill()
         {
             _kills++;
+        }
+
+        public void addDeath()
+        {
+            _deaths++;
+        }
+
+        public void addHealth(int healthValue)
+        {
+            if(health < 100)
+            {
+                _health += healthValue;
+                if (health > 100)
+                {
+                    _health = 100;
+                }
+            }
+        }
+
+        public void addArmour(int armourValue)
+        {
+            if (armour < 100)
+            {
+                _armour += armourValue;
+                if (armour > 100)
+                {
+                    _armour = 100;
+                }
+            }
         }
 
         /// <summary>

@@ -100,7 +100,6 @@ namespace Commands
                     {
                         shootingPlayer = (Player)obj;
                     }
-
                 }
             }
 
@@ -127,6 +126,7 @@ namespace Commands
         public void PlayerUpdateHandler(UpdatePlayerCommand uPlayer)
         {
             List<Object3D> worldObjects = game.getWorldObjects();
+            List<Object3D> deleteCueue = new List<Object3D>();
 
             foreach (Object3D obj in worldObjects)
             {
@@ -134,44 +134,84 @@ namespace Commands
                 {
                     if (obj.guid == uPlayer.playerGuid)
                     {
-                        obj.Move(uPlayer.x, uPlayer.y, uPlayer.z);
-                        obj.Rotate(uPlayer.rotationX, uPlayer.rotationY, uPlayer.rotationZ);
-                        UpdateObjectCommand cmd = new UpdateObjectCommand(obj);
-                        SendCommandsToObservers(cmd);
-
-                        foreach (SpawnLocation s in spawnList)
+                        if (uPlayer.y > -100)
                         {
-
-
-                            if (s.item != null)
-                            {
-                                if (s.item.type != "DamageBoost")
-                                {
-                                    if (uPlayer.x > (s.item.x - 0.6) && uPlayer.x < (s.item.x + 0.6) && uPlayer.y > (s.item.y + 1.4) && uPlayer.y < (s.item.y + 2.6) && uPlayer.z > (s.item.z - 0.6) && uPlayer.z < (s.item.z + 0.6))
-                                    {
-                                        DeleteObjectCommand cmd2 = new DeleteObjectCommand(s.item);
-                                        PlayerPickupCommand cmd3 = new PlayerPickupCommand(s.item, (Player)obj);
-                                        SendCommandsToObservers(cmd2);
-                                        SendCommandsToObservers(cmd3);
-                                        s.dellItem();
-                                    }
-                                }
-                                else
-                                {
-                                    if (uPlayer.x > (s.item.x - 1.45) && uPlayer.x < (s.item.x + 1.45) && uPlayer.y > (s.item.y + 0.75) && uPlayer.y < (s.item.y + 3.25) && uPlayer.z > (s.item.z - 1.45) && uPlayer.z < (s.item.z + 1.45))
-                                    {
-                                        DeleteObjectCommand cmd4 = new DeleteObjectCommand(s.item);
-                                        PlayerPickupCommand cmd5 = new PlayerPickupCommand(s.item, (Player)obj);
-                                        SendCommandsToObservers(cmd4);
-                                        SendCommandsToObservers(cmd5);
-                                        s.dellItem();
-                                    }
-                                }
-                            }
+                            obj.Move(uPlayer.x, uPlayer.y, uPlayer.z);
+                            obj.Rotate(uPlayer.rotationX, uPlayer.rotationY, uPlayer.rotationZ);
+                            deleteCueue = CheckForPickup(uPlayer, obj);
+                            UpdateObjectCommand cmd = new UpdateObjectCommand(obj);
+                            SendCommandsToObservers(cmd);
+                        }
+                        else
+                        {
+                            PlayerSpawnLocation respawnLocation = playerSpawnList.GetSpawnLocation();
+                            DeathCommand cmd = new DeathCommand((Player)obj, respawnLocation);
+                            ((Player)obj).addDeath();
+                            UpdatePlayerStatsCommand cmd2 = new UpdatePlayerStatsCommand((Player)obj);
+                            SendCommandsToObservers(cmd);
+                            SendCommandsToObservers(cmd2);
                         }
                     }
                 }
             }
+
+            foreach (Object3D obj in deleteCueue)
+            {
+                game.getWorldObjects().Remove(obj);
+            }
+        }
+
+        public List<Object3D> CheckForPickup(UpdatePlayerCommand uPlayer, Object3D obj)
+        {
+            List<Object3D> deleteCueue = new List<Object3D>();
+
+            foreach (SpawnLocation s in spawnList)
+            {
+                if (s.item != null)
+                {
+                    if (s.item.type != "DamageBoost")
+                    {
+                        if (uPlayer.x > (s.item.x - 0.6) && uPlayer.x < (s.item.x + 0.6) && uPlayer.y > (s.item.y + 1.4) && uPlayer.y < (s.item.y + 2.6) && uPlayer.z > (s.item.z - 0.6) && uPlayer.z < (s.item.z + 0.6))
+                        {
+                            if (s.item.type == "HealthItem")
+                            {
+                                ((Player)obj).addHealth(((HealthItem)s.item).itemValue);
+                                UpdatePlayerStatsCommand cmd = new UpdatePlayerStatsCommand((Player)obj);
+                                SendCommandsToObservers(cmd);
+                            }
+                            if (s.item.type == "ArmourItem")
+                            {
+                                ((Player)obj).addArmour(((ArmourItem)s.item).itemValue);
+                                UpdatePlayerStatsCommand cmd = new UpdatePlayerStatsCommand((Player)obj);
+                                SendCommandsToObservers(cmd);
+                            }
+                            if (s.item.type == "SpeedBoost")
+                            {
+                                PlayerPickupCommand cmd2 = new PlayerPickupCommand(s.item, ((Player)obj).guid);
+                                SendCommandsToObservers(cmd2);
+                            }
+
+                            DeleteObjectCommand cmd1 = new DeleteObjectCommand(s.item);
+                            SendCommandsToObservers(cmd1);
+                            deleteCueue.Add(s.item);
+                            s.dellItem();
+                        }
+                    }
+                    else
+                    {
+                        if (uPlayer.x > (s.item.x - 1.45) && uPlayer.x < (s.item.x + 1.45) && uPlayer.y > (s.item.y + 0.75) && uPlayer.y < (s.item.y + 3.25) && uPlayer.z > (s.item.z - 1.45) && uPlayer.z < (s.item.z + 1.45))
+                        {
+                            DeleteObjectCommand cmd3 = new DeleteObjectCommand(s.item);
+                            PlayerPickupCommand cmd4 = new PlayerPickupCommand(s.item, ((Player)obj).guid);
+                            SendCommandsToObservers(cmd3);
+                            SendCommandsToObservers(cmd4);
+                            deleteCueue.Add(s.item);
+                            s.dellItem();
+                        }
+                    }
+                }
+            }
+            return deleteCueue;
         }
 
         /// <summary>
@@ -203,6 +243,7 @@ namespace Commands
         public void InitializeItem(Item newItem)
         {
             NewObjectCommand newDBoost = new NewObjectCommand(newItem);
+            game.getWorldObjects().Add(newItem);
             SendCommandsToObservers(newDBoost);
         }
 
