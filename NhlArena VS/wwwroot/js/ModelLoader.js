@@ -9,6 +9,37 @@
         this.name = "NHLArenaMap";
         loadOBJModel("/models/objects/NHLArenaMap/", "NHLArenaMap.obj", "/models/materials/NHLArenaMap/", "NHLArenaMap.mtl", (mesh) => {
             mesh.scale.set(1, 1, 1);
+            var light = new THREE.AmbientLight(0x404040);
+            light.intensity = 2;
+
+            var lightKantine = new THREE.PointLight(0xfbffb7, 0.5, 80);
+            lightKantine.position.set(-40, 5, -33);
+
+            var lightKuil = new THREE.PointLight(0xfbffb7, 0.5, 80);
+            lightKuil.position.set(25, 15, -40);
+
+            var lightTunnel1 = new THREE.PointLight(0xfbffb7, 0.5, 10);
+            lightTunnel1.position.set(-10, 2, 55);
+
+            var lightTunnel2 = new THREE.PointLight(0xfbffb7, 0.5, 10);
+            lightTunnel2.position.set(-46, 2, 10);
+
+            var lightTunnel3 = new THREE.PointLight(0xfbffb7, 0.5, 10);
+            lightTunnel3.position.set(-46, 2, 33);
+
+            var lightTunnel4 = new THREE.PointLight(0xfbffb7, 0.5, 10);
+            lightTunnel4.position.set(-46, 2, 56);
+
+            var lightTunnel5 = new THREE.PointLight(0xfbffb7, 0.5, 10);
+            lightTunnel5.position.set(-30, 2, 57);
+
+            var lightBar = new THREE.PointLight(0xfbffb7, 0.5, 100);
+            lightBar.position.set(20, 4, 37);
+
+            var lightMiddle = new THREE.PointLight(0xfbffb7, 0.5, 50);
+            lightMiddle.position.set(-10, 10, 5);
+
+            mesh.add(light, lightKantine, lightKuil, lightBar, lightMiddle, lightTunnel1, lightTunnel2, lightTunnel3, lightTunnel4, lightTunnel5);
             selfRef.add(mesh);
         });
     }
