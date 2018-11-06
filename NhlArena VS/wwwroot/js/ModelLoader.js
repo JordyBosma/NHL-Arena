@@ -14,7 +14,7 @@
     }
 }
 
-class Player extends THREE.Group {
+class Player1 extends THREE.Group {
     constructor(x,y,z,guid) {
         super();
         this.init(x,y,z,guid);
@@ -22,7 +22,7 @@ class Player extends THREE.Group {
 
     init(x,y,z,guid) {
         var selfRef = this;
-        loadOBJModel("/models/objects/Character/", "CharacterRed.obj", "/models/materials/Character/", "CharacterRed.mtl", (mesh) => {
+        loadOBJModel("/models/objects/Character/Blonde/", "Character_Blonde.obj", "/models/materials/Character/Blonde/", "Character_Blonde.mtl", (mesh) => {
             mesh.scale.set(1, 1, 1);
             mesh.position.y -= 2;
             mesh.rotation.y = Math.PI;
@@ -41,7 +41,7 @@ class Player2 extends THREE.Group {
 
     init(x, y, z, guid) {
         var selfRef = this;
-        loadOBJModel("/models/objects/Character/", "CharacterRed.obj", "/models/materials/Character/", "CharacterRed.mtl", (mesh) => {
+        loadOBJModel("/models/objects/Character/Coby/", "Player_NBA.obj", "/models/materials/Character/Coby/", "Player_NBA.mtl", (mesh) => {
             mesh.scale.set(1, 1, 1);
             mesh.position.y -= 2;
             mesh.rotation.y = Math.PI;
@@ -60,7 +60,7 @@ class Player3 extends THREE.Group {
 
     init(x, y, z, guid) {
         var selfRef = this;
-        loadOBJModel("/models/objects/Character/", "CharacterRed.obj", "/models/materials/Character/", "CharacterRed.mtl", (mesh) => {
+        loadOBJModel("/models/objects/Character/Jos/", "Character_Jos.obj", "/models/materials/Character/Jos/", "Character_Jos.mtl", (mesh) => {
             mesh.scale.set(1, 1, 1);
             mesh.position.y -= 2;
             mesh.rotation.y = Math.PI;
@@ -79,7 +79,7 @@ class Player4 extends THREE.Group {
 
     init(x, y, z, guid) {
         var selfRef = this;
-        loadOBJModel("/models/objects/Character/", "CharacterRed.obj", "/models/materials/Character/", "CharacterRed.mtl", (mesh) => {
+        loadOBJModel("/models/objects/Character/Lifter/", "Character_Lifter.obj", "/models/materials/Character/Lifter/", "Character_Lifter.mtl", (mesh) => {
             mesh.scale.set(1, 1, 1);
             mesh.position.y -= 2;
             mesh.rotation.y = Math.PI;
@@ -98,7 +98,7 @@ class Player5 extends THREE.Group {
 
     init(x, y, z, guid) {
         var selfRef = this;
-        loadOBJModel("/models/objects/Character/", "CharacterRed.obj", "/models/materials/Character/", "CharacterRed.mtl", (mesh) => {
+        loadOBJModel("/models/objects/Character/Math/", "Character_Math.obj", "/models/materials/Character/Math/", "Character_Math.mtl", (mesh) => {
             mesh.scale.set(1, 1, 1);
             mesh.position.y -= 2;
             mesh.rotation.y = Math.PI;
@@ -117,7 +117,7 @@ class Player6 extends THREE.Group {
 
     init(x, y, z, guid) {
         var selfRef = this;
-        loadOBJModel("/models/objects/Character/", "CharacterRed.obj", "/models/materials/Character/", "CharacterRed.mtl", (mesh) => {
+        loadOBJModel("/models/objects/Character/Red/", "Character_Red.obj", "/models/materials/Character/Red/", "Character_Red.mtl", (mesh) => {
             mesh.scale.set(1, 1, 1);
             mesh.position.y -= 2;
             mesh.rotation.y = Math.PI;

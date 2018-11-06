@@ -36,12 +36,12 @@ namespace ItemLogic
             spawnList.Add(new SpawnLocation(-3, 0, -66, "AHA"));
             spawnList.Add(new SpawnLocation(-9, 0, 0.5, "AHA"));
 
-            playerSpawnList.AddLocation(-37, 1, 9.55, -1.60);
-            playerSpawnList.AddLocation(-10.15, 1, 50.95, 0.00);
-            playerSpawnList.AddLocation(-46, 1, -47.25, -1.50);
-            playerSpawnList.AddLocation(31.75, 11, -11.30, -6.25);
-            playerSpawnList.AddLocation(30, 11, -10.75, -6.25);
-            playerSpawnList.AddLocation(30, 11, -76, 1.70);
+            playerSpawnList.AddLocation(-37, 2, 9.55, -1.60);
+            playerSpawnList.AddLocation(-10.15, 2, 50.95, 0.00);
+            playerSpawnList.AddLocation(-46, 2, -47.25, -1.50);
+            playerSpawnList.AddLocation(31.75, 12, -11.30, -6.25);
+            playerSpawnList.AddLocation(30, 12, -10.75, -6.25);
+            playerSpawnList.AddLocation(30, 12, -76, 1.70);
             cmdManager.InitializeSpawnList(spawnList, playerSpawnList);
 
             spawnTimer = new Timer();
