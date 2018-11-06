@@ -136,7 +136,7 @@ namespace Commands
             {
                 if(worldObjects[i] == null)
                 {
-                    return;
+                    continue;
                 }
                 else if (worldObjects[i] is Player)
                 {
@@ -169,7 +169,7 @@ namespace Commands
                         }
                     }
                 }
-            }            
+            }
         }
 
         /// <summary>

@@ -194,7 +194,7 @@
                 controls = new THREE.FirstPersonControls(camera);
                 scene.add(controls.getObject());
 
-                controls.getObject().position.set(20, 5, -30);
+                controls.getObject().position.set(0, 100, 0);
 
                 window.addEventListener('resize', onWindowResize, false);
 
@@ -240,13 +240,13 @@
                 };
                 Socket.onerror = error => {
                     console.log(error);
-                    window.location.replace("http://" + window.location.hostname + ":" + window.location.port + "/User/Main");
+                    //window.location.replace("http://" + window.location.hostname + ":" + window.location.port + "/User/Main");
                 };
                 Socket.onclose = CloseEvent =>
                 {
                     console.log("socket closed");
                     console.log(CloseEvent);
-                    window.location.replace("http://" + window.location.hostname + ":" + window.location.port + "/User/Main");
+                    //window.location.replace("http://" + window.location.hostname + ":" + window.location.port + "/User/Main");
                 };
             Socket.onmessage = function (event) {
                 var command = JSON.parse(event.data);
@@ -254,6 +254,9 @@
                     switch (command[i].commandType) {
                         case "InitializePlayerCommand":
                             playerGuid = command[i].playerGuid
+
+                            controls.getObject().position.set(command[i].x, command[i].y, command[i].z);
+
                             //window.history.pushState("", "", '/User/Game/' + command[i].gameGuid);
                             break;
                         case "GameTimeLeftCommand":
@@ -297,7 +300,7 @@
                                     ui.StartPowerUp("DamageBoost", "Damage Boost", 30, 4);
                                 }
                                 if (command[i].item.type == "SpeedBoost") {
-                                    ui.StartPowerUp("SpeedBoost", "Speed Boost", 20, 2);
+                                    ui.StartPowerUp("SpeedBoost", "Speed Boost", 20, 1.25);
                                 }
                                 if (command[i].item.type == "AmmoItem") {
                                     console.log(command[i]);
@@ -314,8 +317,7 @@
                                 console.log(command[i]);
                                 ui.AddScoreboardScore(command[i].obj);
                                 if (command[i].obj.guid != playerGuid) {
-
-                                    var player = new Player(command[i].obj.x, command[i].obj.y, command[i].obj.z, command[i].obj.guid, "Character_Lifter");
+                                    var player = new Player(command[i].obj.x, command[i].obj.y, command[i].obj.z, command[i].obj.guid, command[i].obj.playerModel);
                                     scene.add(player);
                                     //var newPlayer = new THREE.Object3D();
                                     //newPlayer = worldObjectsMesh[command[i].playerModel].children[0].clone();
@@ -514,7 +516,8 @@
                 //Make new projectile and set position to player position
 
                 var projectile = new THREE.Object3D();
-                projectile = worldObjectsMesh[0].children[0].clone();
+                projectile = worldObjectsMesh[weaponId].children[0].clone();
+                projectile.position.set(objPos.x, objPos.y, objPos.z);
                 projectile.position.set(originPosition[0], originPosition[1], originPosition[2]);
                 scene.add(projectile);
 
@@ -532,11 +535,11 @@
 
             function SetMultiplier(type, value) {
                 if (type == "DamageBoost") {
-                    this.damageMultiplier = value;
+                    damageMultiplier = value;
                     console.log(this.damageMultiplier);
                 }
                 if (type == "SpeedBoost") {
-                    this.speedMultiplier = value;
+                    speedMultiplier = value;
                     console.log(this.speedMultiplier);
                 }
             }
@@ -564,7 +567,7 @@
                                         commandType :"HitCommand",
                                         shootingPlayerGuid: playerGuid,
                                         hitPlayerGuid: intersects[z].object.parent.parent.playerGuid,
-                                        damage: GetWeaponByIndex(projectiles[i].weaponId).damage
+                                        damage: GetWeaponByIndex(projectiles[i].weaponId).damage * damageMultiplier
                                     };
                                     commandArray.push(hitCommand);
                                 }
@@ -613,23 +616,25 @@
 
                     // Moves the camera (player) forward
                     if (controls.moveForward) {
-                        velocity.z -= 130.0 * delta;
+                        velocity.z -= (130.0 * speedMultiplier) * delta ;
                     }
 
                     // Moves the camera (player) backward
                     if (controls.moveBackward) {
-                        velocity.z += 130.0 * delta;
+                        velocity.z += (130.0 * speedMultiplier) * delta ;
                     }
 
                     // Moves the camera (player) left
                     if (controls.moveLeft) {
-                        velocity.x -= 100.0 * delta;
+                        velocity.x -= (100.0 * speedMultiplier) * delta ;
                     }
 
                     // Moves the camera (player) right
                     if (controls.moveRight) {
-                        velocity.x += 100.0 * delta;
+                        velocity.x += (100.0 * speedMultiplier) * delta;
                     }
+
+                    //console.log(velocity);
 
                     // Update the position using the changed delta
                     controls.getObject().translateX(velocity.x * delta);

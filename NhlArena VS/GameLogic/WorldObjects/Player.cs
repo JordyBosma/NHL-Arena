@@ -21,7 +21,7 @@ namespace WorldObjects
         private int _deaths;
         public int kills { get { return _kills; } }
         public int deaths { get { return _deaths; } }
-        public int playerModel { get; }
+        public string playerModel { get; }
         
 
         public Player(Client playerClient, double x, double y, double z, double rotationX, double rotationY, double rotationZ) : base(x, y, z, rotationX, rotationY, rotationZ, "Player")
@@ -37,8 +37,10 @@ namespace WorldObjects
             }
             this._health = 100;
             this._armour = 0;
-            Random rnd = new Random();
-            playerModel = rnd.Next(6);
+
+            Random random = new Random();
+            string[] playerOptions = new string[] { "Character_Blonde", "Character_Jos", "Character_Lifter", "Character_Math", "Character_Red", "Player_NBA" };
+            this.playerModel = playerOptions[random.Next(6)];
             playerClient.SetPlayer(this);
         }
 
@@ -72,6 +74,7 @@ namespace WorldObjects
             if (currentDamage >= _health)
             {
                 _health = 100;
+                _armour = 0;
                 _deaths++;
                 return true;
             }

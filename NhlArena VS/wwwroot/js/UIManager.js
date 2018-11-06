@@ -1,19 +1,21 @@
 ﻿class UIManager {
     constructor(setMultiplier) {
+        //audio
         this.volume = true;
         this.audio;
-
+        //powerup
         this.setMultiplier = setMultiplier;
         this.powerUpTimers = [];
         this.powers = 0;
         this.pheight = 58;
-
+        //scoreboard
         this.scores = document.getElementById("Scoreboard__Content");
         this.endScene = false;
-
+        //menu 
         var scope = this;
         this.tabbedTab = false;
         this.activeMenu = 0;
+        //menu: zocht voor keybindings en logica voor het openen van menus
         document.addEventListener('keydown', function (event) {     //https://css-tricks.com/snippets/javascript/javascript-keycodes/
             if (event.keyCode == 82) {  // r - scoreboard
                 if (!scope.tabbedTab) {
@@ -54,7 +56,7 @@
         });
     }
 
-    //stats
+    //stats: laat kicks (kills) en dropouts (deaths) rechts boven en ecs (health) en herkansingen (armour) onderin in het midden zien.
     UpdateGameScores(K, D) {
         this.UpdateGameScore(K, "gameScoreK", "K: ");
         this.UpdateGameScore(D, "gameScoreD", "D: ");
@@ -74,7 +76,7 @@
         document.getElementById("bar--ecs").style.width = val + "%";
     }
 
-    //gun
+    //gun: laat de amunatie en de naam van het wapen dat je op het moment in de hand hebt rechts onderin zien.
     UpdateGunName(val) {
         document.getElementById("gunName").innerHTML = val + ":";
     }
@@ -87,7 +89,7 @@
         document.getElementById("gunMaxAmmo").innerHTML = val;
     }
 
-    //menus
+    //menus: laat menus en het scoreboard zien.
     HideMenus() {
         this.ShowExitMenu(false);
         this.ShowOptionMenu(false);
@@ -111,7 +113,7 @@
         document.getElementById("toggle-Scoreboard").classList.add("endBgr");
     }
 
-    //scoreboard
+    //scoreboard: update de gegevens van alle spelers in het scoreboard.
     UpdateScoreboardScore(score) {
         var row = document.getElementById(score.guid);
         if (row != null) {
@@ -141,7 +143,6 @@
             this.OrderScoreboardScore(score);
         }
     }
-
 
     OrderScoreboardScore() {            //https://www.w3schools.com/howto/howto_js_sort_table.asp
         var rows, switching, i, x, y, shouldSwitch;
@@ -195,10 +196,9 @@
         }
     }
 
-    //sound
+    //sound: zet audio uit en aan.
     SetAudio(src) {
         this.audio = src; 
-        console.log(src);
     }
 
     SwitchSoundOnOff() {
@@ -223,7 +223,7 @@
         }
     }
 
-    //timer
+    //timer: update de gametimerdisplay met de overige game tijd boven in het midden
     UpdateTimerDisplay(timeLeft) {
         var displayTimeMin = Math.floor(timeLeft / 60);
         displayTimeMin = displayTimeMin.toString();
@@ -238,7 +238,7 @@
         document.getElementById('gameTimer').innerText = displayTime;
     }
 
-    //powerup
+    //powerup: laat powerups zien en triggerd modifier aanpassing.
     StartPowerUp(id, name, length, value) {
         //remove empty powerdisplay:
         if (this.powers == 0) {
@@ -315,15 +315,17 @@
     }
 
     StopPowers() {
+        //remove all powers
         while (this.powerUpTimers.length != 0) {
             this.powerUpTimers[0].StopTimer();
         }
     }
 }
 
+//display timer: timer die per seconde een display element met de overige tijd laat zien en eindig functie uitvoert.
 class displayTimer {
     constructor(length, element, stopAction, scope) {
-        this.timeLeft = length + 1; // in seconds
+        this.timeLeft = length + 1;     // in seconds
         this.displayElement = element;
         var ref = this;
         this.runTimer = setInterval(function () {
