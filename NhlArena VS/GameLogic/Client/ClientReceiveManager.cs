@@ -11,24 +11,45 @@ namespace Clients
 {
     public class ClientReceiveManager
     {
+        List<string> errors = new List<string>();
 
         public ClientReceiveManager()
         {
 
         }
 
+        public void LogErrors()
+        {
+            System.Diagnostics.Debug.WriteLine("");
+            System.Diagnostics.Debug.WriteLine("ERRORS:");
+            foreach (string str in errors)
+            {
+                System.Diagnostics.Debug.WriteLine(str);
+            }
+            System.Diagnostics.Debug.WriteLine("");
+        }
+
         public List<Command> ReceiveString(string cmdString)
         {
-            try
+            if (cmdString[0] != '[')
             {
-                dynamic jsonobject = JsonConvert.DeserializeObject(cmdString, new JsonSerializerSettings { CheckAdditionalContent = false });
-                return ConvertToCommands(jsonobject);
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine(cmdString);
-                System.Diagnostics.Debug.WriteLine(e);
+                errors.Add(cmdString);
                 return null;
+            }
+            else
+            {
+                //System.Diagnostics.Debug.WriteLine(cmdString);
+                try
+                {
+                    dynamic jsonobject = JsonConvert.DeserializeObject(cmdString, new JsonSerializerSettings { CheckAdditionalContent = false });
+                    return ConvertToCommands(jsonobject);
+                }
+                catch (Exception e)
+                {
+                    System.Diagnostics.Debug.WriteLine(cmdString);
+                    System.Diagnostics.Debug.WriteLine(e);
+                    return null;
+                }
             }
         }
 
@@ -52,13 +73,13 @@ namespace Clients
                             cmdlist.Add(new HitCommand(new Guid(json[i].shootingPlayerGuid.Value), new Guid(json[i].hitPlayerGuid.Value), (int)json[i].damage.Value));
                             break;
                         case "FireCommand":
-                            cmdlist.Add(new FireCommand((int)json[i].weaponId.Value, new Guid(json[i].originPlayer.Value), new double[]{ json[i].directionVector[0], json[i].directionVector[1], json[i].directionVector[2] },
+                            cmdlist.Add(new FireCommand((int)json[i].weaponId.Value, new Guid(json[i].originPlayer.Value), new double[] { json[i].directionVector[0], json[i].directionVector[1], json[i].directionVector[2] },
                                 new double[] { json[i].originPosition[0], json[i].originPosition[1], json[i].originPosition[2] }, json[i].velocity.Value));
                             break;
                         case "UpdatePlayerCommand":
-                            cmdlist.Add(new UpdatePlayerCommand(new Guid(json[i].playerGuid.Value), 
-                                double.Parse(json[i].x.Value, CultureInfo.InvariantCulture), double.Parse(json[i].y.Value, CultureInfo.InvariantCulture), 
-                                double.Parse(json[i].z.Value, CultureInfo.InvariantCulture), double.Parse(json[i].rotationX.Value, CultureInfo.InvariantCulture), 
+                            cmdlist.Add(new UpdatePlayerCommand(new Guid(json[i].playerGuid.Value),
+                                double.Parse(json[i].x.Value, CultureInfo.InvariantCulture), double.Parse(json[i].y.Value, CultureInfo.InvariantCulture),
+                                double.Parse(json[i].z.Value, CultureInfo.InvariantCulture), double.Parse(json[i].rotationX.Value, CultureInfo.InvariantCulture),
                                 double.Parse(json[i].rotationY.Value, CultureInfo.InvariantCulture), double.Parse(json[i].rotationZ.Value, CultureInfo.InvariantCulture)));
                             break;
                         default:

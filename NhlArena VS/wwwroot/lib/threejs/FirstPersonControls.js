@@ -9,6 +9,8 @@
 
 THREE.FirstPersonControls = function (camera) {
     var scope = this;
+    var canJump = true;
+    var delay = 1000;
 
     camera.rotation.set(0, 0, 0);
 
@@ -75,13 +77,12 @@ THREE.FirstPersonControls = function (camera) {
                 scope.moveRight = true;
                 break;
             case 32: // spacebar
-                scope.jump = true;
-                //if (canJump) {
+                if (canJump) {
 
-                //    //scope.jump = true;
-                //    //canJump = false;
-                //    //var timer = setTimeout(UpdateCanJump, delay);                                     
-                //}
+                    scope.jump = true;
+                    canJump = false;
+                    var timer = setTimeout(UpdateCanJump, delay);                                     
+                }
                 break;
             case 49:
                 scope.goDown = true;
@@ -93,6 +94,9 @@ THREE.FirstPersonControls = function (camera) {
         }
     };
 
+    function UpdateCanJump() {
+        canJump = true;
+    }
 
     var onKeyUp = function (event) {
         switch (event.keyCode) {

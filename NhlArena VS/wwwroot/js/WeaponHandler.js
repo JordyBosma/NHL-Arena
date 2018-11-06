@@ -11,7 +11,7 @@
     {
         id: 1,
         name: "Laptop",
-        damage: 100,
+        damage: 80,
         velocity: 1.2,
         fireRate: 400,
         maxAmmo: 50,
@@ -32,7 +32,7 @@ function resetAmmo() {
     for (var i = 0; i < 3; i++) {
         weaponArray[i].ammo = 0;        
     }
-    weaponArray[0].ammo = 50;
+    weaponArray[0].ammo = 100;
 }
 
 function AddAmmo(weaponId, Value) {

@@ -77,7 +77,7 @@ namespace ItemLogic
                     if(initialSpawn == true)
                     {
                         initalSpawnCount++;
-                        if (initalSpawnCount == 5)
+                        if (initalSpawnCount == 10)
                         {
                             initialSpawn = false;
                         }

@@ -119,9 +119,7 @@ class DamageBoost extends THREE.Group {
         loadOBJModel("/models/objects/Pickups/", "Pickup_Damage.obj", "/models/materials/Pickups/", "Pickup_Damage.mtl", (mesh) => {
             //console.log(mesh);
             mesh.children[0].material.onBeforeCompile = function (shader) {
-
-                console.log(shader);
-
+                
                 shader.uniforms.time = { value: 0 };
 
                 shader.vertexShader = 'uniform float time;\n' + shader.vertexShader;
@@ -164,9 +162,7 @@ class SpeedBoost extends THREE.Group {
 
         loadOBJModel("/models/objects/Pickups/", "Pickup_Speed.obj", "/models/materials/Pickups/", "Pickup_Speed.mtl", (mesh) => {
             mesh.children[0].material.onBeforeCompile = function (shader) {
-
-                console.log(shader);
-
+                               
                 shader.uniforms.time = { value: 0 };
 
                 shader.vertexShader = 'uniform float time;\n' + shader.vertexShader;
@@ -209,9 +205,7 @@ class AmmoItem extends THREE.Group {
 
         loadOBJModel("/models/objects/Pickups/", "Pickup_Ammo.obj", "/models/materials/Pickups/", "Pickup_Ammo.mtl", (mesh) => {
             mesh.children[0].material.onBeforeCompile = function (shader) {
-
-                console.log(shader);
-
+                                
                 shader.uniforms.time = { value: 0 };
 
                 shader.vertexShader = 'uniform float time;\n' + shader.vertexShader;
@@ -254,9 +248,7 @@ class HealthItem extends THREE.Group {
 
         loadOBJModel("/models/objects/Pickups/", "Pickup_Health.obj", "/models/materials/Pickups/", "Pickup_Health.mtl", (mesh) => {
             mesh.children[0].material.onBeforeCompile = function (shader) {
-
-                console.log(shader);
-
+                
                 shader.uniforms.time = { value: 0 };
 
                 shader.vertexShader = 'uniform float time;\n' + shader.vertexShader;
@@ -299,9 +291,7 @@ class ArmourItem extends THREE.Group {
 
         loadOBJModel("/models/objects/Pickups/", "Pickup_Shield.obj", "/models/materials/Pickups/", "Pickup_Shield.mtl", (mesh) => {
             mesh.children[0].material.onBeforeCompile = function (shader) {
-
-                console.log(shader);
-
+                
                 shader.uniforms.time = { value: 0 };
 
                 shader.vertexShader = 'uniform float time;\n' + shader.vertexShader;
@@ -344,6 +334,6 @@ function loadOBJModel(objPath, objName, materialPath, materialName, onload) {
                 .setMaterials(materials)
                 .load(objName, function (object) {
                     onload(object);
-                }, function () { }, function (e) { console.log("Error loading model"); console.log(e); });
+                }, function () { }, function (e) { console.log("Error loading model"); });
         });
 }

@@ -47,34 +47,41 @@ namespace Clients
         {
             var buffer = new byte[1024 * 4];
 
-            Console.WriteLine("ClientView connection started");
-
-            WebSocketReceiveResult result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-            while (!result.CloseStatus.HasValue)
+            try
             {
-                //string yeetmessage = Encoding.UTF8.GetString(buffer);
-                //System.Diagnostics.Debug.WriteLine("Received the following information from client: " + yeetmessage );
-                WebSocketState state = socket.State;
-                result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                SendCommandsToObservers(receiveManager.ReceiveString(Encoding.UTF8.GetString(buffer)));
-                for (int i = 0; i < buffer.Length; i++)
+                Console.WriteLine("ClientView connection started");
+
+                WebSocketReceiveResult result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                while (!result.CloseStatus.HasValue)
                 {
-                    buffer[i] = 0;
+                    //string yeetmessage = Encoding.UTF8.GetString(buffer);
+                    //System.Diagnostics.Debug.WriteLine("Received the following information from client: " + yeetmessage );
+                    WebSocketState state = socket.State;
+                    result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                    SendCommandsToObservers(receiveManager.ReceiveString(Encoding.UTF8.GetString(buffer)));
+                    for (int i = 0; i < buffer.Length; i++)
+                    {
+                        buffer[i] = 0;
+                    }
                 }
-            }
 
-            if (socket.State != WebSocketState.Open)
+                if (socket.State != WebSocketState.Open)
+                {
+                    List<Command> cmdList = new List<Command>();
+                    cmdList.Add(new DeleteObjectCommand(player));
+
+                    SendCommandsToObservers(cmdList);
+                }
+
+                Console.WriteLine("ClientView has disconnected");
+
+                await socket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
+                socket.Dispose();
+            }
+            catch(Exception e)
             {
-                List<Command> cmdList = new List<Command>();
-                cmdList.Add(new DeleteObjectCommand(player));
-
-                SendCommandsToObservers(cmdList);
+                return;
             }
-
-            Console.WriteLine("ClientView has disconnected");
-
-            await socket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
-            socket.Dispose();
         }
 
         public override async void SendCommands()
@@ -104,6 +111,7 @@ namespace Clients
             }
             else if (value is DisconnectCommand)
             {
+                receiveManager.LogErrors();
                 socket.Abort();                
                 socket.Dispose();
             }

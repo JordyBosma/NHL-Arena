@@ -76,6 +76,7 @@ namespace Commands
             this.directionVector = directionVector;
             this.originPosition = originPosition;
             this.velocity = velocity;
+            this.weaponId = weaponId;
         }
     }
 

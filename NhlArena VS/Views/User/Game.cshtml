@@ -240,13 +240,13 @@
                 };
                 Socket.onerror = error => {
                     console.log(error);
-                    //window.location.replace("http://" + window.location.hostname + ":" + window.location.port + "/User/Main");
+                    window.location.replace("http://" + window.location.hostname + ":" + window.location.port + "/User/Main");
                 };
                 Socket.onclose = CloseEvent =>
                 {
                     console.log("socket closed");
                     console.log(CloseEvent);
-                    //window.location.replace("http://" + window.location.hostname + ":" + window.location.port + "/User/Main");
+                    window.location.replace("http://" + window.location.hostname + ":" + window.location.port + "/User/Main");
                 };
             Socket.onmessage = function (event) {
                 var command = JSON.parse(event.data);
@@ -257,7 +257,7 @@
 
                             controls.getObject().position.set(command[i].x, command[i].y, command[i].z);
 
-                            //window.history.pushState("", "", '/User/Game/' + command[i].gameGuid);
+                            window.history.pushState("", "", '/User/Game/' + command[i].gameGuid);
                             break;
                         case "GameTimeLeftCommand":
                             ui.UpdateTimerDisplay(command[i].gameTimeLeft);
@@ -266,7 +266,7 @@
                             ui.EndScene();
                             break;
                         case "DeathCommand":
-                            console.log(command[i]);
+                            //console.log(command[i]);
                             if (command[i].deadPlayer.guid == playerGuid) {
                                 controls.getObject().position.set(command[i].spawnLocation.x, command[i].spawnLocation.y, command[i].spawnLocation.z);
                                 controls.getObject().rotation.set(0, command[i].spawnLocation.rotationY, 0);
@@ -295,7 +295,6 @@
                             break;
                         case "PlayerPickupCommand":
                             if (command[i].targetPlayer == playerGuid) {
-                                //console.log("yeetus");
                                 if (command[i].item.type == "DamageBoost") {
                                     ui.StartPowerUp("DamageBoost", "Damage Boost", 30, 4);
                                 }
@@ -303,7 +302,6 @@
                                     ui.StartPowerUp("SpeedBoost", "Speed Boost", 20, 1.25);
                                 }
                                 if (command[i].item.type == "AmmoItem") {
-                                    console.log(command[i]);
                                     AddAmmo(command[i].item.weaponId, command[i].item.itemValue);
                                     ui.UpdateGunCurAmmo(currentWeapon.ammo);
                                 }
@@ -314,17 +312,12 @@
                             break;
                         case "NewObjectCommand":
                             if (command[i].obj.type == "Player") {
-                                console.log(command[i]);
                                 ui.AddScoreboardScore(command[i].obj);
                                 if (command[i].obj.guid != playerGuid) {
                                     var player = new Player(command[i].obj.x, command[i].obj.y, command[i].obj.z, command[i].obj.guid, command[i].obj.playerModel);
                                     scene.add(player);
-                                    //var newPlayer = new THREE.Object3D();
-                                    //newPlayer = worldObjectsMesh[command[i].playerModel].children[0].clone();
-                                    //scene.add(newPlayer);
 
                                     worldObjects[command[i].obj.guid] = player;
-                                    console.log(command[i]);
                                 }
                             }
                             if (command[i].obj.type == "DamageBoost") {
@@ -385,10 +378,8 @@
                             object.rotation.x = command[i].obj.rotationX;
                             object.rotation.y = command[i].obj.rotationY;
                             object.rotation.z = command[i].obj.rotationZ;
-                            //console.log(command[i]);
                             break;
                         case "DeleteObjectCommand":
-                            console.log(command[i]);
                             if (Object.keys(worldObjects).indexOf(command[i].obj.guid) < 0) {
                                 break;
                             }
@@ -402,7 +393,6 @@
                             break;
                     }
                 }
-
                 Respond();
 
                 function Respond() {
@@ -421,11 +411,7 @@
                     });
 
                     var cmd = JSON.stringify(commandArray);
-                    //console.log(cmd);
-                    //console.log(Socket.readyState);
                     Socket.send(cmd);
-                    //console.log(Socket.readyState);
-
                     commandArray = [];
                 }
             }
@@ -444,24 +430,6 @@
                     ui.UpdateGunMaxAmmo(currentWeapon.maxAmmo);
                     ui.UpdateGunCurAmmo(currentWeapon.ammo);
                 }
-            //    if (event.keyCode == 49) {  // 1
-            //        currentWeapon = GetWeaponByIndex[0];
-            //        ui.UpdateGunName(currentWeapon.name);
-            //        ui.UpdateGunMaxAmmo(currentWeapon.maxAmmo);
-            //        ui.UpdateGunCurAmmo(currentWeapon.ammo);
-            //    }
-            //    if (event.keyCode == 50) {  // 2
-            //        currentWeapon = GetWeaponByIndex[1];
-            //        ui.UpdateGunName(currentWeapon.name);
-            //        ui.UpdateGunMaxAmmo(currentWeapon.maxAmmo);
-            //        ui.UpdateGunCurAmmo(currentWeapon.ammo);
-            //    }
-            //    if (event.keyCode == 51) {  // 3
-            //        currentWeapon = GetWeaponByIndex[2];
-            //        ui.UpdateGunName(currentWeapon.name);
-            //        ui.UpdateGunMaxAmmo(currentWeapon.maxAmmo);
-            //        ui.UpdateGunCurAmmo(currentWeapon.ammo);
-            //    }
             });
 
             document.addEventListener('click', WeaponFire);
@@ -514,7 +482,6 @@
                 var direction = new THREE.Vector3(directionVector[0], directionVector[1], directionVector[2]);
 
                 //Make new projectile and set position to player position
-
                 var projectile = new THREE.Object3D();
                 projectile = worldObjectsMesh[weaponId].children[0].clone();
                 projectile.position.set(originPosition[0], originPosition[1], originPosition[2]);
@@ -535,11 +502,9 @@
             function SetMultiplier(type, value) {
                 if (type == "DamageBoost") {
                     damageMultiplier = value;
-                    console.log(this.damageMultiplier);
                 }
                 if (type == "SpeedBoost") {
                     speedMultiplier = value;
-                    console.log(this.speedMultiplier);
                 }
             }
 
@@ -559,7 +524,6 @@
                         if (intersects.length != 0) {
                             //check all intersects
                             for (var z = 0; z < intersects.length; z++) {
-                                console.log(intersects[z]);
                                 if (intersects[z].object.name.includes("Character") && projectiles[i].isOwn) {
                                     //create a hitcommand and add it to the send queue
                                     var hitCommand = {
@@ -585,7 +549,7 @@
             }
 
             function PlayerControls() {
-                var canJump = false;
+                var isOnFloor = false;
 
                 // Save the current time
                 var time = performance.now();
@@ -610,9 +574,6 @@
                         velocity.y = -60;
                     }
 
-                    //console.log(velocity.y);
-                    //console.log(deltaYVelocity);
-
                     // Moves the camera (player) forward
                     if (controls.moveForward) {
                         velocity.z -= (130.0 * speedMultiplier) * delta ;
@@ -633,8 +594,6 @@
                         velocity.x += (100.0 * speedMultiplier) * delta;
                     }
 
-                    //console.log(velocity);
-
                     // Update the position using the changed delta
                     controls.getObject().translateX(velocity.x * delta);
                     controls.getObject().translateY(velocity.y * delta);
@@ -651,23 +610,21 @@
                                 var YIncrease = 2 - intersects[i].distance;
                                 controls.getObject().position.y += YIncrease;
                                 velocity.y = 0;
-                                canJump = true;
-                                //console.log(intersects[i]);
+                                isOnFloor = true;
                             }
                         }
                     }
 
                     // Makes the camera (player) jump
-                    if (canJump && controls.jump) {
+                    if (isOnFloor && controls.jump) {
                         velocity.y += 40.0;
                         controls.jump = false;
-                        canJump = false;
+                        isOnFloor = false;
                     }
                 }
+
                 // Save the time for future delta calculations
                 prevTime = time;
-
-                //console.log(controls.getObject().position);
             }
 
             function onWindowResize() {
