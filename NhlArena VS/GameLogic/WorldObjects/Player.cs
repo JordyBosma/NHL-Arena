@@ -69,6 +69,7 @@ namespace WorldObjects
             if (currentDamage >= _health)
             {
                 _health = 100;
+                _armour = 0;
                 _deaths++;
                 return true;
             }
