@@ -10,6 +10,7 @@
         this.runTimer;
         this.powerUpTimers = [];
         this.powers = 0;
+        this.pheight = 58;
         this.scores = document.getElementById("Scoreboard__Content");
         this.endScene = false;
 
@@ -289,20 +290,21 @@
         if (this.powers == 0) {
             var emptyElement = document.getElementById("EmptyPower");
             emptyElement.parentElement.removeChild(emptyElement);
+            this.pheight -= 43;
         }
 
         //update powerdisplay:
         var child = document.getElementById(id);
         if (child != null) {
-            console.log("update powerup");
-            //remove timer
             var parent = child.parentNode;
             var index = Array.prototype.indexOf.call(parent.children, child);   // The equivalent of parent.children.indexOf(child)
-            this.powerUpTimers[index].StopTimer();
+            this.powerUpTimers[index].SetTime(length);
+            //remove timer
+            //this.powerUpTimers[index].StopTimer();
             //add timer
-            var displayElement = child.getElementsByClassName("powerup__timer")[0];
-            this.powerUpTimers[index] = new displayTimer(length, displayElement, this.StopPowerUp, this);
-
+            //var displayElement = child.getElementsByClassName("powerup__timer")[0];
+            //this.powerUpTimers[index] = new displayTimer(length, displayElement, this.StopPowerUp, this);
+            console.log("update powerup");
         //add powerdisplay:
         } else {
             this.powers = this.powers + 1;
@@ -330,6 +332,8 @@
             newpowerdisplay.getElementsByClassName("powerup__icon")[0].style.color = color;
             newpowerdisplay.getElementsByClassName("powerup__label")[0].innerText = name;
             this.powerUpTimers.push(new displayTimer(length, newpowerdisplay.getElementsByClassName("powerup__timer")[0], this.StopPowerUp, this));
+            this.pheight += 43;
+            document.getElementById("powerup").style.setProperty('--part-height', this.pheight+"px");
             document.getElementById("powerup").getElementsByClassName("powerup")[0].appendChild(newpowerdisplay);
             this.setMultiplier(id, value);
             console.log("start powerup");
@@ -337,6 +341,13 @@
     }//hoogte aanpassen (--part-height op #powerup)
 
     StopPowerUp(displayElement, scope) {
+        //remove powerdisplay
+        var powerElement = displayElement.parentNode;
+        var powersElement = powerElement.parentNode;
+        var index = Array.prototype.indexOf.call(powersElement.children, powerElement);   // The equivalent of parent.children.indexOf(child)
+        scope.powerUpTimers[index] = null;
+        scope.powerUpTimers.splice(index, 1);
+        powersElement.removeChild(powerElement);
         scope.powers = scope.powers - 1;
         if (scope.powers == 0) {
             //add empty powerdisplay:
@@ -345,20 +356,14 @@
             emptypowerdisplay.classList.add("powerup__item");
             emptypowerdisplay.innerHTML = "<i class='powerup__icon icon material-icons noselect fleft'>flash_on</i>";
             document.getElementById("powerup").getElementsByClassName("powerup")[0].appendChild(emptypowerdisplay);
+            scope.pheight += 43;
         }
-        //remove powerdisplay
-        var powerElement = displayElement.parentNode;
-        var powersElement = powerElement.parentNode;
-        var index = Array.prototype.indexOf.call(powersElement.children, powerElement);   // The equivalent of parent.children.indexOf(child)
-        scope.powerUpTimers[index] = null;
-        scope.powerUpTimers.splice(index, 1);
-        powersElement.removeChild(powerElement);
+        scope.pheight -= 43;
+        document.getElementById("powerup").style.setProperty('--part-height', scope.pheight + "px");
         var power = powerElement.id;
         scope.setMultiplier(power, 1);
         console.log("stop powerup");
     }
-
-
 }
 
 class displayTimer {
@@ -373,6 +378,11 @@ class displayTimer {
         this.scope = scope;
         this.stopAction = stopAction;
         return this.runTimer;
+    }
+
+    SetTime(length) {
+        this.timeLeft = length + 1;
+        this.UpdateTimer();
     }
 
     UpdateTimer() {
