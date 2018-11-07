@@ -34,6 +34,7 @@ namespace Clients
             if (cmdString[0] != '[')
             {
                 errors.Add(cmdString);
+                errors.Add("\n");
                 return null;
             }
             else
