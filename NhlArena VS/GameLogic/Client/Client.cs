@@ -58,14 +58,18 @@ namespace Clients
                     //System.Diagnostics.Debug.WriteLine("Received the following information from client: " + yeetmessage );
                     WebSocketState state = socket.State;
                     result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                    SendCommandsToObservers(receiveManager.ReceiveString(Encoding.UTF8.GetString(buffer)));
+                    List<Command> templist = receiveManager.ReceiveString(Encoding.UTF8.GetString(buffer));
+                    if (templist != null)
+                    {
+                        SendCommandsToObservers(templist);
+                    }
                     for (int i = 0; i < buffer.Length; i++)
                     {
                         buffer[i] = 0;
                     }
                 }
 
-                if (socket.State != WebSocketState.Open)
+                if (result.CloseStatus.HasValue)
                 {
                     List<Command> cmdList = new List<Command>();
                     cmdList.Add(new DeleteObjectCommand(player));
@@ -78,7 +82,7 @@ namespace Clients
                 await socket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
                 socket.Dispose();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return;
             }
@@ -112,7 +116,7 @@ namespace Clients
             else if (value is DisconnectCommand)
             {
                 receiveManager.LogErrors();
-                socket.Abort();                
+                socket.Abort();
                 socket.Dispose();
             }
             else

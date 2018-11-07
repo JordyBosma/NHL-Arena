@@ -31,7 +31,8 @@ namespace Clients
 
         public List<Command> ReceiveString(string cmdString)
         {
-            if (cmdString[0] != '[')
+            cmdString = cmdString.Replace("\0", string.Empty);
+            if (cmdString[0] != '[' || cmdString.Last() != ']')
             {
                 errors.Add(cmdString);
                 errors.Add("\n");

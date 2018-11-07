@@ -36,31 +36,40 @@ namespace Commands
         /// <param name="value"></param>
         public void OnNext(List<Command> value)
         {
-            if (value != null)
+            try
             {
-                foreach (Command c in value)
+                if (value != null)
                 {
-                    string commandType = c.commandType;
-
-                    switch (commandType)
+                    foreach (Command c in value)
                     {
-                        case "HitCommand":
-                            HitCommand hit = (HitCommand)c;
-                            HitHandler(hit);
-                            break;
-                        case "UpdatePlayerCommand":
-                            UpdatePlayerCommand uPlayerCmd = (UpdatePlayerCommand)c;
-                            PlayerUpdateHandler(uPlayerCmd);
-                            break;
-                        case "DeleteObjectCommand":
-                            DeleteObjectCommand deleteObjectCmd = (DeleteObjectCommand)c;
-                            PlayerDisconnectHandler(deleteObjectCmd);
-                            break;
-                        case "FireCommand":
-                            SendCommandsToObservers(c);
-                            break;
+                        string commandType = c.commandType;
+
+                        switch (commandType)
+                        {
+                            case "HitCommand":
+                                HitCommand hit = (HitCommand)c;
+                                HitHandler(hit);
+                                break;
+                            case "UpdatePlayerCommand":
+                                UpdatePlayerCommand uPlayerCmd = (UpdatePlayerCommand)c;
+                                PlayerUpdateHandler(uPlayerCmd);
+                                break;
+                            case "DeleteObjectCommand":
+                                DeleteObjectCommand deleteObjectCmd = (DeleteObjectCommand)c;
+                                PlayerDisconnectHandler(deleteObjectCmd);
+                                break;
+                            case "FireCommand":
+                                SendCommandsToObservers(c);
+                                break;
+                        }
                     }
                 }
+            }
+            catch(Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine('\n');
+                System.Diagnostics.Debug.WriteLine(e);
+                System.Diagnostics.Debug.WriteLine('\n');
             }
         }
 
